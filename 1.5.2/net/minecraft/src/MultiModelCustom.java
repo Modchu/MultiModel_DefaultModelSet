@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 public abstract class MultiModelCustom extends MultiModelSkirtFloats {
 
 	public Modchu_CustomModel customModel;
-	public ModelRenderer dummy;
+	public MMM_ModelRenderer dummy;
 
 	public MultiModelCustom()
 	{
@@ -31,20 +31,16 @@ public abstract class MultiModelCustom extends MultiModelSkirtFloats {
 
 	public MultiModelCustom(float f, float f1, int i, int j) {
 		super(f, f1, i, j);
-		dummy = new ModelRenderer(this, 0, 0);
+		dummy = new MMM_ModelRenderer(this, 0, 0);
 		dummy.addBox(0.0F, 0.0F, 0.0F, 0, 0, 0, f);
 	}
 
-	public void superrenderMM(float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5) {
-		setRotationAnglesMM(f, f1, ticksExisted, pheadYaw, pheadPitch, f5);
+	public void superrender(MMM_IModelCaps entityCaps, float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5) {
+		setRotationAngles(f, f1, ticksExisted, pheadYaw, pheadPitch, f5, entityCaps);
 		if (customModel != null
 				&& customModel.mainModel != null
 				&& customModel.mainModel.mainFrame != null) {
-			try {
-				Modchu_Reflect.invokeMethod(customModel.mainModel.mainFrame.getClass(), "render", new Class[]{ float.class }, customModel.mainModel.mainFrame, new Object[]{ f5 });
-			} catch(Exception e) {
-				customModel.mainModel.mainFrame.render(f5);
-			}
+			customModel.mainModel.mainFrame.render(f5);
 		} else {
 			//Modchu_Debug.mDebug("superrenderMM mainFrame == null !!");
 		}
@@ -53,40 +49,34 @@ public abstract class MultiModelCustom extends MultiModelSkirtFloats {
 			renderStabilizer(entity, (Map) entityCaps.getCapsValue(caps_stabiliser), f, f1, ticksExisted, pheadYaw, pheadPitch, f5);
 *///151delete
 //-@-151
-			renderStabilizer(f, f1, ticksExisted, pheadYaw, pheadPitch, f5);
+			renderStabilizer(entityCaps, f, f1, ticksExisted, pheadYaw, pheadPitch, f5);
 //@-@151
 		}
 	}
 
 	@Override
-	public void renderMM(float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5) {
+    public void render(MMM_IModelCaps entityCaps, float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5, boolean pIsRender) {
 		//Modchu_Debug.mDebug("MultiModelCustom render");
-		setRotationAnglesMM(f, f1, ticksExisted, pheadYaw, pheadPitch, f5);
-		customModel.renderMM(f, f1, ticksExisted, pheadYaw, pheadPitch, f5);
+		setRotationAngles(f, f1, ticksExisted, pheadYaw, pheadPitch, f5, entityCaps);
+		customModel.render(entityCaps, f, f1, ticksExisted, pheadYaw, pheadPitch, f5, pIsRender);
 	}
 
 	@Override
-	public void setLivingAnimationsMM(float f, float f1, float renderPartialTicks) {
+	public void setLivingAnimations(MMM_IModelCaps entityCaps, float f, float f1, float renderPartialTicks) {
 		//Modchu_Debug.mDebug("MultiModelCustom setLivingAnimationsLM start");
-		super.setLivingAnimationsMM(f, f1, renderPartialTicks);
-		customModel.setLivingAnimationsMM(f, f1, renderPartialTicks);
+		super.setLivingAnimations(entityCaps, f, f1, renderPartialTicks);
+		customModel.setLivingAnimations(entityCaps, f, f1, renderPartialTicks);
 		//Modchu_Debug.mDebug("MultiModelCustom setLivingAnimationsLM end");
 	}
 
-	@Override
-	public void setRotationAnglesMM(float f, float f1, float f2, float f3, float f4, float f5) {
-		super.setRotationAnglesMM(f, f1, f2, f3, f4, f5);
-		customModel.setRotationAnglesMM(f, f1, f2, f3, f4, f5);
-	}
-
     @Override
-	public void setRotationAnglesLM(float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5) {
-		customModel.setRotationAnglesLM(f, f1, ticksExisted, pheadYaw, pheadPitch, f5);
+	public void setRotationAnglesLM(float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5, MMM_IModelCaps entityCaps) {
+		customModel.setRotationAnglesLM(f, f1, ticksExisted, pheadYaw, pheadPitch, f5, entityCaps);
 	}
 
 	@Override
-	public void renderItems() {
-		customModel.renderItems();
+	public void renderItems(MMM_IModelCaps entityCaps) {
+		customModel.renderItems(entityCaps);
 	}
 
 	@Override
@@ -105,23 +95,23 @@ public abstract class MultiModelCustom extends MultiModelSkirtFloats {
     }
 
     @Override
-    public void actionInit(int i) {
-    	customModel.actionInit(i);
+    public void actionInit(MMM_IModelCaps entityCaps, int i) {
+    	customModel.actionInit(entityCaps, i);
     }
 
     @Override
-    public void actionRelease(int i) {
-    	customModel.actionRelease(i);
+    public void actionRelease(MMM_IModelCaps entityCaps, int i) {
+    	customModel.actionRelease(entityCaps, i);
     }
 
     @Override
-    public void action(float f, float f1, float f2, float f3, float f4, float f5, int i) {
-    	customModel.action(f, f1, f2, f3, f4, f5, i);
+    public void action(float f, float f1, float f2, float f3, float f4, float f5, int i, MMM_IModelCaps entityCaps) {
+    	customModel.action(f, f1, f2, f3, f4, f5, i, entityCaps);
     }
 
     @Override
-    public void syncModel(MultiModelBaseBiped model) {
-    	customModel.syncModel(model);
+    public void syncModel(MMM_IModelCaps entityCaps, MultiModelBaseBiped model) {
+    	customModel.syncModel(entityCaps, model);
     }
 
     @Override
@@ -157,7 +147,7 @@ public abstract class MultiModelCustom extends MultiModelSkirtFloats {
     }
 
     @Override
-    public double getMountedYOffset() {
+    public float getMountedYOffset() {
     	return customModel.getMountedYOffset();
     }
 
@@ -187,37 +177,37 @@ public abstract class MultiModelCustom extends MultiModelSkirtFloats {
     }
 
     @Override
-    public void setArmorBipedHeadShowModel(boolean b) {
-    	customModel.setArmorBipedHeadShowModel(b);
+    public void setArmorBipedHeadShowModel(MMM_IModelCaps entityCaps, boolean b) {
+    	customModel.setArmorBipedHeadShowModel(entityCaps, b);
     }
 
     @Override
-    public void setArmorBipedBodyShowModel(boolean b) {
-    	customModel.setArmorBipedBodyShowModel(b);
+    public void setArmorBipedBodyShowModel(MMM_IModelCaps entityCaps, boolean b) {
+    	customModel.setArmorBipedBodyShowModel(entityCaps, b);
     }
 
     @Override
-    public void setArmorBipedRightArmShowModel(boolean b) {
-    	customModel.setArmorBipedRightArmShowModel(b);
+    public void setArmorBipedRightArmShowModel(MMM_IModelCaps entityCaps, boolean b) {
+    	customModel.setArmorBipedRightArmShowModel(entityCaps, b);
     }
 
     @Override
-    public void setArmorBipedLeftArmShowModel(boolean b) {
-    	customModel.setArmorBipedLeftArmShowModel(b);
+    public void setArmorBipedLeftArmShowModel(MMM_IModelCaps entityCaps, boolean b) {
+    	customModel.setArmorBipedLeftArmShowModel(entityCaps, b);
     }
 
     @Override
-    public void setArmorBipedRightLegShowModel(boolean b) {
-    	customModel.setArmorBipedRightLegShowModel(b);
+    public void setArmorBipedRightLegShowModel(MMM_IModelCaps entityCaps, boolean b) {
+    	customModel.setArmorBipedRightLegShowModel(entityCaps, b);
     }
 
     @Override
-    public void setArmorBipedLeftLegShowModel(boolean b) {
-    	customModel.setArmorBipedLeftLegShowModel(b);
+    public void setArmorBipedLeftLegShowModel(MMM_IModelCaps entityCaps, boolean b) {
+    	customModel.setArmorBipedLeftLegShowModel(entityCaps, b);
     }
 
     @Override
-    public void setArmorSkirtShowModel(boolean b) {
+    public void setArmorSkirtShowModel(MMM_IModelCaps entityCaps, boolean b) {
     }
 
 	@Override
@@ -256,8 +246,8 @@ public abstract class MultiModelCustom extends MultiModelSkirtFloats {
 	}
 
 	@Override
-	public void reset(float f, float f1, float f2, float f3, float f4, float f5) {
-		if (customModel != null) customModel.reset(f, f1, f2, f3, f4, f5);
+	public void reset(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
+		if (customModel != null) customModel.reset(f, f1, f2, f3, f4, f5, entityCaps);
 	}
 
 	@Override
@@ -267,12 +257,18 @@ public abstract class MultiModelCustom extends MultiModelSkirtFloats {
 	}
 
 	@Override
-	public void renderFirstPersonHand(float f) {
-		if (customModel != null) customModel.renderFirstPersonHand(f);
+	public void renderFirstPersonHand(MMM_IModelCaps entityCaps, float f) {
+		if (customModel != null) customModel.renderFirstPersonHand(entityCaps, f);
 	}
 
 	@Override
-	public void setRotationAnglesfirstPerson(float f, float f1, float f2, float f3, float f4, float f5) {
-		if (customModel != null) customModel.setRotationAnglesfirstPerson(f, f1, f2, f3, f4, f5);
+	public void setRotationAnglesfirstPerson(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
+		if (customModel != null) customModel.setRotationAnglesfirstPerson(f, f1, f2, f3, f4, f5, entityCaps);
+	}
+
+	@Override
+	public int showArmorParts(MMM_IModelCaps entityCaps, int i) {
+		if (customModel != null) return customModel.showArmorParts(entityCaps, i);
+		return -1;
 	}
 }

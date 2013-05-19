@@ -31,18 +31,18 @@ public class MultiModel_SR2 extends MultiModel {
 		// 追加パーツ
 		eyeR = new Modchu_ModelRenderer(this, 32, 19);
 		eyeR.addPlate(-4.0F, -5.0F, -4.001F, 4, 4, 0, psize);
-		eyeR.setRotationPointLM(0.0F, 0.0F, 0.0F);
+		eyeR.setRotationPoint(0.0F, 0.0F, 0.0F);
 		eyeL = new Modchu_ModelRenderer(this, 42, 19);
 		eyeL.addPlate(0.0F, -5.0F, -4.001F, 4, 4, 0, psize);
-		eyeL.setRotationPointLM(0.0F, 0.0F, 0.0F);
+		eyeL.setRotationPoint(0.0F, 0.0F, 0.0F);
 		bipedHead.addChild(eyeR);
 		bipedHead.addChild(eyeL);
 	}
 
 	@Override
-	public void setLivingAnimationsMM(float f, float f1, float renderPartialTicks) {
-		super.setLivingAnimationsMM(f, f1, renderPartialTicks);
-		EntityLiving entityliving = (EntityLiving) getCapsValue(entityCaps.caps_Entity);
+	public void setLivingAnimations(MMM_IModelCaps entityCaps, float f, float f1, float renderPartialTicks) {
+		super.setLivingAnimations(entityCaps, f, f1, renderPartialTicks);
+		EntityLiving entityliving = (EntityLiving) getCapsValue(entityCaps, entityCaps.caps_Entity);
 		if (entityliving != null) ;else return;
 		float f3 = (float)entityliving.ticksExisted + renderPartialTicks + Modchu_ModelCapsHelper.getCapsValueFloat(this, caps_entityIdFactor);
 		// 目パチ
@@ -56,11 +56,16 @@ public class MultiModel_SR2 extends MultiModel {
 	}
 
 	@Override
-	public void setRotationAnglesLM(float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5) {
-		super.setRotationAnglesLM(f, f1, ticksExisted, pheadYaw, pheadPitch, f5);
+	public void setRotationAnglesLM(float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5, MMM_IModelCaps entityCaps) {
+		super.setRotationAnglesLM(f, f1, ticksExisted, pheadYaw, pheadPitch, f5, entityCaps);
 		if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_aimedBow)) {
 			setCapsValue(caps_visible, eyeL, true);
 			setCapsValue(caps_visible, eyeR, false);
 		}
+	}
+
+	@Override
+	public String getUsingTexture() {
+		return null;
 	}
 }

@@ -190,8 +190,8 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
      * Sets the models various rotation angles.
      */
     @Override
-    public void setRotationAnglesLM(float f, float f1, float f2, float f3, float f4, float f5) {
-		reset(f, f1, f2, f3, f4, f5);
+    public void setRotationAnglesLM(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
+		reset(f, f1, f2, f3, f4, f5, entityCaps);
 		bipedHead.rotateAngleY = f3 / (180F / (float) Math.PI);
 		bipedHead.rotateAngleX = f4 / (180F / (float) Math.PI);
 		if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_getIsSneak) && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_getIsRiding) && Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_oldwalking)) {
@@ -231,7 +231,7 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
 		bipedLeftArm.rotateAngleY = 0.0F;
 		float var7;
 		float var8;
-		armSwing(f, f1, f2, f3, f4, f5);
+		armSwing(f, f1, f2, f3, f4, f5, entityCaps);
 		if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_getIsSneak)) {
 			bipedBody.rotateAngleX = 0.5F;
 			bipedHead.rotationPointY = 1.0F;
@@ -276,12 +276,12 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
 		}
 	}
 
-    public void armSwing(float f, float f1, float f2, float f3, float f4, float f5) {
+    public void armSwing(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     	float[] lgrounds = null;
     	float onGroundR = 0;
     	float onGroundL = 0;
     	if (entityCaps != null) {
-    		lgrounds = (float[])getCapsValue(caps_Grounds);
+    		lgrounds = (float[])getCapsValue(caps_Grounds, entityCaps);
     		if (lgrounds != null) {
     			onGroundR = lgrounds[0];
     			onGroundL = lgrounds[1];
@@ -324,7 +324,7 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
     }
 
     @Override
-    public void reset(float f, float f1, float f2, float f3, float f4, float f5) {
+    public void reset(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     	bipedHead.setRotationPoint(0.0F, 0.0F, 0.0F);
     	bipedBody.setRotationPoint(0.0F, 0.0F, 0.0F);
     	bipedHeadwear.setRotationPoint(0.0F, 0.0F, 0.0F);
@@ -359,23 +359,23 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
 	}
 
     @Override
-	public int showArmorParts(int parts) {
+	public int showArmorParts(MMM_IModelCaps entityCaps, int parts) {
 		// äZÇÃï\é¶óp
 		boolean f;
 		// äï
 		f = parts == 3 ? true : false;
-		setArmorBipedHeadShowModel(f);
+		setArmorBipedHeadShowModel(entityCaps, f);
 		// äZ
 		f = parts == 2 ? true : false;
-		setArmorBipedBodyShowModel(f);
-		setArmorBipedRightArmShowModel(f);
-		setArmorBipedLeftArmShowModel(f);
+		setArmorBipedBodyShowModel(entityCaps, f);
+		setArmorBipedRightArmShowModel(entityCaps, f);
+		setArmorBipedLeftArmShowModel(entityCaps, f);
 		// ãrçb
 		//f = parts == 1 | parts == 0 ? true : false;
 		// ‰aìñ
 		f = parts == 0 ? true : false;
-		setArmorBipedRightLegShowModel(f);
-		setArmorBipedLeftLegShowModel(f);
+		setArmorBipedRightLegShowModel(entityCaps, f);
+		setArmorBipedLeftLegShowModel(entityCaps, f);
 
 		return -1;
 	}
@@ -424,8 +424,8 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
     }
 
     @Override
-    public void action1(float f, float f1, float f2, float f3, float f4, float f5) {
-    	super.action1(f, f1, f2, f3, f4, f5);
+    public void action1(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
+    	super.action1(f, f1, f2, f3, f4, f5, entityCaps);
 		float f6 = bipedBody.rotateAngleZ;
 		if (f6 > 0.0F) {
 			bipedHead.rotationPointY = bipedBody.rotationPointY + 0.5F - (f6 * 0.30889264F);
@@ -460,16 +460,16 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
     }
 
     @Override
-    public void action2(float f, float f1, float f2, float f3, float f4, float f5) {
+    public void action2(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     	// éËÇè„Ç∞ÇÈÉÇÅ[ÉVÉáÉì
-    	super.action2(f, f1, f2, f3, f4, f5);
-    	((ModelRenderer) getCapsValue(caps_bipedRightArm)).rotationPointX += Modchu_ModelCapsHelper.getCapsValueInt(this, caps_dominantArm) == 0 ? 2.0F : -2.0F;
+    	super.action2(f, f1, f2, f3, f4, f5, entityCaps);
+    	((ModelRenderer) getCapsValue(caps_bipedRightArm, entityCaps)).rotationPointX += Modchu_ModelCapsHelper.getCapsValueInt(this, caps_dominantArm) == 0 ? 2.0F : -2.0F;
     }
 
     @Override
-    public void action3(float f, float f1, float f2, float f3, float f4, float f5) {
+    public void action3(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     	// éËÇè„Ç∞ÇƒêUÇÈÉÇÅ[ÉVÉáÉì
-    	super.action3(f, f1, f2, f3, f4, f5);
-    	((ModelRenderer) getCapsValue(caps_bipedRightArm)).rotationPointX += Modchu_ModelCapsHelper.getCapsValueInt(this, caps_dominantArm) == 0 ? 2.0F : -2.0F;
+    	super.action3(f, f1, f2, f3, f4, f5, entityCaps);
+    	((ModelRenderer) getCapsValue(caps_bipedRightArm, entityCaps)).rotationPointX += Modchu_ModelCapsHelper.getCapsValueInt(this, caps_dominantArm) == 0 ? 2.0F : -2.0F;
     }
 }

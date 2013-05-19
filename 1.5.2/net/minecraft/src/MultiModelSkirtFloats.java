@@ -40,23 +40,23 @@ public abstract class MultiModelSkirtFloats extends MultiModelAction {
     }
 
     @Override
-    public void setLivingAnimationsMM(float f, float f1, float f2) {
-    	super.setLivingAnimationsMM(f, f1, f2);
+    public void setLivingAnimations(MMM_IModelCaps entityCaps, float f, float f1, float f2) {
+    	super.setLivingAnimations(entityCaps, f, f1, f2);
     	if (Modchu_ModelCapsHelper.getCapsValueInt(this, caps_skirtFloats) == 2) {
 //-@-151
-    		EntityLiving entityliving = (EntityLiving) getCapsValue(entityCaps.caps_Entity);
+    		EntityLiving entityliving = (EntityLiving) getCapsValue(entityCaps, entityCaps.caps_Entity);
 //@-@151
     		setMotionY(entityliving.motionY + 0.0784000015258789D > 0 ? 0 : (float) ((entityliving.motionY + 0.0784000015258789D)) * mod_Modchu_ModchuLib.skirtFloatsVolume);
     	}
     }
 
     @Override
-    public void setRotationAnglesLM(float f, float f1, float f2, float f3, float f4, float f5) {
-    	super.setRotationAnglesLM(f, f1, f2, f3, f4, f5);
-    	skirtFloats(f, f1, f2, f3, f4, f5);
+    public void setRotationAnglesLM(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
+    	super.setRotationAnglesLM(f, f1, f2, f3, f4, f5, entityCaps);
+    	skirtFloats(f, f1, f2, f3, f4, f5, entityCaps);
     }
 
-    public void skirtFloats(float f, float f1, float f2, float f3, float f4, float f5) {
+    public void skirtFloats(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     }
 
     private boolean getSkirtFloats() {

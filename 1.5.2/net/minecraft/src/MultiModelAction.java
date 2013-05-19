@@ -5,24 +5,24 @@ package net.minecraft.src;
  */
 public abstract class MultiModelAction extends MultiModelBaseBiped {
 
-    public ModelRenderer rightArm;
-    public ModelRenderer rightArm2;
-    public ModelRenderer rightArmPlus;
-    public ModelRenderer rightArmPlus2;
-    public ModelRenderer rightHand;
-    public ModelRenderer rightLeg;
-    public ModelRenderer rightLeg2;
-    public ModelRenderer rightLegPlus;
-    public ModelRenderer rightLegPlus2;
-    public ModelRenderer leftArm;
-    public ModelRenderer leftArm2;
-    public ModelRenderer leftArmPlus;
-    public ModelRenderer leftArmPlus2;
-    public ModelRenderer leftHand;
-    public ModelRenderer leftLeg;
-    public ModelRenderer leftLeg2;
-    public ModelRenderer leftLegPlus;
-    public ModelRenderer leftLegPlus2;
+    public MMM_ModelRenderer rightArm;
+    public MMM_ModelRenderer rightArm2;
+    public MMM_ModelRenderer rightArmPlus;
+    public MMM_ModelRenderer rightArmPlus2;
+    public MMM_ModelRenderer rightHand;
+    public MMM_ModelRenderer rightLeg;
+    public MMM_ModelRenderer rightLeg2;
+    public MMM_ModelRenderer rightLegPlus;
+    public MMM_ModelRenderer rightLegPlus2;
+    public MMM_ModelRenderer leftArm;
+    public MMM_ModelRenderer leftArm2;
+    public MMM_ModelRenderer leftArmPlus;
+    public MMM_ModelRenderer leftArmPlus2;
+    public MMM_ModelRenderer leftHand;
+    public MMM_ModelRenderer leftLeg;
+    public MMM_ModelRenderer leftLeg2;
+    public MMM_ModelRenderer leftLegPlus;
+    public MMM_ModelRenderer leftLegPlus2;
 
     /**
      * コンストラクタは全て継承させること
@@ -52,44 +52,44 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
     /**
      * ショートカットアクション時に呼ばれる
      */
-    public void actionInit(int i) {
+    public void actionInit(MMM_IModelCaps entityCaps, int i) {
     	setCapsValue(caps_runActionNumber, i);
     	switch(i) {
     	case 1:
-    		actionInit1();
+    		actionInit1(entityCaps);
     		break;
     	case 2:
-    		actionInit2();
+    		actionInit2(entityCaps);
     		break;
     	case 3:
-    		actionInit3();
+    		actionInit3(entityCaps);
     		break;
     	case 4:
-    		actionInit4();
+    		actionInit4(entityCaps);
     		break;
     	case 5:
-    		actionInit5();
+    		actionInit5(entityCaps);
     		break;
     	case 6:
-    		actionInit6();
+    		actionInit6(entityCaps);
     		break;
     	case 7:
-    		actionInit7();
+    		actionInit7(entityCaps);
     		break;
     	case 8:
-    		actionInit8();
+    		actionInit8(entityCaps);
     		break;
     	case 9:
-    		actionInit9();
+    		actionInit9(entityCaps);
     		break;
     	case 30:
-    		actionInit30();
+    		actionInit30(entityCaps);
     		break;
     	}
     }
 
-    public void actionInit1() {
-    	setCapsValue(caps_shortcutKeysAction, true);
+    public void actionInit1(MMM_IModelCaps entityCaps) {
+    	setCapsValue(entityCaps, caps_shortcutKeysAction, true);
     	boolean b = false;
     	setCapsValue(caps_visible, bipedLeftArm, b);
     	setCapsValue(caps_visible, bipedRightArm, b);
@@ -139,86 +139,86 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
     	setCapsValue(caps_sittingBan, true);
     }
 
-    public void actionInit2() {
-    	setCapsValue(caps_shortcutKeysAction, true);
-    	setCapsValue(caps_actionCount, 0);
+    public void actionInit2(MMM_IModelCaps entityCaps) {
+    	setCapsValue(entityCaps, caps_shortcutKeysAction, true);
+    	setCapsValue(entityCaps, caps_actionCount, 0);
     	setCapsValue(caps_waitBan, false);
     }
 
-    public void actionInit3() {
-    	setCapsValue(caps_shortcutKeysAction, true);
+    public void actionInit3(MMM_IModelCaps entityCaps) {
+    	setCapsValue(entityCaps, caps_shortcutKeysAction, true);
     	setCapsValue(caps_waitBan, false);
     }
 
-    public void actionInit4() {
-    	setCapsValue(caps_shortcutKeysAction, true);
+    public void actionInit4(MMM_IModelCaps entityCaps) {
+    	setCapsValue(entityCaps, caps_shortcutKeysAction, true);
     	setCapsValue(caps_waitBan, false);
     }
 
-    public void actionInit5() {
-    	setCapsValue(caps_shortcutKeysAction, true);
+    public void actionInit5(MMM_IModelCaps entityCaps) {
+    	setCapsValue(entityCaps, caps_shortcutKeysAction, true);
     }
 
-    public void actionInit6() {
-    	setCapsValue(caps_shortcutKeysAction, true);
+    public void actionInit6(MMM_IModelCaps entityCaps) {
+    	setCapsValue(entityCaps, caps_shortcutKeysAction, true);
     }
 
-    public void actionInit7() {
-    	setCapsValue(caps_shortcutKeysAction, true);
+    public void actionInit7(MMM_IModelCaps entityCaps) {
+    	setCapsValue(entityCaps, caps_shortcutKeysAction, true);
     }
 
-    public void actionInit8() {
-    	setCapsValue(caps_shortcutKeysAction, true);
+    public void actionInit8(MMM_IModelCaps entityCaps) {
+    	setCapsValue(entityCaps, caps_shortcutKeysAction, true);
     }
 
-    public void actionInit9() {
-    	setCapsValue(caps_shortcutKeysAction, true);
+    public void actionInit9(MMM_IModelCaps entityCaps) {
+    	setCapsValue(entityCaps, caps_shortcutKeysAction, true);
     }
 
-    public void actionInit30() {
-    	setCapsValue(caps_shortcutKeysAction, true);
+    public void actionInit30(MMM_IModelCaps entityCaps) {
+    	setCapsValue(entityCaps, caps_shortcutKeysAction, true);
     }
 
-    /**c
+    /**
      * ショートカットアクション解除時に呼ばれる。
      */
-    public void actionRelease(int i) {
-    	switch(Modchu_ModelCapsHelper.getCapsValueInt(this, caps_runActionNumber)) {
+    public void actionRelease(MMM_IModelCaps entityCaps, int i) {
+    	switch(i) {
     	case 1:
-    		actionRelease1();
+    		actionRelease1(entityCaps);
     		break;
     	case 2:
-    		actionRelease2();
+    		actionRelease2(entityCaps);
     		break;
     	case 3:
-    		actionRelease3();
+    		actionRelease3(entityCaps);
     		break;
     	case 4:
-    		actionRelease4();
+    		actionRelease4(entityCaps);
     		break;
     	case 5:
-    		actionRelease5();
+    		actionRelease5(entityCaps);
     		break;
     	case 6:
-    		actionRelease6();
+    		actionRelease6(entityCaps);
     		break;
     	case 7:
-    		actionRelease7();
+    		actionRelease7(entityCaps);
     		break;
     	case 8:
-    		actionRelease8();
+    		actionRelease8(entityCaps);
     		break;
     	case 9:
-    		actionRelease9();
+    		actionRelease9(entityCaps);
     		break;
     	case 30:
-    		actionRelease30();
+    		actionRelease30(entityCaps);
     		break;
     	}
     }
 
-    public void actionRelease1() {
-    	setCapsValue(caps_shortcutKeysAction, false);
+    public void actionRelease1(MMM_IModelCaps entityCaps) {
+    	setCapsValue(entityCaps, caps_shortcutKeysAction, false);
     	setCapsValue(caps_sneakBan, false);
     	setCapsValue(caps_waitBan, false);
     	setCapsValue(caps_sittingBan, false);
@@ -250,17 +250,11 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
 
     	if (Arms != null) {
     		if (Arms[0] != null) bipedRightArm.addChild(Arms[0]);
-    		if (Arms[2] != null) bipedRightArm.addChild(Arms[2]);
     		if (Arms[1] != null) bipedLeftArm.addChild(Arms[1]);
-    		if (Arms[3] != null) bipedLeftArm.addChild(Arms[3]);
     		if (Arms[0] != null
     				&& rightHand != null) ((Modchu_ModelRenderer) rightHand).removeChild(Arms[0]);
-    		if (Arms[2] != null
-    				&& rightHand != null) ((Modchu_ModelRenderer) rightHand).removeChild(Arms[2]);
     		if (Arms[1] != null
     				&& leftHand != null) ((Modchu_ModelRenderer) leftHand).removeChild(Arms[1]);
-    		if (Arms[3] != null
-    				&& leftHand != null) ((Modchu_ModelRenderer) leftHand).removeChild(Arms[3]);
     		if (Arms[0] != null) Arms[0].setRotationPoint(0.5F, 6.5F, 0F);
     		if (Arms[1] != null) Arms[1].setRotationPoint(-0.5F, 6.5F, 0F);
     	}
@@ -275,81 +269,82 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
     	bipedHead.rotationPointZ = 0.0F;
     }
 
-    public void actionRelease2() {
-    	setCapsValue(caps_shortcutKeysAction, false);
+    public void actionRelease2(MMM_IModelCaps entityCaps) {
+    	setCapsValue(entityCaps, caps_shortcutKeysAction, false);
     	setCapsValue(caps_waitBan, false);
     }
 
-    public void actionRelease3() {
-    	setCapsValue(caps_shortcutKeysAction, false);
+    public void actionRelease3(MMM_IModelCaps entityCaps) {
+    	setCapsValue(entityCaps, caps_shortcutKeysAction, false);
     	setCapsValue(caps_waitBan, false);
     }
 
-    public void actionRelease4() {
-    	setCapsValue(caps_shortcutKeysAction, false);
+    public void actionRelease4(MMM_IModelCaps entityCaps) {
+    	setCapsValue(entityCaps, caps_shortcutKeysAction, false);
     	setCapsValue(caps_waitBan, false);
     }
 
-    public void actionRelease5() {
-    	setCapsValue(caps_shortcutKeysAction, false);
+    public void actionRelease5(MMM_IModelCaps entityCaps) {
+    	setCapsValue(entityCaps, caps_shortcutKeysAction, false);
     }
 
-    public void actionRelease6() {
-    	setCapsValue(caps_shortcutKeysAction, false);
+    public void actionRelease6(MMM_IModelCaps entityCaps) {
+    	setCapsValue(entityCaps, caps_shortcutKeysAction, false);
     }
 
-    public void actionRelease7() {
-    	setCapsValue(caps_shortcutKeysAction, false);
+    public void actionRelease7(MMM_IModelCaps entityCaps) {
+    	setCapsValue(entityCaps, caps_shortcutKeysAction, false);
     }
 
-    public void actionRelease8() {
-    	setCapsValue(caps_shortcutKeysAction, false);
+    public void actionRelease8(MMM_IModelCaps entityCaps) {
+    	setCapsValue(entityCaps, caps_shortcutKeysAction, false);
     }
 
-    public void actionRelease9() {
-    	setCapsValue(caps_shortcutKeysAction, false);
+    public void actionRelease9(MMM_IModelCaps entityCaps) {
+    	setCapsValue(entityCaps, caps_shortcutKeysAction, false);
     }
 
-    public void actionRelease30() {
-    	setCapsValue(caps_shortcutKeysAction, false);
+    public void actionRelease30(MMM_IModelCaps entityCaps) {
+    	setCapsValue(entityCaps, caps_shortcutKeysAction, false);
     }
 
-    public void action(float f, float f1, float f2, float f3, float f4, float f5, int i) {
+    public void action(float f, float f1, float f2, float f3, float f4, float f5, int i, MMM_IModelCaps entityCaps) {
     	switch(i) {
     	case 1:
-    		action1(f, f1, f2, f3, f4, f5);
+    		action1(f, f1, f2, f3, f4, f5, entityCaps);
     		break;
     	case 2:
-    		action2(f, f1, f2, f3, f4, f5);
+    		action2(f, f1, f2, f3, f4, f5, entityCaps);
     		break;
     	case 3:
-    		action3(f, f1, f2, f3, f4, f5);
+    		action3(f, f1, f2, f3, f4, f5, entityCaps);
     		break;
     	case 4:
-    		action4(f, f1, f2, f3, f4, f5);
+    		action4(f, f1, f2, f3, f4, f5, entityCaps);
     		break;
     	case 5:
-    		action5(f, f1, f2, f3, f4, f5);
+    		action5(f, f1, f2, f3, f4, f5, entityCaps);
     		break;
     	case 6:
-    		action6(f, f1, f2, f3, f4, f5);
+    		action6(f, f1, f2, f3, f4, f5, entityCaps);
     		break;
     	case 7:
-    		action7(f, f1, f2, f3, f4, f5);
+    		action7(f, f1, f2, f3, f4, f5, entityCaps);
     		break;
     	case 8:
-    		action8(f, f1, f2, f3, f4, f5);
+    		action8(f, f1, f2, f3, f4, f5, entityCaps);
     		break;
     	case 9:
-    		action9(f, f1, f2, f3, f4, f5);
+    		action9(f, f1, f2, f3, f4, f5, entityCaps);
     		break;
     	}
     }
 
-    public void action1(float f, float f1, float f2, float f3, float f4, float f5) {
+    public void action1(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     	// ｳｯｰｳｯｰｳﾏｳﾏ(ﾟ∀ﾟ)
-    	float speed = Modchu_ModelCapsHelper.getCapsValueFloat(this, caps_actionSpeed) / 10;
-    	//Modchu_Debug.mDebug("action1 "+(Modchu_ModelCapsHelper.getCapsValueFloat(this, caps_actionSpeed))+" speed="+speed+" Type="+getCapsValue(caps_armorType));
+    	float speed = Modchu_ModelCapsHelper.getCapsValueFloat(this, entityCaps, caps_actionSpeed) / 10;
+    	//Modchu_Debug.mDebug("action1 entityCaps != null?"+(entityCaps != null));
+    	//Modchu_Debug.mDebug("action1 "+(Modchu_ModelCapsHelper.getCapsValueFloat(this, entityCaps, caps_actionSpeed))+" speed="+speed+" Type="+getCapsValue(this, entityCaps, caps_armorType));
     	if (speed < 0.0F) return;
 
     	rightArm.rotationPointX = bipedRightArm.rotationPointX;
@@ -380,6 +375,7 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
     	leftArm.rotateAngleZ = bipedLeftArm.rotateAngleZ;
 
     	float f6 = bipedBody.rotateAngleZ;
+    	Modchu_Debug.mDebug("f6="+f6);
     	//actionSpeed = 0.1F;
     	//left
     	//float f1 = 0.5359998F;
@@ -398,14 +394,14 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
     	rightArm.rotateAngleY = f6 * 0.09328361F;
     	rightHand.rotateAngleX = -f6 * 1.86567233F;
     	rightHand.rotateAngleZ = 0.0F;
-    	if (!Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_actionReverse)) {
+    	if (!Modchu_ModelCapsHelper.getCapsValueBoolean(this, entityCaps, caps_actionReverse)) {
     		if (f6 < 0.5F) {
     			f6 += speed;
-    		} else setCapsValue(caps_actionReverse, true);
+    		} else setCapsValue(entityCaps, caps_actionReverse, true);
     	} else {
     		if (f6 > -0.3F) {
     			f6 -= speed;
-    		} else setCapsValue(caps_actionReverse, false);
+    		} else setCapsValue(entityCaps, caps_actionReverse, false);
     	}
     	if (f6 > 0.5449998F) f6 = 0.5449998F;
     	if (f6 < -0.3880023F) f6 = -0.3880023F;
@@ -472,40 +468,40 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
     	bipedBody.rotateAngleZ = f6;
     }
 
-    public void action2(float f, float f1, float f2, float f3, float f4, float f5) {
+    public void action2(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     	// 手を上げるモーション
-    	((ModelRenderer) getCapsValue(caps_bipedRightArm)).rotateAngleX -= 0.2F;
-    	((ModelRenderer) getCapsValue(caps_bipedRightArm)).rotateAngleY -= 1.0F;
-    	((ModelRenderer) getCapsValue(caps_bipedRightArm)).rotateAngleZ += Modchu_ModelCapsHelper.getCapsValueInt(this, caps_dominantArm) == 0 ? 2.1F : -2.1F;
+    	((MMM_ModelRenderer) getCapsValue(entityCaps, caps_bipedRightArm, entityCaps)).rotateAngleX -= 0.2F;
+    	((MMM_ModelRenderer) getCapsValue(entityCaps, caps_bipedRightArm, entityCaps)).rotateAngleY -= 1.0F;
+    	((MMM_ModelRenderer) getCapsValue(entityCaps, caps_bipedRightArm, entityCaps)).rotateAngleZ += Modchu_ModelCapsHelper.getCapsValueInt(this, caps_dominantArm) == 0 ? 2.1F : -2.1F;
     }
 
-    public void action3(float f, float f1, float f2, float f3, float f4, float f5) {
+    public void action3(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     	// 手を上げて振るモーション
     	//Modchu_Debug.mDebug("armorType="+armorType+" actionSpeed="+actionSpeed);
-    	float actionSpeed = Modchu_ModelCapsHelper.getCapsValueFloat(this, caps_actionSpeed);
+    	float actionSpeed = Modchu_ModelCapsHelper.getCapsValueFloat(this, entityCaps, caps_actionSpeed);
     	if (actionSpeed < 0.0F) return;
     	int i = (int) (actionSpeed * 2);
     	if (i < 0) i = 0;
-    	boolean actionReverse = Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_actionReverse);
-    	int actionCount = Modchu_ModelCapsHelper.getCapsValueInt(this, caps_actionCount);
+    	boolean actionReverse = Modchu_ModelCapsHelper.getCapsValueBoolean(this, entityCaps, caps_actionReverse);
+    	int actionCount = Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_actionCount);
     	actionCount = (int) (actionReverse ? actionCount - i : actionCount + i);
-    	setCapsValue(caps_actionCount, actionCount);
+    	setCapsValue(entityCaps, caps_actionCount, actionCount);
     	//Modchu_Debug.mDebug("actionReverse="+actionReverse+" actionCount="+actionCount+" "+((float) (actionCount - 15)) / 30.0F);
-    	((ModelRenderer) getCapsValue(caps_bipedRightArm)).rotateAngleZ = 2.0F - ((float) (actionCount - 15)) / 20.0F;
-    	if (Modchu_ModelCapsHelper.getCapsValueInt(this, caps_dominantArm) == 1) ((ModelRenderer) getCapsValue(caps_bipedRightArm)).rotateAngleZ = -((ModelRenderer) getCapsValue(caps_bipedRightArm)).rotateAngleZ;
+    	((MMM_ModelRenderer) getCapsValue(caps_bipedRightArm, entityCaps)).rotateAngleZ = 2.0F - ((float) (actionCount - 15)) / 20.0F;
+    	if (Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm) == 1) ((MMM_ModelRenderer) getCapsValue(entityCaps, caps_bipedRightArm)).rotateAngleZ = -((MMM_ModelRenderer) getCapsValue(entityCaps, caps_bipedRightArm)).rotateAngleZ;
     	if (actionCount > 30) {
-    		setCapsValue(caps_actionReverse, true);
-    		setCapsValue(caps_actionCount, 30);
+    		setCapsValue(entityCaps, caps_actionReverse, true);
+    		setCapsValue(entityCaps, caps_actionCount, 30);
     	}
     	if (actionCount < 0) {
-    		setCapsValue(caps_actionReverse, false);
-    		setCapsValue(caps_actionCount, 0);
+    		setCapsValue(entityCaps, caps_actionReverse, false);
+    		setCapsValue(entityCaps, caps_actionCount, 0);
     	}
     }
 
-    public void action4(float f, float f1, float f2, float f3, float f4, float f5) {
+    public void action4(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     	// 両手を前に出すモーション
-    	if (Modchu_ModelCapsHelper.getCapsValueFloat(this, caps_onGround, (Modchu_ModelCapsHelper.getCapsValueInt(this, caps_dominantArm))) > 0.0F) {
+    	if (Modchu_ModelCapsHelper.getCapsValueFloat(this, caps_onGround, entityCaps, (Modchu_ModelCapsHelper.getCapsValueInt(this, caps_dominantArm))) > 0.0F) {
     		bipedRightArm.rotateAngleX += bipedLeftArm.rotateAngleX += -1.57F;
     		bipedRightArm.rotateAngleY = bipedLeftArm.rotateAngleY = 0.0F;
     		bipedRightArm.rotateAngleZ = bipedLeftArm.rotateAngleZ = 0.0F;
@@ -516,23 +512,23 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
     	}
     }
 
-    public void action5(float f, float f1, float f2, float f3, float f4, float f5) {
+    public void action5(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     	//
     }
 
-    public void action6(float f, float f1, float f2, float f3, float f4, float f5) {
+    public void action6(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     }
 
-    public void action7(float f, float f1, float f2, float f3, float f4, float f5) {
+    public void action7(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     }
 
-    public void action8(float f, float f1, float f2, float f3, float f4, float f5) {
+    public void action8(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     }
 
-    public void action9(float f, float f1, float f2, float f3, float f4, float f5) {
+    public void action9(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     }
 
-    public void action30(float f, float f1, float f2, float f3, float f4, float f5) {
+    public void action30(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     	//デバック用
     	if (mod_Modchu_ModchuLib.mod_modchu_modchulib.getPackage() == null) return;
     	boolean b = true;
@@ -557,37 +553,17 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
     }
 
     @Override
-    public void syncModel(MultiModelBaseBiped model) {
-    	super.syncModel(model);
-    	if (Modchu_ModelCapsHelper.getCapsValueInt(this, caps_runActionNumber) == 1
-    			| Modchu_ModelCapsHelper.getCapsValueInt(this, caps_runActionNumber) == 3) bipedBody.rotateAngleZ = model.bipedBody.rotateAngleZ;
+    public void syncModel(MMM_IModelCaps entityCaps, MultiModelBaseBiped model) {
+    	super.syncModel(entityCaps, model);
+    	if (Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_runActionNumber) == 1
+    			| Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_runActionNumber) == 3) bipedBody.rotateAngleZ = model.bipedBody.rotateAngleZ;
     }
 
     @Override
-    public boolean setCapsValue(int pIndex, Object ...pArg) {
-    	switch (pIndex) {
-    	case caps_actionInit:
-    		if (pArg != null
-    		&& pArg.length > 0
-    		&& pArg[0] != null) {
-    			actionInit((Integer) pArg[0]);
-    			return true;
-    		}
-    	case caps_actionRelease:
-    		if (pArg != null
-    		&& pArg.length > 0
-    		&& pArg[0] != null) {
-    			actionRelease((Integer) pArg[0]);
-    			return true;
-    		}
-    	}
-    	return super.setCapsValue(pIndex, pArg);
-    }
-
-    public void setArmorBipedRightArmShowModel(boolean b) {
-    	if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_shortcutKeysAction)
-    			&& Modchu_ModelCapsHelper.getCapsValueInt(this, caps_runActionNumber) == 0
-    			| Modchu_ModelCapsHelper.getCapsValueInt(this, caps_runActionNumber) == 1) {
+    public void setArmorBipedRightArmShowModel(MMM_IModelCaps entityCaps, boolean b) {
+    	if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, entityCaps, caps_shortcutKeysAction)
+    			&& Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_runActionNumber) == 0
+    			| Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_runActionNumber) == 1) {
     		setCapsValue(caps_visible, bipedRightArm, false);
     		if (rightArm != null) setCapsValue(caps_visible, rightArm, b);
     		if (rightArm2 != null) setCapsValue(caps_visible, rightArm2, b);
@@ -596,10 +572,11 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
     	else setCapsValue(caps_visible, bipedRightArm, b);
     }
 
-    public void setArmorBipedLeftArmShowModel(boolean b) {
-    	if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_shortcutKeysAction)
-    			&& Modchu_ModelCapsHelper.getCapsValueInt(this, caps_runActionNumber) == 0
-    			| Modchu_ModelCapsHelper.getCapsValueInt(this, caps_runActionNumber) == 1) {
+    @Override
+    public void setArmorBipedLeftArmShowModel(MMM_IModelCaps entityCaps, boolean b) {
+    	if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, entityCaps, caps_shortcutKeysAction)
+    			&& Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_runActionNumber) == 0
+    			| Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_runActionNumber) == 1) {
     		setCapsValue(caps_visible, bipedLeftArm, false);
     		if (leftArm != null) setCapsValue(caps_visible, leftArm, b);
     		if (leftArm2 != null) setCapsValue(caps_visible, leftArm2, b);
@@ -608,10 +585,11 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
     	else setCapsValue(caps_visible, bipedLeftArm, b);
     }
 
-    public void setArmorBipedRightLegShowModel(boolean b) {
-    	if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_shortcutKeysAction)
-    			&& Modchu_ModelCapsHelper.getCapsValueInt(this, caps_runActionNumber) == 0
-    			| Modchu_ModelCapsHelper.getCapsValueInt(this, caps_runActionNumber) == 1) {
+    @Override
+    public void setArmorBipedRightLegShowModel(MMM_IModelCaps entityCaps, boolean b) {
+    	if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, entityCaps, caps_shortcutKeysAction)
+    			&& Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_runActionNumber) == 0
+    			| Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_runActionNumber) == 1) {
     		setCapsValue(caps_visible, bipedRightLeg, false);
     		if (rightLeg != null) setCapsValue(caps_visible, rightLeg, b);
     		if (rightLeg2 != null) setCapsValue(caps_visible, rightLeg2, b);
@@ -619,10 +597,11 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
     	else setCapsValue(caps_visible, bipedRightLeg, b);
     }
 
-    public void setArmorBipedLeftLegShowModel(boolean b) {
-    	if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_shortcutKeysAction)
-    			&& Modchu_ModelCapsHelper.getCapsValueInt(this, caps_runActionNumber) == 0
-    			| Modchu_ModelCapsHelper.getCapsValueInt(this, caps_runActionNumber) == 1) {
+    @Override
+    public void setArmorBipedLeftLegShowModel(MMM_IModelCaps entityCaps, boolean b) {
+    	if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, entityCaps, caps_shortcutKeysAction)
+    			&& Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_runActionNumber) == 0
+    			| Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_runActionNumber) == 1) {
     		setCapsValue(caps_visible, bipedLeftLeg, false);
     		if (leftLeg != null) setCapsValue(caps_visible, leftLeg, b);
     		if (leftLeg2 != null) setCapsValue(caps_visible, leftLeg2, b);
