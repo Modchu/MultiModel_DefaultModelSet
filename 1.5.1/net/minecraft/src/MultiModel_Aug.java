@@ -49,44 +49,44 @@ public class MultiModel_Aug extends MultiModel_SR2 {
 		// 増加パーツ
 		shaggyB = new Modchu_ModelRenderer(this, 24, 0);
 		shaggyB.addPlate(-5.0F, 0.0F, 0.0F, 10, 4, 4, psize);
-		shaggyB.setRotationPointLM(0.0F, -1.0F, 4.0F);
+		shaggyB.setRotationPoint(0.0F, -1.0F, 4.0F);
 		shaggyB.setRotateAngleX(0.4F);
 		bipedHead.addChild(shaggyB);
 		shaggyR = new Modchu_ModelRenderer(this, 34, 4);
 		shaggyR.addPlate(0.0F, 0.0F, -5.0F, 10, 4, 1, psize);
-		shaggyR.setRotationPointLM(4.0F, -1.0F, 0.0F);
+		shaggyR.setRotationPoint(4.0F, -1.0F, 0.0F);
 		shaggyR.setRotateAngleZ(-0.4F);
 		bipedHead.addChild(shaggyR);
 		shaggyL = new Modchu_ModelRenderer(this, 24, 4);
 		shaggyL.addPlate(0.0F, 0.0F, -5.0F, 10, 4, 5, psize);
-		shaggyL.setRotationPointLM(-4.0F, -1.0F, 0.0F);
+		shaggyL.setRotationPoint(-4.0F, -1.0F, 0.0F);
 		shaggyL.setRotateAngleZ(0.4F);
 		bipedHead.addChild(shaggyL);
 
 		sensor1 = new Modchu_ModelRenderer(this, 0, 0);
 		sensor1.addPlate(-8.0F, -4.0F, 0.0F, 8, 4, 0);
-		sensor1.setRotationPointLM(0.0F, -8.0F, 0.0F);
+		sensor1.setRotationPoint(0.0F, -8.0F, 0.0F);
 		bipedHead.addChild(sensor1);
 		sensor2 = new Modchu_ModelRenderer(this, 0, 4);
 		sensor2.addPlate(0.0F, -4.0F, 0.0F, 8, 4, 0);
-		sensor2.setRotationPointLM(0.0F, -8.0F, 0.0F);
+		sensor2.setRotationPoint(0.0F, -8.0F, 0.0F);
 		bipedHead.addChild(sensor2);
 		sensor3 = new Modchu_ModelRenderer(this, 44, 0);
 		sensor3.addPlate(0.0F, -7.0F, -4.0F, 4, 8, 1);
-		sensor3.setRotationPointLM(0.0F, -8.0F, 0.0F);
+		sensor3.setRotationPoint(0.0F, -8.0F, 0.0F);
 		bipedHead.addChild(sensor3);
 		sensor4 = new Modchu_ModelRenderer(this, 34, 0);
 		sensor4.addPlate(0.0F, -4.0F, -10.0F, 10, 4, 1);
-		sensor4.setRotationPointLM(0.0F, -8.0F, 0.0F);
+		sensor4.setRotationPoint(0.0F, -8.0F, 0.0F);
 		bipedHead.addChild(sensor4);
 
 		sidetailUpperR = new Modchu_ModelRenderer(this, 52, 10);
-		sidetailUpperR.addBoxLM(-4.0F, 0.0F, -1.0F, 4, 3, 2);
-		sidetailUpperR.setRotationPointLM(0.0F, 0.0F, 0.0F);
+		sidetailUpperR.addBox(-4.0F, 0.0F, -1.0F, 4, 3, 2);
+		sidetailUpperR.setRotationPoint(0.0F, 0.0F, 0.0F);
 		bipedHead.addChild(sidetailUpperR);
 		sidetailUpperL = new Modchu_ModelRenderer(this, 52, 15);
-		sidetailUpperL.addBoxLM(0.0F, 0.0F, -1.0F, 4, 3, 2);
-		sidetailUpperL.setRotationPointLM(0.0F, 0.0F, 0.0F);
+		sidetailUpperL.addBox(0.0F, 0.0F, -1.0F, 4, 3, 2);
+		sidetailUpperL.setRotationPoint(0.0F, 0.0F, 0.0F);
 		bipedHead.addChild(sidetailUpperL);
 
 		// 未使用パーツ
@@ -96,13 +96,15 @@ public class MultiModel_Aug extends MultiModel_SR2 {
 	}
 
 	@Override
-	public void setLivingAnimationsLM(EntityLiving entityliving, float f, float f1, float renderPartialTicks)
+	public void setLivingAnimations(MMM_IModelCaps entityCaps, float f, float f1, float renderPartialTicks)
 	{
-		super.setLivingAnimationsLM(entityliving, f, f1, renderPartialTicks);
+		super.setLivingAnimations(entityCaps, f, f1, renderPartialTicks);
+		EntityLiving entityliving = (EntityLiving) getCapsValue(entityCaps, entityCaps.caps_Entity);
+		if (entityliving != null) ;else return;
 
-		float f3 = (float)entityliving.ticksExisted + renderPartialTicks + getCapsValueFloat(caps_entityIdFactor);
+		float f3 = (float)entityliving.ticksExisted + renderPartialTicks + Modchu_ModelCapsHelper.getCapsValueFloat(this, caps_entityIdFactor);
 		float f4 = 0.0F;
-		if (getCapsValueBoolean(caps_isLookSuger)) {
+		if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_isLookSuger)) {
 			f3 *= 8.0F;
 			f4 = -0.2F;
 		} else {
@@ -117,8 +119,8 @@ public class MultiModel_Aug extends MultiModel_SR2 {
 	}
 
 	@Override
-	public void setRotationAnglesLM(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
-		super.setRotationAnglesLM(f, f1, f2, f3, f4, f5, entity);
+	public void setRotationAnglesLM(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
+		super.setRotationAnglesLM(f, f1, f2, f3, f4, f5, entityCaps);
 		SideTailR.rotateAngleX = SideTailL.rotateAngleX = -bipedHead.rotateAngleX / 1.5F;
 		float y = -8.0F;
 		sensor1.rotationPointY = sensor2.rotationPointY = sensor3.rotationPointY = sensor4.rotationPointY = y;
@@ -127,14 +129,14 @@ public class MultiModel_Aug extends MultiModel_SR2 {
 	}
 
 	@Override
-	public void defaultPartsSettingBefore() {
-		super.defaultPartsSettingBefore();
+	public void defaultPartsSettingBefore(MMM_IModelCaps entityCaps) {
+		super.defaultPartsSettingBefore(entityCaps);
 		String[] s1 = {
 				"sidetailUpperR", "sidetailUpperL"
 		};
 		String[] s2 = {
 				"s_tailUR", "s_tailUL"
 		};
-		addShowPartsReneme(s1, s2);
+		setCapsValue(entityCaps, caps_showPartsRenemeMap, s1, s2);
 	}
 }
