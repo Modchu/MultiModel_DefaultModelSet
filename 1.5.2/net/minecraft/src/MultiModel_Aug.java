@@ -129,14 +129,14 @@ public class MultiModel_Aug extends MultiModel_SR2 {
 	}
 
 	@Override
-	public void defaultPartsSettingBefore() {
-		super.defaultPartsSettingBefore();
+	public void defaultPartsSettingBefore(MMM_IModelCaps entityCaps) {
+		super.defaultPartsSettingBefore(entityCaps);
 		String[] s1 = {
 				"sidetailUpperR", "sidetailUpperL"
 		};
 		String[] s2 = {
 				"s_tailUR", "s_tailUL"
 		};
-		setCapsValue(caps_showPartsRenemeMap, s1, s2);
+		setCapsValue(entityCaps, caps_showPartsRenemeMap, s1, s2);
 	}
 }

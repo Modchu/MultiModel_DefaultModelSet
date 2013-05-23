@@ -80,18 +80,18 @@ public abstract class MultiModelCustom extends MultiModelSkirtFloats {
 	}
 
 	@Override
-	public void defaultPartsSettingBefore() {
-		customModel.defaultPartsSettingBefore();
+	public void defaultPartsSettingBefore(MMM_IModelCaps entityCaps) {
+		customModel.defaultPartsSettingBefore(entityCaps);
 	}
 
 	@Override
-	public void defaultPartsSettingAfter() {
-		customModel.defaultPartsSettingAfter();
+	public void defaultPartsSettingAfter(MMM_IModelCaps entityCaps) {
+		customModel.defaultPartsSettingAfter(entityCaps);
 	}
 
     @Override
-    public void showModelSettingReflects() {
-    	customModel.showModelSettingReflects();
+    public void showModelSettingReflects(MMM_IModelCaps entityCaps) {
+    	customModel.showModelSettingReflects(entityCaps);
     }
 
     @Override
@@ -267,8 +267,8 @@ public abstract class MultiModelCustom extends MultiModelSkirtFloats {
 	}
 
 	@Override
-	public int showArmorParts(MMM_IModelCaps entityCaps, int i) {
-		if (customModel != null) return customModel.showArmorParts(entityCaps, i);
+	public int showArmorParts(MMM_IModelCaps entityCaps, int i, int i2) {
+		if (customModel != null) return customModel.showArmorParts(entityCaps, i, i2);
 		return -1;
 	}
 }

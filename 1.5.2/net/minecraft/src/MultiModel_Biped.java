@@ -359,7 +359,7 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
 	}
 
     @Override
-	public int showArmorParts(MMM_IModelCaps entityCaps, int parts) {
+	public int showArmorParts(MMM_IModelCaps entityCaps, int parts, int index) {
 		// 鎧の表示用
 		boolean f;
 		// 兜
@@ -396,14 +396,14 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
 	}
 
     @Override
-    public void defaultPartsSettingBefore() {
+    public void defaultPartsSettingBefore(MMM_IModelCaps entityCaps) {
     	String[] s = {
     			"rightArm", "rightArm2", "rightArmPlus", "rightArmPlus2", "rightHand",
     			"rightLeg", "rightLeg2", "rightLegPlus", "rightLegPlus2", "leftArm",
     			"leftArm2", "leftArmPlus", "leftArmPlus2", "leftHand", "leftLeg",
     			"leftLeg2", "leftLegPlus", "leftLegPlus2", "HeadMount", "mainFrame"
     	};
-    	setCapsValue(caps_showPartsHideList, (Object) s);
+    	setCapsValue(entityCaps, caps_showPartsHideList, (Object) s);
     	String[] s1 = {
     			"bipedHead", "bipedHeadwear", "bipedBody", "bipedRightArm", "bipedLeftArm",
     			"bipedRightLeg", "bipedLeftLeg", "c", "d", "e",
@@ -420,7 +420,7 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
     			"bipedHead", "Headwear", "Body", "RightArm", "LeftArm",
     			"RightLeg", "LeftLeg", "bipedEars", "bipedCloak"
     	};
-    	setCapsValue(caps_showPartsRenemeMap, s1, s2);
+    	setCapsValue(entityCaps, caps_showPartsRenemeMap, s1, s2);
     }
 
     @Override
@@ -463,13 +463,13 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
     public void action2(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     	// 手を上げるモーション
     	super.action2(f, f1, f2, f3, f4, f5, entityCaps);
-    	((ModelRenderer) getCapsValue(caps_bipedRightArm, entityCaps)).rotationPointX += Modchu_ModelCapsHelper.getCapsValueInt(this, caps_dominantArm) == 0 ? 2.0F : -2.0F;
+    	((ModelRenderer) getCapsValue(caps_bipedRightArm, entityCaps)).rotationPointX += Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm) == 0 ? 2.0F : -2.0F;
     }
 
     @Override
     public void action3(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     	// 手を上げて振るモーション
     	super.action3(f, f1, f2, f3, f4, f5, entityCaps);
-    	((ModelRenderer) getCapsValue(caps_bipedRightArm, entityCaps)).rotationPointX += Modchu_ModelCapsHelper.getCapsValueInt(this, caps_dominantArm) == 0 ? 2.0F : -2.0F;
+    	((ModelRenderer) getCapsValue(caps_bipedRightArm, entityCaps)).rotationPointX += Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm) == 0 ? 2.0F : -2.0F;
     }
 }

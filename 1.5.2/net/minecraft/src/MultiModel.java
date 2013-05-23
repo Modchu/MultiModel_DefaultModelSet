@@ -553,7 +553,7 @@ public class MultiModel extends MultiModelSkirtFloats {
     }
 
     @Override
-    public int showArmorParts(MMM_IModelCaps entityCaps, int parts) {
+    public int showArmorParts(MMM_IModelCaps entityCaps, int parts, int index) {
     	// ŠZ‚Ì•\Ž¦—p
     	boolean f;
     	// Š•
@@ -576,7 +576,7 @@ public class MultiModel extends MultiModelSkirtFloats {
     }
 
     @Override
-    public void defaultPartsSettingBefore() {
+    public void defaultPartsSettingBefore(MMM_IModelCaps entityCaps) {
     	String[] s = {
     			"bipedCloak", "bipedEars", "SkirtTop", "SkirtFront", "SkirtLeft",
     			"SkirtRight", "SkirtBack", "rightArm", "rightArm2", "rightArmPlus",
@@ -586,7 +586,7 @@ public class MultiModel extends MultiModelSkirtFloats {
     			"HeadMount", "mainFrame", "j", "k", "field_78121_j",
     			"field_78122_k"
     	};
-    	setCapsValue(caps_showPartsHideList, (Object) s);
+    	setCapsValue(entityCaps, caps_showPartsHideList, (Object) s);
     	String[] s1 = {
     			"bipedHead", "bipedHeadwear", "bipedBody", "bipedRightArm", "bipedLeftArm",
     			"bipedRightLeg", "bipedLeftLeg", "c", "d", "e",
@@ -601,12 +601,12 @@ public class MultiModel extends MultiModelSkirtFloats {
     			"bipedHead", "Headwear", "Body", "RightArm", "LeftArm",
     			"RightLeg", "LeftLeg"
     	};
-    	setCapsValue(caps_showPartsRenemeMap, s1, s2);
+    	setCapsValue(entityCaps, caps_showPartsRenemeMap, s1, s2);
     }
 
     @Override
-    public void showModelSettingReflects() {
-    	super.showModelSettingReflects();
+    public void showModelSettingReflects(MMM_IModelCaps entityCaps) {
+    	super.showModelSettingReflects(entityCaps);
     	setCapsValue(caps_indexOfAllVisible, "Skirt", Modchu_ModelCapsHelper.getCapsValueInt(this, caps_armorType));
     	if (Modchu_ModelCapsHelper.getCapsValueInt(this, caps_skirtFloats) == 2) {
     		if (Skirt != null) setCapsValue(caps_visible, Skirt, false);
@@ -656,11 +656,11 @@ public class MultiModel extends MultiModelSkirtFloats {
     	if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, entityCaps, caps_shortcutKeysAction)
     			&& Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_runActionNumber) == 0
     			| Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_runActionNumber) == 1) {
-    		if (Modchu_ModelCapsHelper.getCapsValueInt(this, caps_dominantArm) == 0) return rightArm;
+    		if (Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm) == 0) return rightArm;
     		return leftArm;
     	}
     	else {
-    		if (Modchu_ModelCapsHelper.getCapsValueInt(this, caps_dominantArm) == 0) return bipedRightArm;
+    		if (Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm) == 0) return bipedRightArm;
     		return bipedLeftArm;
     	}
     }

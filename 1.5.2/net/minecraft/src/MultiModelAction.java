@@ -142,17 +142,17 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
     public void actionInit2(MMM_IModelCaps entityCaps) {
     	setCapsValue(entityCaps, caps_shortcutKeysAction, true);
     	setCapsValue(entityCaps, caps_actionCount, 0);
-    	setCapsValue(caps_waitBan, false);
+    	setCapsValue(caps_waitBan, true);
     }
 
     public void actionInit3(MMM_IModelCaps entityCaps) {
     	setCapsValue(entityCaps, caps_shortcutKeysAction, true);
-    	setCapsValue(caps_waitBan, false);
+    	setCapsValue(caps_waitBan, true);
     }
 
     public void actionInit4(MMM_IModelCaps entityCaps) {
     	setCapsValue(entityCaps, caps_shortcutKeysAction, true);
-    	setCapsValue(caps_waitBan, false);
+    	setCapsValue(caps_waitBan, true);
     }
 
     public void actionInit5(MMM_IModelCaps entityCaps) {
@@ -375,7 +375,6 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
     	leftArm.rotateAngleZ = bipedLeftArm.rotateAngleZ;
 
     	float f6 = bipedBody.rotateAngleZ;
-    	Modchu_Debug.mDebug("f6="+f6);
     	//actionSpeed = 0.1F;
     	//left
     	//float f1 = 0.5359998F;
@@ -470,9 +469,10 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
 
     public void action2(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     	// 手を上げるモーション
-    	((MMM_ModelRenderer) getCapsValue(entityCaps, caps_bipedRightArm, entityCaps)).rotateAngleX -= 0.2F;
-    	((MMM_ModelRenderer) getCapsValue(entityCaps, caps_bipedRightArm, entityCaps)).rotateAngleY -= 1.0F;
-    	((MMM_ModelRenderer) getCapsValue(entityCaps, caps_bipedRightArm, entityCaps)).rotateAngleZ += Modchu_ModelCapsHelper.getCapsValueInt(this, caps_dominantArm) == 0 ? 2.1F : -2.1F;
+    	MMM_ModelRenderer arm = (MMM_ModelRenderer) getCapsValue(this, caps_bipedRightArm, entityCaps);
+    	arm.rotateAngleX -= 0.2F;
+    	arm.rotateAngleY -= 1.0F;
+    	arm.rotateAngleZ = Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm) == 0 ? 2.1F : -2.1F;
     }
 
     public void action3(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
@@ -487,8 +487,9 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
     	actionCount = (int) (actionReverse ? actionCount - i : actionCount + i);
     	setCapsValue(entityCaps, caps_actionCount, actionCount);
     	//Modchu_Debug.mDebug("actionReverse="+actionReverse+" actionCount="+actionCount+" "+((float) (actionCount - 15)) / 30.0F);
-    	((MMM_ModelRenderer) getCapsValue(caps_bipedRightArm, entityCaps)).rotateAngleZ = 2.0F - ((float) (actionCount - 15)) / 20.0F;
-    	if (Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm) == 1) ((MMM_ModelRenderer) getCapsValue(entityCaps, caps_bipedRightArm)).rotateAngleZ = -((MMM_ModelRenderer) getCapsValue(entityCaps, caps_bipedRightArm)).rotateAngleZ;
+    	MMM_ModelRenderer arm = (MMM_ModelRenderer) getCapsValue(this, caps_bipedRightArm, entityCaps);
+    	arm.rotateAngleZ = 2.0F - ((float) (actionCount - 15)) / 20.0F;
+    	if (Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm) == 1) arm.rotateAngleZ = -arm.rotateAngleZ;
     	if (actionCount > 30) {
     		setCapsValue(entityCaps, caps_actionReverse, true);
     		setCapsValue(entityCaps, caps_actionCount, 30);
@@ -501,7 +502,7 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
 
     public void action4(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     	// 両手を前に出すモーション
-    	if (Modchu_ModelCapsHelper.getCapsValueFloat(this, caps_onGround, entityCaps, (Modchu_ModelCapsHelper.getCapsValueInt(this, caps_dominantArm))) > 0.0F) {
+    	if (Modchu_ModelCapsHelper.getCapsValueFloat(this, caps_onGround, entityCaps, (Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm))) > 0.0F) {
     		bipedRightArm.rotateAngleX += bipedLeftArm.rotateAngleX += -1.57F;
     		bipedRightArm.rotateAngleY = bipedLeftArm.rotateAngleY = 0.0F;
     		bipedRightArm.rotateAngleZ = bipedLeftArm.rotateAngleZ = 0.0F;

@@ -23,7 +23,6 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 	public MMM_ModelRenderer bipedLeftLeg;
 	public MMM_ModelRenderer bipedEars;
 	public MMM_ModelRenderer bipedCloak;
-	//public MMM_IModelCaps entityCaps;
 //@-@151
 	private int armorType = 0;
 	private boolean oldwalking = false;
@@ -100,11 +99,6 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     }
 
     public void setLivingAnimations(MMM_IModelCaps entityCaps, float f, float f1, float f2) {
-/*
-    	if ((this.entityCaps != null
-    			&& entityCaps != this.entityCaps)
-    			| this.entityCaps == null) this.entityCaps = entityCaps;
-*/
     	setCapsValue(entityCaps, caps_setLivingAnimationsBefore, this, f, f1, f2);
     	setLivingAnimationsLM(entityCaps, f, f1, f2);
 //-@-151
@@ -375,20 +369,20 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
      * GUI パーツ表示・非表示 モデル初期化時とPFLM_Gui Customize Defaultボタンが押された時、
      * setPartsの前に呼ばれる。自動取得されたリストの編集など
      */
-    public void defaultPartsSettingBefore() {
+    public void defaultPartsSettingBefore(MMM_IModelCaps entityCaps) {
     }
 
     /**
      * GUI パーツ表示・非表示 モデル初期化時とPFLM_Gui Customize Defaultボタンが押された時、
      * setPartsの後に呼ばれる。デフォルトOFFにする設定など
      */
-    public void defaultPartsSettingAfter() {
+    public void defaultPartsSettingAfter(MMM_IModelCaps entityCaps) {
     }
 
     /**
      * GUI パーツ表示・非表示反映
      */
-    public void showModelSettingReflects() {
+    public void showModelSettingReflects(MMM_IModelCaps entityCaps) {
     }
 
     /**
@@ -1055,12 +1049,12 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     }
 
     public MMM_ModelRenderer getBipedRightArm(MMM_IModelCaps entityCaps) {
-    	if (Modchu_ModelCapsHelper.getCapsValueInt(entityCaps, caps_dominantArm) == 0) return bipedRightArm;
+    	if (Modchu_ModelCapsHelper.getCapsValueInt(entityCaps, caps_dominantArm, getCapsValue(caps_armorType)) == 0) return bipedRightArm;
     	return bipedLeftArm;
     }
 
     public MMM_ModelRenderer getNotDominantArm(MMM_IModelCaps entityCaps) {
-    	if (Modchu_ModelCapsHelper.getCapsValueInt(entityCaps, caps_dominantArm) == 0) return bipedLeftArm;
+    	if (Modchu_ModelCapsHelper.getCapsValueInt(entityCaps, caps_dominantArm, getCapsValue(caps_armorType)) == 0) return bipedLeftArm;
     	return bipedRightArm;
     }
 
@@ -1073,7 +1067,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     	((MMM_ModelRenderer) getCapsValue(caps_bipedRightArm, entityCaps)).render(f);
     }
 
-    abstract int showArmorParts(MMM_IModelCaps entityCaps, int parts);
+    abstract int showArmorParts(MMM_IModelCaps entityCaps, int parts, int index);
     // 以下、LMM_EntityCaps側にあってほしいもの
 	/**
      * LMM専用処理
