@@ -172,11 +172,6 @@ public abstract class MultiModelCustom extends MultiModelSkirtFloats {
     }
 
     @Override
-    public void equippedItemPositionFlower() {
-    	customModel.equippedItemPositionFlower();
-    }
-
-    @Override
     public void setArmorBipedHeadShowModel(MMM_IModelCaps entityCaps, boolean b) {
     	customModel.setArmorBipedHeadShowModel(entityCaps, b);
     }
@@ -246,7 +241,7 @@ public abstract class MultiModelCustom extends MultiModelSkirtFloats {
 	}
 
 	@Override
-	public void reset(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
+	public void setDefaultPause(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
 		if (customModel != null) customModel.reset(f, f1, f2, f3, f4, f5, entityCaps);
 	}
 

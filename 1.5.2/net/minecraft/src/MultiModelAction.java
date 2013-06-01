@@ -117,20 +117,16 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
     	if (bipedRightArm != null
     			&& bipedRightArm instanceof Modchu_ModelRenderer) {
     		((Modchu_ModelRenderer) bipedRightArm).removeChild(Arms[0]);
-    		((Modchu_ModelRenderer) bipedRightArm).removeChild(Arms[2]);
     	}
     	if (bipedLeftArm != null
     			&& bipedLeftArm instanceof Modchu_ModelRenderer) {
     		((Modchu_ModelRenderer) bipedLeftArm).removeChild(Arms[1]);
-    		((Modchu_ModelRenderer) bipedLeftArm).removeChild(Arms[3]);
     	}
     	if (rightHand != null) {
     		rightHand.addChild(Arms[0]);
-    		rightHand.addChild(Arms[2]);
     	}
     	if (leftHand != null) {
     		leftHand.addChild(Arms[1]);
-    		leftHand.addChild(Arms[3]);
     	}
     	Arms[0].setRotationPoint(0.5F, 0.0F, 0.0F);
     	Arms[1].setRotationPoint(-0.5F, 0.0F, 0.0F);
@@ -502,15 +498,22 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
 
     public void action4(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     	// 両手を前に出すモーション
-    	if (Modchu_ModelCapsHelper.getCapsValueFloat(this, caps_onGround, entityCaps, (Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm))) > 0.0F) {
-    		bipedRightArm.rotateAngleX += bipedLeftArm.rotateAngleX += -1.57F;
-    		bipedRightArm.rotateAngleY = bipedLeftArm.rotateAngleY = 0.0F;
-    		bipedRightArm.rotateAngleZ = bipedLeftArm.rotateAngleZ = 0.0F;
+    	if (onGrounds[dominantArm] > 0F) {
+    		switch(dominantArm) {
+    		case 0:
+    			bipedRightArm.rotateAngleX += -1.57F;
+    			bipedLeftArm.rotateAngleX = -1.57F;
+    			break;
+    		case 1:
+    			bipedLeftArm.rotateAngleX += -1.57F;
+    			bipedRightArm.rotateAngleX = -1.57F;
+    			break;
+    		}
     	} else {
     		bipedRightArm.rotateAngleX = bipedLeftArm.rotateAngleX = -1.57F;
-    		bipedRightArm.rotateAngleY = bipedLeftArm.rotateAngleY = 0.0F;
-    		bipedRightArm.rotateAngleZ = bipedLeftArm.rotateAngleZ = 0.0F;
     	}
+    	bipedRightArm.rotateAngleY = bipedLeftArm.rotateAngleY = 0.0F;
+    	bipedRightArm.rotateAngleZ = bipedLeftArm.rotateAngleZ = 0.0F;
     }
 
     public void action5(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
@@ -557,7 +560,9 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
     public void syncModel(MMM_IModelCaps entityCaps, MultiModelBaseBiped model) {
     	super.syncModel(entityCaps, model);
     	if (Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_runActionNumber) == 1
-    			| Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_runActionNumber) == 3) bipedBody.rotateAngleZ = model.bipedBody.rotateAngleZ;
+    			| Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_runActionNumber) == 3
+    			&& bipedBody != null
+    			&& model.bipedBody != null) bipedBody.rotateAngleZ = model.bipedBody.rotateAngleZ;
     }
 
     @Override

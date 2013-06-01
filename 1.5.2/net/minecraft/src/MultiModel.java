@@ -39,95 +39,76 @@ public class MultiModel extends MultiModelSkirtFloats {
 
     @Override
     public void initModel(float f, float f1) {
-    	f1 += 8F;
     	bipedCloak = new Modchu_ModelRenderer(this);
     	bipedEars = new Modchu_ModelRenderer(this);
     	bipedHead = new Modchu_ModelRenderer(this, 0, 0);
-    	((Modchu_ModelRenderer) bipedHead).addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, f);
-    	((Modchu_ModelRenderer) bipedHead).addChild(HeadMount);
+    	bipedHead.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, f);
     	bipedHeadwear = new Modchu_ModelRenderer(this, 24, 0);
-    	((Modchu_ModelRenderer) bipedHeadwear).addBox(-4.0F, 0.0F, 1.0F, 8, 4, 3, f);
-    	((Modchu_ModelRenderer) bipedHead).addChild(bipedHeadwear);
+    	bipedHeadwear.addBox(-4.0F, 0.0F, 1.0F, 8, 4, 3, f);
+    	bipedHead.addChild(bipedHeadwear);
     	bipedBody = new Modchu_ModelRenderer(this, 32, 8);
-    	((Modchu_ModelRenderer) bipedBody).addBox(-3.0F, -3.5F, -2.0F, 6, 7, 4, f);
+    	bipedBody.addBox(-3.0F, -3.5F, -2.0F, 6, 7, 4, f);
     	bipedRightArm = new Modchu_ModelRenderer(this, 48, 0);
-    	((Modchu_ModelRenderer) bipedRightArm).addBox(-1.0F, 0.0F, -1.0F, 2, 8, 2, f);
-    	((Modchu_ModelRenderer) bipedBody).addChild(bipedRightArm);
+    	bipedRightArm.addBox(-1.0F, 0.0F, -1.0F, 2, 8, 2, f);
+    	bipedBody.addChild(bipedRightArm);
     	bipedLeftArm = new Modchu_ModelRenderer(this, 56, 0);
-    	((Modchu_ModelRenderer) bipedLeftArm).addBox(-1.0F, 0.0F, -1.0F, 2, 8, 2, f);
-    	((Modchu_ModelRenderer) bipedBody).addChild(bipedLeftArm);
+    	bipedLeftArm.addBox(-1.0F, 0.0F, -1.0F, 2, 8, 2, f);
+    	bipedBody.addChild(bipedLeftArm);
     	bipedRightLeg = new Modchu_ModelRenderer(this, 32, 19);
-    	((Modchu_ModelRenderer) bipedRightLeg).addBox(-1.5F, 0.0F, -2.0F, 3, 9, 4, f);
-    	((Modchu_ModelRenderer) bipedBody).addChild(bipedRightLeg);
+    	bipedRightLeg.addBox(-1.5F, 0.0F, -2.0F, 3, 9, 4, f);
+    	bipedBody.addChild(bipedRightLeg);
     	bipedLeftLeg = new Modchu_ModelRenderer(this, 32, 19);
     	bipedLeftLeg.mirror = true;
-    	((Modchu_ModelRenderer) bipedLeftLeg).addBox(-1.5F, 0.0F, -2.0F, 3, 9, 4, f);
-    	((Modchu_ModelRenderer) bipedBody).addChild(bipedLeftLeg);
+    	bipedLeftLeg.addBox(-1.5F, 0.0F, -2.0F, 3, 9, 4, f);
+    	bipedBody.addChild(bipedLeftLeg);
     	Skirt = new Modchu_ModelRenderer(this, 0, 16);
-    	((Modchu_ModelRenderer) Skirt).addBox(-4F, -4F, -4F, 8, 8, 8, f);
-    	((Modchu_ModelRenderer) bipedBody).addChild(Skirt);
+    	Skirt.addBox(-4F, -4F, -4F, 8, 8, 8, f);
+    	bipedBody.addChild(Skirt);
     	ChignonR = new Modchu_ModelRenderer(this, 24, 18);
-    	((Modchu_ModelRenderer) ChignonR).addBox(-5F, -7F, 0.2F, 1, 3, 3, f);
-    	((Modchu_ModelRenderer) ChignonR).setRotationPoint(0.0F, 0.0F, 0.0F);
-    	((Modchu_ModelRenderer) bipedHead).addChild(ChignonR);
+    	ChignonR.addBox(-5F, -7F, 0.2F, 1, 3, 3, f);
+    	ChignonR.setRotationPoint(0.0F, 0.0F, 0.0F);
+    	bipedHead.addChild(ChignonR);
     	ChignonL = new Modchu_ModelRenderer(this, 24, 18);
-    	((Modchu_ModelRenderer) ChignonL).addBox(4F, -7F, 0.2F, 1, 3, 3, f);
-    	((Modchu_ModelRenderer) ChignonL).setRotationPoint(0.0F, 0.0F, 0.0F);
-    	((Modchu_ModelRenderer) bipedHead).addChild(ChignonL);
+    	ChignonL.addBox(4F, -7F, 0.2F, 1, 3, 3, f);
+    	ChignonL.setRotationPoint(0.0F, 0.0F, 0.0F);
+    	bipedHead.addChild(ChignonL);
     	ChignonB = new Modchu_ModelRenderer(this, 52, 10);
-    	((Modchu_ModelRenderer) ChignonB).addBox(-2F, -7.2F, 4F, 4, 4, 2, f);
-    	((Modchu_ModelRenderer) ChignonB).setRotationPoint(0.0F, 0.0F, 0.0F);
-    	((Modchu_ModelRenderer) bipedHead).addChild(ChignonB);
+    	ChignonB.addBox(-2F, -7.2F, 4F, 4, 4, 2, f);
+    	ChignonB.setRotationPoint(0.0F, 0.0F, 0.0F);
+    	bipedHead.addChild(ChignonB);
     	Tail = new Modchu_ModelRenderer(this, 46, 20);
-    	((Modchu_ModelRenderer) Tail).addBox(-1.5F, -6.8F, 4F, 3, 9, 3, f);
-    	((Modchu_ModelRenderer) Tail).setRotationPoint(0.0F, 0.0F, 0.0F);
-    	((Modchu_ModelRenderer) bipedHead).addChild(Tail);
+    	Tail.addBox(-1.5F, -6.8F, 4F, 3, 9, 3, f);
+    	Tail.setRotationPoint(0.0F, 0.0F, 0.0F);
+    	bipedHead.addChild(Tail);
     	SideTailR = new Modchu_ModelRenderer(this, 58, 21);
-    	((Modchu_ModelRenderer) SideTailR).addBox(-5.5F, -6.8F, 0.9F, 1, 8, 2, f);
-    	((Modchu_ModelRenderer) SideTailR).setRotationPoint(0.0F, 0.0F, 0.0F);
-    	((Modchu_ModelRenderer) bipedHead).addChild(SideTailR);
+    	SideTailR.addBox(-5.5F, -6.8F, 0.9F, 1, 8, 2, f);
+    	SideTailR.setRotationPoint(0.0F, 0.0F, 0.0F);
+    	bipedHead.addChild(SideTailR);
     	SideTailL = new Modchu_ModelRenderer(this, 58, 21);
     	SideTailL.mirror = true;
-    	((Modchu_ModelRenderer) SideTailL).addBox(4.5F, -6.8F, 0.9F, 1, 8, 2, f);
-    	((Modchu_ModelRenderer) SideTailL).setRotationPoint(0.0F, 0.0F, 0.0F);
-    	((Modchu_ModelRenderer) bipedHead).addChild(SideTailL);
+    	SideTailL.addBox(4.5F, -6.8F, 0.9F, 1, 8, 2, f);
+    	SideTailL.setRotationPoint(0.0F, 0.0F, 0.0F);
+    	bipedHead.addChild(SideTailL);
 
     	mainFrame = new Modchu_ModelRenderer(this, 0, 0);
-    	((Modchu_ModelRenderer) mainFrame).setRotationPoint(0F, 0F + f1, 0F);
-    	((Modchu_ModelRenderer) mainFrame).addChild(bipedHead);
-    	((Modchu_ModelRenderer) mainFrame).addChild(bipedBody);
+    	mainFrame.setRotationPoint(0F, 8F, 0F);
+    	mainFrame.addChild(bipedHead);
+    	mainFrame.addChild(bipedBody);
 
     	actionPartsInit(f, f1);
     }
 
     @Override
     public void armsinit(float f, float f1) {
-    	Arms = new Modchu_ModelRenderer[18];
     	// 手持ち
     	Arms[0] = new Modchu_ModelRenderer(this, 0, 0);
-    	((Modchu_ModelRenderer) Arms[0]).setRotationPoint(0.5F, 6.5F, 0F);
+    	Arms[0].setRotationPoint(0.5F, 6.5F, 0F);
     	Arms[1] = new Modchu_ModelRenderer(this, 0, 0);
-    	((Modchu_ModelRenderer) Arms[1]).setRotationPoint(-0.5F, 6.5F, 0F);
-    	((Modchu_ModelRenderer) Arms[1]).isInvertX = true;
-    	// バイプロダクトエフェクター
-    	Arms[2] = new Modchu_ModelRenderer(this, 0, 0);
-    	((Modchu_ModelRenderer) Arms[2]).setRotationPoint(-3F, 9F, 6F);
-    	((Modchu_ModelRenderer) Arms[2]).setRotateAngle(0.78539816339744830961566084581988F, 0F, 0F);
-    	Arms[3] = new Modchu_ModelRenderer(this, 0, 0);
-    	((Modchu_ModelRenderer) Arms[3]).setRotationPoint(3F, 9F, 6F);
-    	((Modchu_ModelRenderer) Arms[3]).setRotateAngle(0.78539816339744830961566084581988F, 0F, 0F);
-    	((Modchu_ModelRenderer) Arms[3]).isInvertX = true;
-    	// テールソード
-    	Arms[4] = new Modchu_ModelRenderer(this, 0, 0);
-    	((Modchu_ModelRenderer) Arms[4]).setRotationPoint(-2F, 0F, 0F);
-    	((Modchu_ModelRenderer) Arms[4]).setRotateAngle(3.1415926535897932384626433832795F, 0F, 0F);
-    	Arms[5] = new Modchu_ModelRenderer(this, 0, 0);
-    	((Modchu_ModelRenderer) Arms[5]).setRotationPoint(2F, 0F, 0F);
-    	((Modchu_ModelRenderer) Arms[5]).setRotateAngle(3.1415926535897932384626433832795F, 0F, 0F);
+    	Arms[1].setRotationPoint(-0.5F, 6.5F, 0F);
+    	Arms[1].isInvertX = true;
 
-
-//		Arms[8] = new Modchu_ModelRenderer(this, "HeadTop");
-//		Arms[8].setRotationPoint(0F, -3F, 1F);
+    	bipedRightArm.addChild(Arms[0]);
+    	bipedLeftArm.addChild(Arms[1]);
     	if (HeadMount != null) {
     		if (bipedHead instanceof Modchu_ModelRenderer) {
     			((Modchu_ModelRenderer) bipedHead).removeChild(HeadMount);
@@ -135,15 +116,19 @@ public class MultiModel extends MultiModelSkirtFloats {
     			bipedHead.childModels.remove(HeadMount);
     		}
     	}
+    	if (HeadTop != null) {
+    		if (HeadTop instanceof Modchu_ModelRenderer) {
+    			((Modchu_ModelRenderer) bipedHead).removeChild(HeadTop);
+    		} else {
+    			bipedHead.childModels.remove(HeadTop);
+    		}
+    	}
     	HeadMount = new Modchu_ModelRenderer(this, "HeadMount");
-    	((Modchu_ModelRenderer) HeadMount).setRotationPoint(0F, 0F, 0F);
-    	((Modchu_ModelRenderer) bipedHead).addChild(HeadMount);
-    	((Modchu_ModelRenderer) bipedBody).addChild(Arms[4]);
-    	((Modchu_ModelRenderer) bipedBody).addChild(Arms[5]);
-    	((Modchu_ModelRenderer) bipedRightArm).addChild(Arms[0]);
-    	((Modchu_ModelRenderer) bipedRightArm).addChild(Arms[2]);
-    	((Modchu_ModelRenderer) bipedLeftArm).addChild(Arms[1]);
-    	((Modchu_ModelRenderer) bipedLeftArm).addChild(Arms[3]);
+    	HeadMount.setRotationPoint(0F, 0F, 0F);
+    	HeadTop = new Modchu_ModelRenderer(this, "HeadTop");
+    	HeadTop.setRotationPoint(0.0F, -8.0F, 0.0F);
+    	bipedHead.addChild(HeadMount);
+    	bipedHead.addChild(HeadTop);
     }
 
     /**
@@ -151,102 +136,102 @@ public class MultiModel extends MultiModelSkirtFloats {
      */
     public void actionPartsInit(float f, float f1) {
     	rightArm = new Modchu_ModelRenderer(this, 48, 0);
-    	((Modchu_ModelRenderer) rightArm).addBox(-1.0F, 0.0F, -1.0F, 2, 4, 2, f);
-    	((Modchu_ModelRenderer) rightArm).setRotationPoint(-3.0F, 9.5F, 0.0F);
-    	((Modchu_ModelRenderer) bipedBody).addChild(rightArm);
+    	rightArm.addBox(-1.0F, 0.0F, -1.0F, 2, 4, 2, f);
+    	rightArm.setRotationPoint(-3.0F, 9.5F, 0.0F);
+    	bipedBody.addChild(rightArm);
 
     	rightArmPlus = new Modchu_ModelRenderer(this);
-    	//((Modchu_ModelRenderer) rightArmPlus).setTextureOffset(52, 0).addPlate(-1.0F, -1.0F, -3.01F, 2, 2, 4, f);
+    	//rightArmPlus.setTextureOffset(52, 0.addPlate(-1.0F, -1.0F, -3.01F, 2, 2, 4, f);
     	rightArmPlus.rotateAngleX = 1.570796313F;
-    	((Modchu_ModelRenderer) rightArm).addChild(rightArmPlus);
+    	rightArm.addChild(rightArmPlus);
 
     	rightArm2 = new Modchu_ModelRenderer(this, 48, 3);
-    	((Modchu_ModelRenderer) rightArm2).addBox(-1.0F, 0.0F, -1.0F, 2, 2, 2, f);
-    	((Modchu_ModelRenderer) rightArm2).setRotationPoint(0.0F, 2.0F, 0.0F);
-    	((Modchu_ModelRenderer) rightArm).addChild(rightArm2);
+    	rightArm2.addBox(-1.0F, 0.0F, -1.0F, 2, 2, 2, f);
+    	rightArm2.setRotationPoint(0.0F, 2.0F, 0.0F);
+    	rightArm.addChild(rightArm2);
 
     	rightArmPlus2 = new Modchu_ModelRenderer(this);
-    	((Modchu_ModelRenderer) rightArmPlus2).setTextureOffset(52, 0).addPlate(-1.0F, -1.0F, 0.001F, 2, 2, 4, f);
-    	((Modchu_ModelRenderer) rightArmPlus2).setTextureOffset(52, 0).addPlate(-1.0F, -1.0F, -2.001F, 2, 2, 0, f);
+    	rightArmPlus2.setTextureOffset(52, 0).addPlate(-1.0F, -1.0F, 0.001F, 2, 2, 4, f);
+    	rightArmPlus2.setTextureOffset(52, 0).addPlate(-1.0F, -1.0F, -2.001F, 2, 2, 0, f);
     	rightArmPlus2.rotateAngleX = 1.570796313F;
-    	((Modchu_ModelRenderer) rightArm2).addChild(rightArmPlus2);
+    	rightArm2.addChild(rightArmPlus2);
 
     	rightHand = new Modchu_ModelRenderer(this, 48, 6);
-    	((Modchu_ModelRenderer) rightHand).addBox(-1.0F, -1.0F, -1.0F, 2, 2, 2, f);
-    	((Modchu_ModelRenderer) rightHand).setRotationPoint(0.0F, 3.0F, 0.0F);
-    	((Modchu_ModelRenderer) rightArm2).addChild(rightHand);
+    	rightHand.addBox(-1.0F, -1.0F, -1.0F, 2, 2, 2, f);
+    	rightHand.setRotationPoint(0.0F, 3.0F, 0.0F);
+    	rightArm2.addChild(rightHand);
 
     	leftArm = new Modchu_ModelRenderer(this, 56, 0);
-    	((Modchu_ModelRenderer) leftArm).addBox(-1.0F, 0.0F, -1.0F, 2, 4, 2, f);
-    	((Modchu_ModelRenderer) leftArm).setRotationPoint(3.0F, 9.5F, 0.0F);
-    	((Modchu_ModelRenderer) bipedBody).addChild(leftArm);
+    	leftArm.addBox(-1.0F, 0.0F, -1.0F, 2, 4, 2, f);
+    	leftArm.setRotationPoint(3.0F, 9.5F, 0.0F);
+    	bipedBody.addChild(leftArm);
 
     	leftArmPlus = new Modchu_ModelRenderer(this);
-    	//((Modchu_ModelRenderer) leftArmPlus).setTextureOffset(60, 0).addPlate(-1.0F, -1.0F, -3.01F, 2, 2, 4, f);
+    	//leftArmPlus.setTextureOffset(60, 0.addPlate(-1.0F, -1.0F, -3.01F, 2, 2, 4, f);
     	leftArmPlus.rotateAngleX = 1.570796313F;
-    	((Modchu_ModelRenderer) leftArm).addChild(leftArmPlus);
+    	leftArm.addChild(leftArmPlus);
 
     	leftArm2 = new Modchu_ModelRenderer(this, 56, 3);
-    	((Modchu_ModelRenderer) leftArm2).addBox(-1.0F, 0.0F, -1.0F, 2, 2, 2, f);
-    	((Modchu_ModelRenderer) leftArm2).setRotationPoint(0.0F, 2.0F, 0.0F);
-    	((Modchu_ModelRenderer) leftArm).addChild(leftArm2);
+    	leftArm2.addBox(-1.0F, 0.0F, -1.0F, 2, 2, 2, f);
+    	leftArm2.setRotationPoint(0.0F, 2.0F, 0.0F);
+    	leftArm.addChild(leftArm2);
 
     	leftArmPlus2 = new Modchu_ModelRenderer(this);
-    	((Modchu_ModelRenderer) leftArmPlus2).setTextureOffset(60, 0).addPlate(-1.0F, -1.0F, 0.001F, 2, 2, 4, f);
-    	((Modchu_ModelRenderer) leftArmPlus2).setTextureOffset(60, 0).addPlate(-1.0F, -1.0F, -2.001F, 2, 2, 0, f);
+    	leftArmPlus2.setTextureOffset(60, 0).addPlate(-1.0F, -1.0F, 0.001F, 2, 2, 4, f);
+    	leftArmPlus2.setTextureOffset(60, 0).addPlate(-1.0F, -1.0F, -2.001F, 2, 2, 0, f);
     	leftArmPlus2.rotateAngleX = 1.570796313F;
-    	((Modchu_ModelRenderer) leftArm2).addChild(leftArmPlus2);
+    	leftArm2.addChild(leftArmPlus2);
 
     	leftHand = new Modchu_ModelRenderer(this, 56, 6);
-    	((Modchu_ModelRenderer) leftHand).addBox(-1.0F, -1.0F, -1.0F, 2, 2, 2, f);
-    	((Modchu_ModelRenderer) leftHand).setRotationPoint(0.0F, 3.0F, 0.0F);
-    	((Modchu_ModelRenderer) leftArm2).addChild(leftHand);
+    	leftHand.addBox(-1.0F, -1.0F, -1.0F, 2, 2, 2, f);
+    	leftHand.setRotationPoint(0.0F, 3.0F, 0.0F);
+    	leftArm2.addChild(leftHand);
 
     	rightLeg = new Modchu_ModelRenderer(this, 32, 19);
-    	((Modchu_ModelRenderer) rightLeg).addBox(-1.5F, 0.0F, -2.0F, 3, 4, 4, f);
-    	((Modchu_ModelRenderer) rightLeg).setRotationPoint(0.0F, 8.0F, 0.0F);
-    	((Modchu_ModelRenderer) bipedBody).addChild(rightLeg);
+    	rightLeg.addBox(-1.5F, 0.0F, -2.0F, 3, 4, 4, f);
+    	rightLeg.setRotationPoint(0.0F, 8.0F, 0.0F);
+    	bipedBody.addChild(rightLeg);
 
     	rightLegPlus = new Modchu_ModelRenderer(this);
-    	((Modchu_ModelRenderer) rightLegPlus).setTextureOffset(36, 19).addPlate(-1.5F, -2.0F, -4.01F, 3, 4, 4, f);
+    	rightLegPlus.setTextureOffset(36, 19).addPlate(-1.5F, -2.0F, -4.01F, 3, 4, 4, f);
     	rightLegPlus.rotateAngleX = 1.570796313F;
-    	((Modchu_ModelRenderer) rightLeg).addChild(rightLegPlus);
+    	rightLeg.addChild(rightLegPlus);
 
     	rightLeg2 = new Modchu_ModelRenderer(this, 32, 23);
-    	((Modchu_ModelRenderer) rightLeg2).addBox(-1.5F, 0.0F, -2.0F, 3, 5, 4, f);
-    	((Modchu_ModelRenderer) rightLeg2).setRotationPoint(0.0F, 8.0F, 0.0F);
-    	((Modchu_ModelRenderer) rightLeg).addChild(rightLeg2);
+    	rightLeg2.addBox(-1.5F, 0.0F, -2.0F, 3, 5, 4, f);
+    	rightLeg2.setRotationPoint(0.0F, 8.0F, 0.0F);
+    	rightLeg.addChild(rightLeg2);
 
     	rightLegPlus2 = new Modchu_ModelRenderer(this);
-    	((Modchu_ModelRenderer) rightLegPlus2).setTextureOffset(36, 19).addPlate(-1.5F, -2.0F, 0.01F, 3, 4, 4, f);
-    	((Modchu_ModelRenderer) rightLegPlus2).setTextureOffset(39, 19).addPlate(-1.5F, -2.0F, -5.01F, 3, 4, 4, f);
+    	rightLegPlus2.setTextureOffset(36, 19).addPlate(-1.5F, -2.0F, 0.01F, 3, 4, 4, f);
+    	rightLegPlus2.setTextureOffset(39, 19).addPlate(-1.5F, -2.0F, -5.01F, 3, 4, 4, f);
     	rightLegPlus2.rotateAngleX = 1.570796313F;
-    	((Modchu_ModelRenderer) rightLeg2).addChild(rightLegPlus2);
+    	rightLeg2.addChild(rightLegPlus2);
 
     	leftLeg = new Modchu_ModelRenderer(this, 32, 19);
     	leftLeg.mirror = true;
-    	((Modchu_ModelRenderer) leftLeg).addBox(-1.5F, 0.0F, -2.0F, 3, 4, 4, f);
-    	((Modchu_ModelRenderer) leftLeg).setRotationPoint(0.0F, 8.0F, 0.0F);
-    	((Modchu_ModelRenderer) bipedBody).addChild(leftLeg);
+    	leftLeg.addBox(-1.5F, 0.0F, -2.0F, 3, 4, 4, f);
+    	leftLeg.setRotationPoint(0.0F, 8.0F, 0.0F);
+    	bipedBody.addChild(leftLeg);
 
     	leftLegPlus = new Modchu_ModelRenderer(this);
     	leftLegPlus.mirror = true;
-    	((Modchu_ModelRenderer) leftLegPlus).setTextureOffset(36, 19).addPlate(-1.5F, -2.0F, -4.01F, 3, 4, 4, f);
+    	leftLegPlus.setTextureOffset(36, 19).addPlate(-1.5F, -2.0F, -4.01F, 3, 4, 4, f);
     	leftLegPlus.rotateAngleX = 1.570796313F;
-    	((Modchu_ModelRenderer) leftLeg).addChild(leftLegPlus);
+    	leftLeg.addChild(leftLegPlus);
 
     	leftLeg2 = new Modchu_ModelRenderer(this, 32, 23);
     	leftLeg2.mirror = true;
-    	((Modchu_ModelRenderer) leftLeg2).addBox(-1.5F, 0.0F, -2.0F, 3, 5, 4, f);
-    	((Modchu_ModelRenderer) leftLeg2).setRotationPoint(0.0F, 8.0F, 0.0F);
-    	((Modchu_ModelRenderer) leftLeg).addChild(leftLeg2);
+    	leftLeg2.addBox(-1.5F, 0.0F, -2.0F, 3, 5, 4, f);
+    	leftLeg2.setRotationPoint(0.0F, 8.0F, 0.0F);
+    	leftLeg.addChild(leftLeg2);
 
     	leftLegPlus2 = new Modchu_ModelRenderer(this);
     	leftLegPlus2.mirror = true;
-    	((Modchu_ModelRenderer) leftLegPlus2).setTextureOffset(36, 19).addPlate(-1.5F, -2.0F, 0.01F, 3, 4, 4, f);
-    	((Modchu_ModelRenderer) leftLegPlus2).setTextureOffset(39, 19).addPlate(-1.5F, -2.0F, -5.01F, 3, 4, 4, f);
+    	leftLegPlus2.setTextureOffset(36, 19).addPlate(-1.5F, -2.0F, 0.01F, 3, 4, 4, f);
+    	leftLegPlus2.setTextureOffset(39, 19).addPlate(-1.5F, -2.0F, -5.01F, 3, 4, 4, f);
     	leftLegPlus2.rotateAngleX = 1.570796313F;
-    	((Modchu_ModelRenderer) leftLeg2).addChild(leftLegPlus2);
+    	leftLeg2.addChild(leftLegPlus2);
 
     	rightHand.showModel = leftHand.showModel =
     		rightArm.showModel = leftArm.showModel =
@@ -271,34 +256,34 @@ public class MultiModel extends MultiModelSkirtFloats {
     	if (Modchu_ModelCapsHelper.getCapsValueInt(this, caps_skirtFloats) < 2) return;
     	//ふんわりスカート上
     	SkirtTop = new Modchu_ModelRenderer(this, 8, 16);
-    	((Modchu_ModelRenderer) SkirtTop).addPlate(0.0F, 0.0F, 0.0F, 8, 8, 0);
-    	((Modchu_ModelRenderer) SkirtTop).setRotationPoint(-4.0F, -4.0F, 4.0F);
-    	if (Skirt != null) ((Modchu_ModelRenderer) Skirt).addChild(SkirtTop);
+    	SkirtTop.addPlate(0.0F, 0.0F, 0.0F, 8, 8, 0);
+    	SkirtTop.setRotationPoint(-4.0F, -4.0F, 4.0F);
+    	if (Skirt != null) Skirt.addChild(SkirtTop);
 
     	//ふんわりスカート前
     	SkirtFront = new Modchu_ModelRenderer(this, 8, 24);
-    	((Modchu_ModelRenderer) SkirtFront).addPlate(0.0F, 0.0F, 0.0F, 8, 8, 0);
-    	((Modchu_ModelRenderer) SkirtFront).setRotationPoint(0.0F, 8.0F, 0.0F);
-    	((Modchu_ModelRenderer) SkirtTop).addChild(SkirtFront);
+    	SkirtFront.addPlate(0.0F, 0.0F, 0.0F, 8, 8, 0);
+    	SkirtFront.setRotationPoint(0.0F, 8.0F, 0.0F);
+    	SkirtTop.addChild(SkirtFront);
 
     	//ふんわりスカート右
     	SkirtRight = new Modchu_ModelRenderer(this, 0, 24);
-    	((Modchu_ModelRenderer) SkirtRight).addPlate(0.0F, 0.0F, 0.0F, 8, 8, 1);
-    	((Modchu_ModelRenderer) SkirtRight).setRotationPoint(0.0F, 0.0F, 0.0F);
-    	((Modchu_ModelRenderer) SkirtTop).addChild(SkirtRight);
+    	SkirtRight.addPlate(0.0F, 0.0F, 0.0F, 8, 8, 1);
+    	SkirtRight.setRotationPoint(0.0F, 0.0F, 0.0F);
+    	SkirtTop.addChild(SkirtRight);
 
     	//ふんわりスカート左
     	SkirtLeft = new Modchu_ModelRenderer(this, 16, 24);
-    	((Modchu_ModelRenderer) SkirtLeft).setMirror(true);
-    	((Modchu_ModelRenderer) SkirtLeft).addPlate(0.0F, 0.0F, 0.0F, 8, 8, 1);
-    	((Modchu_ModelRenderer) SkirtLeft).setRotationPoint(8.0F, 8.0F, 0.0F);
-    	((Modchu_ModelRenderer) SkirtTop).addChild(SkirtLeft);
+    	SkirtLeft.setMirror(true);
+    	SkirtLeft.addPlate(0.0F, 0.0F, 0.0F, 8, 8, 1);
+    	SkirtLeft.setRotationPoint(8.0F, 8.0F, 0.0F);
+    	SkirtTop.addChild(SkirtLeft);
 
     	//ふんわりスカート後ろ
     	SkirtBack = new Modchu_ModelRenderer(this, 24, 24);
-    	((Modchu_ModelRenderer) SkirtBack).addPlate(0.0F, 0.0F, 0.0F, 8, 8, 0);
-    	((Modchu_ModelRenderer) SkirtBack).setRotationPoint(0.0F, 0.0F, 0.0F);
-    	((Modchu_ModelRenderer) SkirtTop).addChild(SkirtBack);
+    	SkirtBack.addPlate(0.0F, 0.0F, 0.0F, 8, 8, 0);
+    	SkirtBack.setRotationPoint(0.0F, 0.0F, 0.0F);
+    	SkirtTop.addChild(SkirtBack);
     	if (Skirt != null) setCapsValue(caps_visible, Skirt, false);
     }
 
@@ -310,7 +295,7 @@ public class MultiModel extends MultiModelSkirtFloats {
     	//f3 = 向いている方角方向で変化
     	//f4 = 向いている上下方向で変化
     	//f5 = スケール値？
-    	reset(f, f1, f2, f3, f4, f5, entityCaps);
+    	setDefaultPause(f, f1, f2, f3, f4, f5, entityCaps);
     	//if (!Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_firstPerson)) {
     		bipedHead.rotateAngleY = f3 / 57.29578F;
     		bipedHead.rotateAngleX = f4 / 57.29578F;
@@ -343,13 +328,13 @@ public class MultiModel extends MultiModelSkirtFloats {
     			bipedLeftLeg.rotateAngleY = -0.3141593F;
     		}
     		// アイテム持ってるときの腕振りを抑える
-    		if (heldItemLeft != 0 && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_oldwalking)) {
+    		if (heldItem[1] != 0 && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_oldwalking)) {
     			bipedLeftArm.rotateAngleX = bipedLeftArm.rotateAngleX * 0.5F
-    					- 0.3141593F * (float) heldItemLeft;
+    					- 0.3141593F * (float) heldItem[1];
     		}
-    		if (heldItemRight != 0 && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_oldwalking)) {
+    		if (heldItem[0] != 0 && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_oldwalking)) {
     			bipedRightArm.rotateAngleX = bipedRightArm.rotateAngleX * 0.5F
-    					- 0.3141593F * (float) heldItemRight;
+    					- 0.3141593F * (float) heldItem[0];
     		}
     		bipedRightArm.rotateAngleY = 0.0F;
     		bipedLeftArm.rotateAngleY = 0.0F;
@@ -422,8 +407,6 @@ public class MultiModel extends MultiModelSkirtFloats {
     		}
     	//}
     	//
-    	((Modchu_ModelRenderer) Arms[2]).setRotateAngle(-0.78539816339744830961566084581988F - ((Modchu_ModelRenderer) bipedRightArm).getRotateAngleX(), 0F, 0F);
-    	((Modchu_ModelRenderer) Arms[3]).setRotateAngle(-0.78539816339744830961566084581988F - ((Modchu_ModelRenderer) bipedLeftArm).getRotateAngleX(), 0F, 0F);
     }
 
     @Override
@@ -446,65 +429,52 @@ public class MultiModel extends MultiModelSkirtFloats {
     	SkirtLeft.rotateAngleY = -motionY;
     	SkirtBack.rotateAngleX -= motionY;
 
-    	((Modchu_ModelRenderer) SkirtFront).scaleX = ((Modchu_ModelRenderer) SkirtBack).scaleX = 1.0F - (motionY * 1.0F);
-    	((Modchu_ModelRenderer) SkirtRight).scaleZ = ((Modchu_ModelRenderer) SkirtLeft).scaleZ = 1.0F - (motionY * 1.0F);
+    	SkirtFront.scaleX = SkirtBack.scaleX = 1.0F - (motionY * 1.0F);
+    	SkirtRight.scaleZ = SkirtLeft.scaleZ = 1.0F - (motionY * 1.0F);
     }
 
     @Override
-    public void reset(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
-    	if (bipedHead != null) ((Modchu_ModelRenderer) bipedHead).setRotationPoint(0.0F, 0.0F, 0.0F);
-    	if (bipedHeadwear != null) ((Modchu_ModelRenderer) bipedHeadwear).setRotationPoint(0.0F, 0.0F, 0.0F);
-    	if (bipedBody != null) ((Modchu_ModelRenderer) bipedBody).setRotationPoint(0.0F, -3.0F, 0.0F);
-    	if (bipedRightArm != null) ((Modchu_ModelRenderer) bipedRightArm).setRotationPoint(-3.0F, -3.0F, 0.0F);
-    	if (bipedLeftArm != null) ((Modchu_ModelRenderer) bipedLeftArm).setRotationPoint(3.0F, -3.0F, 0.0F);
-    	if (bipedRightLeg != null) ((Modchu_ModelRenderer) bipedRightLeg).setRotationPoint(-1.5F, 15F, 0.0F);
-    	if (bipedLeftLeg != null) ((Modchu_ModelRenderer) bipedLeftLeg).setRotationPoint(1.5F, 15F, 0.0F);
-    	if (Skirt != null) ((Modchu_ModelRenderer) Skirt).setRotationPoint(0.0F, 4.0F, 0.0F);
+    public void setDefaultPause(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
+    	if (bipedHead != null) bipedHead.setRotationPoint(0.0F, 0.0F, 0.0F);
+    	if (bipedHeadwear != null) bipedHeadwear.setRotationPoint(0.0F, 0.0F, 0.0F);
+    	if (bipedBody != null) bipedBody.setRotationPoint(0.0F, -3.0F, 0.0F);
+    	if (bipedRightArm != null) bipedRightArm.setRotationPoint(-3.0F, -3.0F, 0.0F);
+    	if (bipedLeftArm != null) bipedLeftArm.setRotationPoint(3.0F, -3.0F, 0.0F);
+    	if (bipedRightLeg != null) bipedRightLeg.setRotationPoint(-1.5F, 15F, 0.0F);
+    	if (bipedLeftLeg != null) bipedLeftLeg.setRotationPoint(1.5F, 15F, 0.0F);
+    	if (Skirt != null) Skirt.setRotationPoint(0.0F, 4.0F, 0.0F);
     }
 
     public void armSwing(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
-    	float[] lgrounds = null;
-    	float onGroundR = 0F;
-    	float onGroundL = 0F;
-    	if (entityCaps != null) {
-    		lgrounds = (float[])getCapsValue(caps_Grounds, entityCaps);
-    		if (lgrounds != null) {
-    			onGroundR = lgrounds[0];
-    			onGroundL = lgrounds[1];
-    		}
-    	}
-    	if (lgrounds == null) {
-    		onGroundR = Modchu_ModelCapsHelper.getCapsValueFloat(this, caps_onGround, entityCaps);
-    	}
-    	if ((onGroundR > -9990F || onGroundL > -9990F) && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_aimedBow) && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_oldwalking)) {
+    	if ((onGrounds[0] > -9990F || onGrounds[1] > -9990F) && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_aimedBow) && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_oldwalking)) {
     		// 腕振り
     		float f6, f7, f8;
-    		f6 = MathHelper.sin(MathHelper.sqrt_float(onGroundR) * (float)Math.PI * 2.0F);
-    		f7 = MathHelper.sin(MathHelper.sqrt_float(onGroundL) * (float)Math.PI * 2.0F);
+    		f6 = MathHelper.sin(MathHelper.sqrt_float(onGrounds[0]) * (float)Math.PI * 2.0F);
+    		f7 = MathHelper.sin(MathHelper.sqrt_float(onGrounds[1]) * (float)Math.PI * 2.0F);
     		bipedBody.rotateAngleY = (f6 - f7) * 0.2F;
     		// R
-    		if (onGroundR > 0F) {
-    			f6 = 1.0F - onGroundR;
+    		if (onGrounds[0] > 0F) {
+    			f6 = 1.0F - onGrounds[0];
     			f6 *= f6;
     			f6 *= f6;
     			f6 = 1.0F - f6;
     			f7 = MathHelper.sin(f6 * (float)Math.PI);
-    			f8 = MathHelper.sin(onGroundR * (float)Math.PI) * -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
+    			f8 = MathHelper.sin(onGrounds[0] * (float)Math.PI) * -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
     			bipedRightArm.rotateAngleX -= (double)f7 * 1.2D + (double)f8;
     			bipedRightArm.rotateAngleY += bipedBody.rotateAngleY * 2.0F;
-    			bipedRightArm.rotateAngleZ = MathHelper.sin(onGroundR * 3.141593F) * -0.4F;
+    			bipedRightArm.rotateAngleZ = MathHelper.sin(onGrounds[0] * 3.141593F) * -0.4F;
     		}
     		// L
-    		if (onGroundL > 0F) {
-    			f6 = 1.0F - onGroundL;
+    		if (onGrounds[1] > 0F) {
+    			f6 = 1.0F - onGrounds[1];
     			f6 *= f6;
     			f6 *= f6;
     			f6 = 1.0F - f6;
     			f7 = MathHelper.sin(f6 * (float)Math.PI);
-    			f8 = MathHelper.sin(onGroundL * (float)Math.PI) * -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
+    			f8 = MathHelper.sin(onGrounds[1] * (float)Math.PI) * -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
     			bipedLeftArm.rotateAngleX -= (double)f7 * 1.2D + (double)f8;
     			bipedLeftArm.rotateAngleY += bipedBody.rotateAngleY * 2.0F;
-    			bipedLeftArm.rotateAngleZ = MathHelper.sin(onGroundL * 3.141593F) * 0.4F;
+    			bipedLeftArm.rotateAngleZ = MathHelper.sin(onGrounds[1] * 3.141593F) * 0.4F;
     		}
     	}
     }
