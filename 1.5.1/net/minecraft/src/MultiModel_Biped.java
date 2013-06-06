@@ -69,48 +69,14 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
 
 	@Override
     public void armsinit(float f, float f1) {
-    	Arms = new Modchu_ModelRenderer[18];
     	// 手持ち
     	Arms[0] = new Modchu_ModelRenderer(this, 0, 0);
     	Arms[0].setRotationPoint(0.5F, 6.5F, 0F);
     	Arms[1] = new Modchu_ModelRenderer(this, 0, 0);
     	Arms[1].setRotationPoint(-0.5F, 6.5F, 0F);
     	((Modchu_ModelRenderer) Arms[1]).isInvertX = true;
-    	// バイプロダクトエフェクター
-    	Arms[2] = new Modchu_ModelRenderer(this, 0, 0);
-    	Arms[2].setRotationPoint(-3F, 9F, 6F);
-    	((Modchu_ModelRenderer) Arms[2]).setRotateAngle(0.78539816339744830961566084581988F, 0F, 0F);
-    	Arms[3] = new Modchu_ModelRenderer(this, 0, 0);
-    	Arms[3].setRotationPoint(3F, 9F, 6F);
-    	((Modchu_ModelRenderer) Arms[3]).setRotateAngle(0.78539816339744830961566084581988F, 0F, 0F);
-    	((Modchu_ModelRenderer) Arms[3]).isInvertX = true;
-    	// テールソード
-    	Arms[4] = new Modchu_ModelRenderer(this, 0, 0);
-    	Arms[4].setRotationPoint(-2F, 0F, 0F);
-    	((Modchu_ModelRenderer) Arms[4]).setRotateAngle(3.1415926535897932384626433832795F, 0F, 0F);
-    	Arms[5] = new Modchu_ModelRenderer(this, 0, 0);
-    	Arms[5].setRotationPoint(2F, 0F, 0F);
-    	((Modchu_ModelRenderer) Arms[5]).setRotateAngle(3.1415926535897932384626433832795F, 0F, 0F);
-
-
-//		Arms[8] = new Modchu_ModelRenderer(this, "HeadTop");
-//		Arms[8].setRotationPoint(0F, -3F, 1F);
-    	if (HeadMount != null) {
-    		if (bipedHead instanceof Modchu_ModelRenderer) {
-    			((Modchu_ModelRenderer) bipedHead).removeChild(HeadMount);
-    		} else {
-    			bipedHead.childModels.remove(HeadMount);
-    		}
-    	}
-    	HeadMount = new Modchu_ModelRenderer(this, "HeadMount");
-    	HeadMount.setRotationPoint(0F, 0F, 0F);
-    	bipedHead.addChild(HeadMount);
-    	bipedBody.addChild(Arms[4]);
-    	bipedBody.addChild(Arms[5]);
     	bipedRightArm.addChild(Arms[0]);
-    	bipedRightArm.addChild(Arms[2]);
     	bipedLeftArm.addChild(Arms[1]);
-    	bipedLeftArm.addChild(Arms[3]);
     }
 
     public void actionPartsInit(float f, float f1) {
@@ -191,7 +157,7 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
      */
     @Override
     public void setRotationAnglesLM(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
-		reset(f, f1, f2, f3, f4, f5, entityCaps);
+    	setDefaultPause(f, f1, f2, f3, f4, f5, entityCaps);
 		bipedHead.rotateAngleY = f3 / (180F / (float) Math.PI);
 		bipedHead.rotateAngleX = f4 / (180F / (float) Math.PI);
 		if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_getIsSneak) && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_getIsRiding) && Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_oldwalking)) {
@@ -277,54 +243,41 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
 	}
 
     public void armSwing(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
-    	float[] lgrounds = null;
-    	float onGroundR = 0;
-    	float onGroundL = 0;
-    	if (entityCaps != null) {
-    		lgrounds = (float[])getCapsValue(caps_Grounds, entityCaps);
-    		if (lgrounds != null) {
-    			onGroundR = lgrounds[0];
-    			onGroundL = lgrounds[1];
-    		}
-    	}
-    	if (lgrounds == null) {
-    		onGroundR = onGround;
-    	}
-    	if ((onGroundR > -9990F || onGroundL > -9990F) && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_aimedBow) && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_oldwalking)) {
+    	if ((onGrounds[0] > -9990F || onGrounds[1] > -9990F) && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_aimedBow) && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_oldwalking)) {
     		// 腕振り
     		float f6, f7, f8;
-    		f6 = MathHelper.sin(MathHelper.sqrt_float(onGroundR) * (float)Math.PI * 2.0F);
-    		f7 = MathHelper.sin(MathHelper.sqrt_float(onGroundL) * (float)Math.PI * 2.0F);
+    		f6 = MathHelper.sin(MathHelper.sqrt_float(onGrounds[0]) * (float)Math.PI * 2.0F);
+    		f7 = MathHelper.sin(MathHelper.sqrt_float(onGrounds[1]) * (float)Math.PI * 2.0F);
     		bipedBody.rotateAngleY = (f6 - f7) * 0.2F;
     		// R
-    		if (onGroundR > 0F) {
-    			f6 = 1.0F - onGroundR;
+    		if (onGrounds[0] > 0F) {
+    			f6 = 1.0F - onGrounds[0];
     			f6 *= f6;
     			f6 *= f6;
     			f6 = 1.0F - f6;
     			f7 = MathHelper.sin(f6 * (float)Math.PI);
-    			f8 = MathHelper.sin(onGroundR * (float)Math.PI) * -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
+    			f8 = MathHelper.sin(onGrounds[0] * (float)Math.PI) * -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
     			bipedRightArm.rotateAngleX -= (double)f7 * 1.2D + (double)f8;
     			bipedRightArm.rotateAngleY += bipedBody.rotateAngleY * 2.0F;
-    			bipedRightArm.rotateAngleZ = MathHelper.sin(onGroundR * 3.141593F) * -0.4F;
+    			bipedRightArm.rotateAngleZ = MathHelper.sin(onGrounds[0] * 3.141593F) * -0.4F;
     		}
     		// L
-    		if (onGroundL > 0F) {
-    			f6 = 1.0F - onGroundL;
+    		if (onGrounds[1] > 0F) {
+    			f6 = 1.0F - onGrounds[1];
     			f6 *= f6;
     			f6 *= f6;
     			f6 = 1.0F - f6;
     			f7 = MathHelper.sin(f6 * (float)Math.PI);
-    			f8 = MathHelper.sin(onGroundL * (float)Math.PI) * -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
+    			f8 = MathHelper.sin(onGrounds[1] * (float)Math.PI) * -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
     			bipedLeftArm.rotateAngleX -= (double)f7 * 1.2D + (double)f8;
     			bipedLeftArm.rotateAngleY += bipedBody.rotateAngleY * 2.0F;
-    			bipedLeftArm.rotateAngleZ = MathHelper.sin(onGroundL * 3.141593F) * 0.4F;
+    			bipedLeftArm.rotateAngleZ = MathHelper.sin(onGrounds[1] * 3.141593F) * 0.4F;
     		}
     	}
     }
 
     @Override
-    public void reset(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
+    public void setDefaultPause(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     	bipedHead.setRotationPoint(0.0F, 0.0F, 0.0F);
     	bipedBody.setRotationPoint(0.0F, 0.0F, 0.0F);
     	bipedHeadwear.setRotationPoint(0.0F, 0.0F, 0.0F);
@@ -463,13 +416,13 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
     public void action2(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     	// 手を上げるモーション
     	super.action2(f, f1, f2, f3, f4, f5, entityCaps);
-    	((ModelRenderer) getCapsValue(caps_bipedRightArm, entityCaps)).rotationPointX += Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm) == 0 ? 2.0F : -2.0F;
+    	((MMM_ModelRenderer) getCapsValue(caps_bipedRightArm, entityCaps)).rotationPointX += Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm) == 0 ? 2.0F : -2.0F;
     }
 
     @Override
     public void action3(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     	// 手を上げて振るモーション
     	super.action3(f, f1, f2, f3, f4, f5, entityCaps);
-    	((ModelRenderer) getCapsValue(caps_bipedRightArm, entityCaps)).rotationPointX += Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm) == 0 ? 2.0F : -2.0F;
+    	((MMM_ModelRenderer) getCapsValue(caps_bipedRightArm, entityCaps)).rotationPointX += Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm) == 0 ? 2.0F : -2.0F;
     }
 }

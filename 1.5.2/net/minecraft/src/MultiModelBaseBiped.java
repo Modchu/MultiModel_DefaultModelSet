@@ -103,6 +103,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     	}
     }
 
+    @Override
     public void setLivingAnimations(MMM_IModelCaps entityCaps, float f, float f1, float f2) {
     	setCapsValue(entityCaps, caps_setLivingAnimationsBefore, this, f, f1, f2);
     	setLivingAnimationsLM(entityCaps, f, f1, f2);
@@ -1110,6 +1111,11 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 
     public void renderFirstPersonHand(MMM_IModelCaps entityCaps, float f) {
     	((MMM_ModelRenderer) getCapsValue(caps_bipedRightArm, entityCaps)).render(f);
+    }
+
+    @Override
+    public int showArmorParts(int parts, int index) {
+    	return showArmorParts(null, parts, index);
     }
 
     abstract int showArmorParts(MMM_IModelCaps entityCaps, int parts, int index);
