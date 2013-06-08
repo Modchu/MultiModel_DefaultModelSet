@@ -295,118 +295,116 @@ public class MultiModel extends MultiModelSkirtFloats {
     	//f3 = å¸Ç¢ÇƒÇ¢ÇÈï˚äpï˚å¸Ç≈ïœâª
     	//f4 = å¸Ç¢ÇƒÇ¢ÇÈè„â∫ï˚å¸Ç≈ïœâª
     	//f5 = ÉXÉPÅ[ÉãílÅH
+    	super.setRotationAnglesLM(f, f1, f2, f3, f4, f5, entityCaps);
     	setDefaultPause(f, f1, f2, f3, f4, f5, entityCaps);
-    	//if (!Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_firstPerson)) {
-    		bipedHead.rotateAngleY = f3 / 57.29578F;
-    		bipedHead.rotateAngleX = f4 / 57.29578F;
-    		bipedRightArm.rotateAngleX = MathHelper
-    				.cos(f * 0.6662F + 3.141593F) * 2.0F * f1 * 0.5F;
-    		bipedLeftArm.rotateAngleX = MathHelper.cos(f * 0.6662F) * 2.0F * f1
-    				* 0.5F;
-    		if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_getIsSneak) && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_getIsRiding) && Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_oldwalking)) {
-    			bipedRightArm.rotateAngleX = MathHelper.cos(f * 0.6662F + (float)Math.PI) * 1.4F * f1;
-    			bipedLeftArm.rotateAngleX = MathHelper.cos(f * 0.6662F) * 1.4F * f1;
-    			bipedLeftArm.rotateAngleZ = (MathHelper.cos(f * 0.2812F) - 1.0F) * 1.0F * f1;
-    			bipedRightArm.rotateAngleZ = (MathHelper.cos(f * 0.2312F) + 1.0F) * 1.0F * f1;
-    		} else {
-    			bipedRightArm.rotateAngleZ = 0.0F;
-    			bipedLeftArm.rotateAngleZ = 0.0F;
-    		}
-    		bipedRightLeg.rotateAngleX = MathHelper.cos(f * 0.6662F) * 1.4F
-    				* f1;
-    		bipedLeftLeg.rotateAngleX = MathHelper.cos(f * 0.6662F + 3.141593F)
-    				* 1.4F * f1;
-    		bipedRightLeg.rotateAngleY = 0.0F;
-    		bipedLeftLeg.rotateAngleY = 0.0F;
-    		if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_getIsRiding)) {
-    			// èÊÇËï®Ç…èÊÇ¡ÇƒÇ¢ÇÈ
-    			bipedRightArm.rotateAngleX += -0.6283185F;
-    			bipedLeftArm.rotateAngleX += -0.6283185F;
-    			bipedRightLeg.rotateAngleX = -1.256637F;
-    			bipedLeftLeg.rotateAngleX = -1.256637F;
-    			bipedRightLeg.rotateAngleY = 0.3141593F;
-    			bipedLeftLeg.rotateAngleY = -0.3141593F;
-    		}
-    		// ÉAÉCÉeÉÄéùÇ¡ÇƒÇÈÇ∆Ç´ÇÃòrêUÇËÇó}Ç¶ÇÈ
-    		if (heldItem[1] != 0 && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_oldwalking)) {
-    			bipedLeftArm.rotateAngleX = bipedLeftArm.rotateAngleX * 0.5F
-    					- 0.3141593F * (float) heldItem[1];
-    		}
-    		if (heldItem[0] != 0 && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_oldwalking)) {
-    			bipedRightArm.rotateAngleX = bipedRightArm.rotateAngleX * 0.5F
-    					- 0.3141593F * (float) heldItem[0];
-    		}
-    		bipedRightArm.rotateAngleY = 0.0F;
-    		bipedLeftArm.rotateAngleY = 0.0F;
+    	bipedHead.rotateAngleY = f3 / 57.29578F;
+    	bipedHead.rotateAngleX = f4 / 57.29578F;
+    	bipedRightArm.rotateAngleX = MathHelper
+    			.cos(f * 0.6662F + 3.141593F) * 2.0F * f1 * 0.5F;
+    	bipedLeftArm.rotateAngleX = MathHelper.cos(f * 0.6662F) * 2.0F * f1
+    			* 0.5F;
+    	if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_getIsSneak) && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_getIsRiding) && Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_oldwalking)) {
+    		bipedRightArm.rotateAngleX = MathHelper.cos(f * 0.6662F + (float)Math.PI) * 1.4F * f1;
+    		bipedLeftArm.rotateAngleX = MathHelper.cos(f * 0.6662F) * 1.4F * f1;
+    		bipedLeftArm.rotateAngleZ = (MathHelper.cos(f * 0.2812F) - 1.0F) * 1.0F * f1;
+    		bipedRightArm.rotateAngleZ = (MathHelper.cos(f * 0.2312F) + 1.0F) * 1.0F * f1;
+    	} else {
+    		bipedRightArm.rotateAngleZ = 0.0F;
+    		bipedLeftArm.rotateAngleZ = 0.0F;
+    	}
+    	bipedRightLeg.rotateAngleX = MathHelper.cos(f * 0.6662F) * 1.4F
+    			* f1;
+    	bipedLeftLeg.rotateAngleX = MathHelper.cos(f * 0.6662F + 3.141593F)
+    			* 1.4F * f1;
+    	bipedRightLeg.rotateAngleY = 0.0F;
+    	bipedLeftLeg.rotateAngleY = 0.0F;
+    	if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_getIsRiding)) {
+    		// èÊÇËï®Ç…èÊÇ¡ÇƒÇ¢ÇÈ
+    		bipedRightArm.rotateAngleX += -0.6283185F;
+    		bipedLeftArm.rotateAngleX += -0.6283185F;
+    		bipedRightLeg.rotateAngleX = -1.256637F;
+    		bipedLeftLeg.rotateAngleX = -1.256637F;
+    		bipedRightLeg.rotateAngleY = 0.3141593F;
+    		bipedLeftLeg.rotateAngleY = -0.3141593F;
+    	}
+    	// ÉAÉCÉeÉÄéùÇ¡ÇƒÇÈÇ∆Ç´ÇÃòrêUÇËÇó}Ç¶ÇÈ
+    	if (heldItem[1] != 0 && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_oldwalking)) {
+    		bipedLeftArm.rotateAngleX = bipedLeftArm.rotateAngleX * 0.5F
+    				- 0.3141593F * (float) heldItem[1];
+    	}
+    	if (heldItem[0] != 0 && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_oldwalking)) {
+    		bipedRightArm.rotateAngleX = bipedRightArm.rotateAngleX * 0.5F
+    				- 0.3141593F * (float) heldItem[0];
+    	}
+    	bipedRightArm.rotateAngleY = 0.0F;
+    	bipedLeftArm.rotateAngleY = 0.0F;
 
-    		armSwing(f, f1, f2, f3, f4, f5, entityCaps);
+    	armSwing(f, f1, f2, f3, f4, f5, entityCaps);
 
-    		bipedRightLeg.rotationPointZ = bipedLeftLeg.rotationPointZ = 0.0F;
-    		if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_getIsSneak)) {
-    			// ÇµÇ·Ç™Ç›
-    			bipedBody.rotateAngleX = 0.5F;
-    			Skirt.rotateAngleX = -0.5F;
-    			bipedRightLeg.rotateAngleX -= 0.5F;
-    			bipedLeftLeg.rotateAngleX -= 0.5F;
-    			bipedHead.rotationPointY = 1.0F;
-    			bipedBody.rotationPointY = 3.5F;
-    			bipedBody.rotationPointZ = 1.0F;
-    			bipedRightLeg.rotationPointY = bipedLeftLeg.rotationPointY = 3.5F - 1.0F;
-    			bipedRightLeg.rotationPointZ = bipedLeftLeg.rotationPointZ = 0.25F;
-    			Skirt.rotationPointY = 5.5F - 0.5F;
-    			Skirt.rotationPointZ = -1.0F;
+    	bipedRightLeg.rotationPointZ = bipedLeftLeg.rotationPointZ = 0.0F;
+    	if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_getIsSneak)) {
+    		// ÇµÇ·Ç™Ç›
+    		bipedBody.rotateAngleX = 0.5F;
+    		Skirt.rotateAngleX = -0.5F;
+    		bipedRightLeg.rotateAngleX -= 0.5F;
+    		bipedLeftLeg.rotateAngleX -= 0.5F;
+    		bipedHead.rotationPointY = 1.0F;
+    		bipedBody.rotationPointY = 3.5F;
+    		bipedBody.rotationPointZ = 1.0F;
+    		bipedRightLeg.rotationPointY = bipedLeftLeg.rotationPointY = 3.5F - 1.0F;
+    		bipedRightLeg.rotationPointZ = bipedLeftLeg.rotationPointZ = 0.25F;
+    		Skirt.rotationPointY = 5.5F - 0.5F;
+    		Skirt.rotationPointZ = -1.0F;
+    	} else {
+    		// í èÌóßÇø
+    		bipedBody.rotateAngleX = 0.0F;
+    		Skirt.rotationPointZ = 0.0F;
+    		Skirt.rotateAngleX = 0.0F;
+    		Skirt.rotationPointY = 5.5F;
+    		bipedHead.rotationPointY = 0.0F;
+    		bipedBody.rotationPointY = 3.5F;
+    		bipedBody.rotationPointZ = 0.0F;
+    		bipedRightLeg.rotationPointY = bipedLeftLeg.rotationPointY = 3.5F;
+    	}
+    	if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_aimedBow)) {
+    		// ã|ç\Ç¶
+    		float f6 = MathHelper.sin(onGrounds[dominantArm] * 3.141593F);
+    		float f7 = MathHelper.sin((1.0F - (1.0F - onGrounds[dominantArm])
+    				* (1.0F - onGrounds[dominantArm])) * 3.141593F);
+    		bipedRightArm.rotateAngleZ = 0.0F;
+    		bipedLeftArm.rotateAngleZ = 0.0F;
+    		bipedRightArm.rotateAngleY = -(0.1F - f6 * 0.6F)
+    				+ bipedHead.rotateAngleY;
+    		bipedLeftArm.rotateAngleY = (0.1F - f6 * 0.6F)
+    				+ bipedHead.rotateAngleY + 0.4F;
+    		bipedRightArm.rotateAngleX = -1.470796F;
+    		bipedRightArm.rotateAngleX -= f6 * 1.2F - f7 * 0.4F;
+    		bipedRightArm.rotateAngleZ += MathHelper.cos(f2 * 0.09F) * 0.05F + 0.05F;
+    		bipedLeftArm.rotateAngleZ -= MathHelper.cos(f2 * 0.09F) * 0.05F + 0.05F;
+    		bipedRightArm.rotateAngleX += MathHelper.sin(f2 * 0.067F) * 0.05F;
+    		bipedRightArm.rotateAngleX += bipedHead.rotateAngleX;
+    		bipedLeftArm.rotateAngleX = bipedRightArm.rotateAngleX + 0.4F;
+    		bipedRightArm.rotationPointX = -3F;
+    		bipedLeftArm.rotationPointX = 3F;
+    	} else {
+    		if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_getIsWait)) {
+    			// ë“ã@èÛë‘
+    			bipedRightArm.rotateAngleX = MathHelper.sin(f2 * 0.062F) * 0.05F - 0.7F;
+    			bipedRightArm.rotateAngleY = 0.0F;
+    			bipedRightArm.rotateAngleZ = -0.4F;
+    			bipedLeftArm.rotateAngleX = MathHelper.sin(f2 * 0.062F) * 0.05F - 0.7F;
+    			bipedLeftArm.rotateAngleY = 0.0F;
+    			bipedLeftArm.rotateAngleZ = 0.4F;
     		} else {
-    			// í èÌóßÇø
-    			bipedBody.rotateAngleX = 0.0F;
-    			Skirt.rotationPointZ = 0.0F;
-    			Skirt.rotateAngleX = 0.0F;
-    			Skirt.rotationPointY = 5.5F;
-    			bipedHead.rotationPointY = 0.0F;
-    			bipedBody.rotationPointY = 3.5F;
-    			bipedBody.rotationPointZ = 0.0F;
-    			bipedRightLeg.rotationPointY = bipedLeftLeg.rotationPointY = 3.5F;
-    		}
-    		if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_aimedBow)) {
-    			// ã|ç\Ç¶
-    			float f6 = MathHelper.sin(onGround * 3.141593F);
-    			float f7 = MathHelper.sin((1.0F - (1.0F - onGround)
-    					* (1.0F - onGround)) * 3.141593F);
-    			bipedRightArm.rotateAngleZ = 0.0F;
-    			bipedLeftArm.rotateAngleZ = 0.0F;
-    			bipedRightArm.rotateAngleY = -(0.1F - f6 * 0.6F)
-    					+ bipedHead.rotateAngleY;
-    			bipedLeftArm.rotateAngleY = (0.1F - f6 * 0.6F)
-    					+ bipedHead.rotateAngleY + 0.4F;
-    			bipedRightArm.rotateAngleX = -1.470796F;
-    			bipedRightArm.rotateAngleX -= f6 * 1.2F - f7 * 0.4F;
+    			// åƒãz òrìô
+    			bipedRightArm.rotateAngleZ += 0.5F;
+    			bipedLeftArm.rotateAngleZ -= 0.5F;
     			bipedRightArm.rotateAngleZ += MathHelper.cos(f2 * 0.09F) * 0.05F + 0.05F;
     			bipedLeftArm.rotateAngleZ -= MathHelper.cos(f2 * 0.09F) * 0.05F + 0.05F;
     			bipedRightArm.rotateAngleX += MathHelper.sin(f2 * 0.067F) * 0.05F;
-    			bipedRightArm.rotateAngleX += bipedHead.rotateAngleX;
-    			bipedLeftArm.rotateAngleX = bipedRightArm.rotateAngleX + 0.4F;
-    			bipedRightArm.rotationPointX = -3F;
-    			bipedLeftArm.rotationPointX = 3F;
-    		} else {
-    			if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_getIsWait)) {
-    				// ë“ã@èÛë‘
-    				bipedRightArm.rotateAngleX = MathHelper.sin(f2 * 0.062F) * 0.05F - 0.7F;
-    				bipedRightArm.rotateAngleY = 0.0F;
-    				bipedRightArm.rotateAngleZ = -0.4F;
-    				bipedLeftArm.rotateAngleX = MathHelper.sin(f2 * 0.062F) * 0.05F - 0.7F;
-    				bipedLeftArm.rotateAngleY = 0.0F;
-    				bipedLeftArm.rotateAngleZ = 0.4F;
-    			} else {
-    				// åƒãz òrìô
-    				bipedRightArm.rotateAngleZ += 0.5F;
-    				bipedLeftArm.rotateAngleZ -= 0.5F;
-    				bipedRightArm.rotateAngleZ += MathHelper.cos(f2 * 0.09F) * 0.05F + 0.05F;
-    				bipedLeftArm.rotateAngleZ -= MathHelper.cos(f2 * 0.09F) * 0.05F + 0.05F;
-    				bipedRightArm.rotateAngleX += MathHelper.sin(f2 * 0.067F) * 0.05F;
-    				bipedLeftArm.rotateAngleX -= MathHelper.sin(f2 * 0.067F) * 0.05F;
-    			}
+    			bipedLeftArm.rotateAngleX -= MathHelper.sin(f2 * 0.067F) * 0.05F;
     		}
-    	//}
-    	//
+    	}
     }
 
     @Override

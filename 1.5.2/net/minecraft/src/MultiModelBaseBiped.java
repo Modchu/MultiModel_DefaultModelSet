@@ -195,7 +195,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 			}
 		}
 		// アーマー頭部装飾品 対応
-		lis = (ItemStack) getCapsValue(entityCaps, caps_armorItemInSlot, 3);
+		lis = (ItemStack) getCapsValue(entityCaps, caps_currentArmor, 3);
 		if (lis != null) {
 			addSupport = addSupportChecks(lis);
 			headMountRenderItems(entityCaps, lis, addSupport);
@@ -250,7 +250,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 			}
 
 			// アーマー頭部装飾品 対応
-			litemstack = (ItemStack) getCapsValue(caps_armorItemInSlot, 3);
+			litemstack = (ItemStack) getCapsValue(caps_currentArmor, 3);
 			if (litemstack != null) {
 				addSupport = addSupportChecks(litemstack);
 				headMountRenderItems(entityCaps, litemstack, addSupport);
@@ -482,13 +482,6 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     }
 
     /**
-     * 寝ているポーズ時の位置調整
-     */
-    public double getSleepingyOffset() {
-    	return -0.9D;
-    }
-
-    /**
      * isModelSize=true時に乗り物に乗っている状態でのカメラ位置調整
      */
     public float ridingViewCorrection() {
@@ -659,8 +652,6 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 			return getModchuRemodelingModel();
 		case caps_sittingyOffset:
 			return getSittingyOffset();
-		case caps_sleepingyOffset:
-			return getSleepingyOffset();
 		case caps_texture:
 			if (pArg != null
 			&& pArg.length > 1

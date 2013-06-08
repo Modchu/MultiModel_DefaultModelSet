@@ -35,7 +35,11 @@ public abstract class MultiModelCustom extends MultiModelSkirtFloats {
 		dummy.addBox(0.0F, 0.0F, 0.0F, 0, 0, 0, f);
 	}
 
-	public void superrender(MMM_IModelCaps entityCaps, float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5) {
+	public void skirtFloatsInit(float f, float f1) {
+		if (customModel != null) customModel.skirtFloatsInit(f, f1);
+	}
+
+    public void superrender(MMM_IModelCaps entityCaps, float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5) {
 		setRotationAngles(f, f1, ticksExisted, pheadYaw, pheadPitch, f5, entityCaps);
 		if (customModel != null
 				&& customModel.mainModel != null
@@ -55,18 +59,15 @@ public abstract class MultiModelCustom extends MultiModelSkirtFloats {
 	}
 
 	@Override
-    public void render(MMM_IModelCaps entityCaps, float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5, boolean pIsRender) {
-		//Modchu_Debug.mDebug("MultiModelCustom render");
+	public void render(MMM_IModelCaps entityCaps, float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5, boolean pIsRender) {
 		setRotationAngles(f, f1, ticksExisted, pheadYaw, pheadPitch, f5, entityCaps);
 		customModel.render(entityCaps, f, f1, ticksExisted, pheadYaw, pheadPitch, f5, pIsRender);
 	}
 
 	@Override
-	public void setLivingAnimations(MMM_IModelCaps entityCaps, float f, float f1, float renderPartialTicks) {
-		//Modchu_Debug.mDebug("MultiModelCustom setLivingAnimationsLM start");
-		super.setLivingAnimations(entityCaps, f, f1, renderPartialTicks);
-		customModel.setLivingAnimations(entityCaps, f, f1, renderPartialTicks);
-		//Modchu_Debug.mDebug("MultiModelCustom setLivingAnimationsLM end");
+	public void setLivingAnimationsLM(MMM_IModelCaps entityCaps, float f, float f1, float renderPartialTicks) {
+		super.setLivingAnimationsLM(entityCaps, f, f1, renderPartialTicks);
+		customModel.setLivingAnimationsLM(entityCaps, f, f1, renderPartialTicks);
 	}
 
     @Override
@@ -89,121 +90,116 @@ public abstract class MultiModelCustom extends MultiModelSkirtFloats {
 		customModel.defaultPartsSettingAfter(entityCaps);
 	}
 
-    @Override
-    public void showModelSettingReflects(MMM_IModelCaps entityCaps) {
-    	customModel.showModelSettingReflects(entityCaps);
-    }
+	@Override
+	public void showModelSettingReflects(MMM_IModelCaps entityCaps) {
+		customModel.showModelSettingReflects(entityCaps);
+	}
 
-    @Override
-    public void actionInit(MMM_IModelCaps entityCaps, int i) {
-    	customModel.actionInit(entityCaps, i);
-    }
+	@Override
+	public void actionInit(MMM_IModelCaps entityCaps, int i) {
+		customModel.actionInit(entityCaps, i);
+	}
 
-    @Override
-    public void actionRelease(MMM_IModelCaps entityCaps, int i) {
-    	customModel.actionRelease(entityCaps, i);
-    }
+	@Override
+	public void actionRelease(MMM_IModelCaps entityCaps, int i) {
+		customModel.actionRelease(entityCaps, i);
+	}
 
-    @Override
-    public void action(float f, float f1, float f2, float f3, float f4, float f5, int i, MMM_IModelCaps entityCaps) {
-    	customModel.action(f, f1, f2, f3, f4, f5, i, entityCaps);
-    }
+	@Override
+	public void action(float f, float f1, float f2, float f3, float f4, float f5, int i, MMM_IModelCaps entityCaps) {
+		customModel.action(f, f1, f2, f3, f4, f5, i, entityCaps);
+	}
 
-    @Override
-    public void syncModel(MMM_IModelCaps entityCaps, MultiModelBaseBiped model) {
-    	customModel.syncModel(entityCaps, model);
-    }
+	@Override
+	public void syncModel(MMM_IModelCaps entityCaps, MultiModelBaseBiped model) {
+		customModel.syncModel(entityCaps, model);
+	}
 
-    @Override
-    public float getHeight() {
-    	if (customModel != null) return customModel.getHeight();
-    	return 1.35F;
-    }
+	@Override
+	public float getHeight() {
+		if (customModel != null) return customModel.getHeight();
+		return 1.35F;
+	}
 
-    @Override
-    public float getWidth() {
-    	if (customModel != null) return customModel.getWidth();
-    	return 0.5F;
-    }
+	@Override
+	public float getWidth() {
+		if (customModel != null) return customModel.getWidth();
+		return 0.5F;
+	}
 
-    @Override
-    public float getyOffset() {
-    	return customModel.getyOffset();
-    }
+	@Override
+	public float getyOffset() {
+		return customModel.getyOffset();
+	}
 
-    @Override
-    public float getRidingHeight() {
-    	return customModel.getRidingHeight();
-    }
+	@Override
+	public float getRidingHeight() {
+		return customModel.getRidingHeight();
+	}
 
-    @Override
-    public float getRidingWidth() {
-    	return customModel.getRidingWidth();
-    }
+	@Override
+	public float getRidingWidth() {
+		return customModel.getRidingWidth();
+	}
 
-    @Override
-    public float getRidingyOffset() {
-    	return customModel.getRidingyOffset();
-    }
+	@Override
+	public float getRidingyOffset() {
+		return customModel.getRidingyOffset();
+	}
 
-    @Override
-    public float getMountedYOffset() {
-    	return customModel.getMountedYOffset();
-    }
+	@Override
+	public float getMountedYOffset() {
+		return customModel.getMountedYOffset();
+	}
 
-    @Override
-    public double getSittingyOffset() {
-    	return customModel.getSittingyOffset();
-    }
+	@Override
+	public double getSittingyOffset() {
+		return customModel.getSittingyOffset();
+	}
 
-    @Override
-    public double getSleepingyOffset() {
-    	return customModel.getSleepingyOffset();
-    }
+	@Override
+	public float ridingViewCorrection() {
+		return customModel.ridingViewCorrection();
+	}
 
-    @Override
-    public float ridingViewCorrection() {
-    	return customModel.ridingViewCorrection();
-    }
+	@Override
+	public float getModelScale() {
+		return customModel.getModelScale();
+	}
 
-    @Override
-    public float getModelScale() {
-    	return customModel.getModelScale();
-    }
+	@Override
+	public void setArmorBipedHeadShowModel(MMM_IModelCaps entityCaps, boolean b) {
+		customModel.setArmorBipedHeadShowModel(entityCaps, b);
+	}
 
-    @Override
-    public void setArmorBipedHeadShowModel(MMM_IModelCaps entityCaps, boolean b) {
-    	customModel.setArmorBipedHeadShowModel(entityCaps, b);
-    }
+	@Override
+	public void setArmorBipedBodyShowModel(MMM_IModelCaps entityCaps, boolean b) {
+		customModel.setArmorBipedBodyShowModel(entityCaps, b);
+	}
 
-    @Override
-    public void setArmorBipedBodyShowModel(MMM_IModelCaps entityCaps, boolean b) {
-    	customModel.setArmorBipedBodyShowModel(entityCaps, b);
-    }
+	@Override
+	public void setArmorBipedRightArmShowModel(MMM_IModelCaps entityCaps, boolean b) {
+		customModel.setArmorBipedRightArmShowModel(entityCaps, b);
+	}
 
-    @Override
-    public void setArmorBipedRightArmShowModel(MMM_IModelCaps entityCaps, boolean b) {
-    	customModel.setArmorBipedRightArmShowModel(entityCaps, b);
-    }
+	@Override
+	public void setArmorBipedLeftArmShowModel(MMM_IModelCaps entityCaps, boolean b) {
+		customModel.setArmorBipedLeftArmShowModel(entityCaps, b);
+	}
 
-    @Override
-    public void setArmorBipedLeftArmShowModel(MMM_IModelCaps entityCaps, boolean b) {
-    	customModel.setArmorBipedLeftArmShowModel(entityCaps, b);
-    }
+	@Override
+	public void setArmorBipedRightLegShowModel(MMM_IModelCaps entityCaps, boolean b) {
+		customModel.setArmorBipedRightLegShowModel(entityCaps, b);
+	}
 
-    @Override
-    public void setArmorBipedRightLegShowModel(MMM_IModelCaps entityCaps, boolean b) {
-    	customModel.setArmorBipedRightLegShowModel(entityCaps, b);
-    }
+	@Override
+	public void setArmorBipedLeftLegShowModel(MMM_IModelCaps entityCaps, boolean b) {
+		customModel.setArmorBipedLeftLegShowModel(entityCaps, b);
+	}
 
-    @Override
-    public void setArmorBipedLeftLegShowModel(MMM_IModelCaps entityCaps, boolean b) {
-    	customModel.setArmorBipedLeftLegShowModel(entityCaps, b);
-    }
-
-    @Override
-    public void setArmorSkirtShowModel(MMM_IModelCaps entityCaps, boolean b) {
-    }
+	@Override
+	public void setArmorSkirtShowModel(MMM_IModelCaps entityCaps, boolean b) {
+	}
 
 	@Override
 	public Object getCapsValue(int pIndex, Object ...pArg) {
