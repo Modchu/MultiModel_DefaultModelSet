@@ -92,7 +92,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     @Override
     public void render(MMM_IModelCaps entityCaps, float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5, boolean pIsRender) {
     	setRotationAngles(f, f1, ticksExisted, pheadYaw, pheadPitch, f5, entityCaps);
-    	mainFrame.render(f5);
+    	mainFrame.render(f5, pIsRender);
     	if (entityCaps != null) {
 /*//151delete
     		renderStabilizer(entity, (Map) entityCaps.getCapsValue(caps_stabiliser), f, f1, ticksExisted, pheadYaw, pheadPitch, f5);
