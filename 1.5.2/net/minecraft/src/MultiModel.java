@@ -575,9 +575,8 @@ public class MultiModel extends MultiModelSkirtFloats {
     @Override
     public void showModelSettingReflects(MMM_IModelCaps entityCaps) {
     	super.showModelSettingReflects(entityCaps);
-    	setCapsValue(caps_indexOfAllVisible, "Skirt", Modchu_ModelCapsHelper.getCapsValueInt(this, caps_armorType));
-    	if (Modchu_ModelCapsHelper.getCapsValueInt(this, caps_skirtFloats) == 2) {
-    		if (Skirt != null) setCapsValue(caps_visible, Skirt, false);
+    	if (Modchu_ModelCapsHelper.getCapsValueInt(this, caps_skirtFloats) < 2) {
+    		setCapsValue(caps_indexOfAllVisible, "Skirt", Modchu_ModelCapsHelper.getCapsValueInt(this, caps_armorType));
     	}
     }
 
@@ -635,10 +634,16 @@ public class MultiModel extends MultiModelSkirtFloats {
 
     @Override
     public void setArmorSkirtShowModel(MMM_IModelCaps entityCaps, boolean b) {
-    	if (Skirt != null
-    			&& Modchu_ModelCapsHelper.getCapsValueInt(this, caps_skirtFloats) < 2) {
-    		//Skirt.isHidden = !b;
-    		setCapsValue(caps_visible, Skirt, b);
+    	if (Skirt != null) {
+    		if (Modchu_ModelCapsHelper.getCapsValueInt(this, caps_skirtFloats) < 2) {
+    			setCapsValue(caps_visible, Skirt, b);
+    		} else {
+    			setCapsValue(caps_visible, SkirtTop, b);
+    			setCapsValue(caps_visible, SkirtFront, b);
+    			setCapsValue(caps_visible, SkirtRight, b);
+    			setCapsValue(caps_visible, SkirtLeft, b);
+    			setCapsValue(caps_visible, SkirtBack, b);
+    		}
     	}
     }
 

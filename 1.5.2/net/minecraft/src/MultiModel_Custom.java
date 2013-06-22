@@ -20,7 +20,7 @@ public class MultiModel_Custom extends MultiModelCustom {
 	public MultiModel_Custom(float f, float f1, int i, int j) {
 		super(f, f1, i, j);
 		String s = "default";
-		MMM_ModelMultiBase model = (MMM_ModelMultiBase) mod_Modchu_ModchuLib.modelNewInstance(s)[0];
+		MMM_ModelMultiBase model = (MMM_ModelMultiBase) mod_Modchu_ModchuLib.modelNewInstance(s, false)[0];
 		customModel = new Modchu_CustomModel(this, model, s, f, 0.0F);
 	}
 

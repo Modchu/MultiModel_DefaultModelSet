@@ -65,6 +65,12 @@ public abstract class MultiModelCustom extends MultiModelSkirtFloats {
 	}
 
 	@Override
+	public void setLivingAnimations(MMM_IModelCaps entityCaps, float f, float f1, float renderPartialTicks) {
+		super.setLivingAnimations(entityCaps, f, f1, renderPartialTicks);
+		customModel.setLivingAnimations(entityCaps, f, f1, renderPartialTicks);
+	}
+
+	@Override
 	public void setLivingAnimationsLM(MMM_IModelCaps entityCaps, float f, float f1, float renderPartialTicks) {
 		super.setLivingAnimationsLM(entityCaps, f, f1, renderPartialTicks);
 		customModel.setLivingAnimationsLM(entityCaps, f, f1, renderPartialTicks);

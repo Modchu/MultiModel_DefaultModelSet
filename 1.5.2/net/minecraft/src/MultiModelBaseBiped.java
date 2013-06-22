@@ -828,14 +828,6 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 				return true;
 			}
 			return false;
-		case caps_changeModel:
-			if (pArg != null
-			&& pArg.length > 0
-			&& pArg[0] != null) {
-				changeModel((MMM_IModelCaps) pArg[0]);
-				return true;
-			}
-			return false;
 		case caps_syncModel:
 			if (pArg != null
 			&& pArg.length > 1
