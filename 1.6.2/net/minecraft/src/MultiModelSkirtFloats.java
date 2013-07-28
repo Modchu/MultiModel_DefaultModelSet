@@ -5,7 +5,7 @@ package net.minecraft.src;
  */
 public abstract class MultiModelSkirtFloats extends MultiModelAction {
 
-    private float motionY = 0.0F;
+    private double motionY = 0.0D;
 
     /**
      * コンストラクタは全て継承させること
@@ -46,7 +46,7 @@ public abstract class MultiModelSkirtFloats extends MultiModelAction {
 //-@-151
     		EntityLivingBase entityliving = (EntityLivingBase) getCapsValue(entityCaps, entityCaps.caps_Entity);
 //@-@151
-    		setMotionY(entityliving.motionY + 0.0784000015258789D > 0 ? 0 : (float) ((entityliving.motionY + 0.0784000015258789D)) * mod_Modchu_ModchuLib.skirtFloatsVolume);
+    		setMotionY(entityliving.motionY + 0.0784000015258789D > 0 ? 0 : (entityliving.motionY + 0.0784000015258789D) * mod_Modchu_ModchuLib.skirtFloatsVolume);
     	}
     }
 
@@ -81,18 +81,18 @@ public abstract class MultiModelSkirtFloats extends MultiModelAction {
     		if (pArg != null
     		&& pArg.length > 0
     		&& pArg[0] != null) {
-    			setMotionY((Float) pArg[0]);
+    			setMotionY((Double) pArg[0]);
     			return true;
     		}
     	}
     	return super.setCapsValue(pIndex, pArg);
     }
 
-    private float getMotionY() {
+    private double getMotionY() {
     	return motionY;
     }
 
-    private void setMotionY(float f) {
+    private void setMotionY(double f) {
     	motionY = f;
     }
 }
