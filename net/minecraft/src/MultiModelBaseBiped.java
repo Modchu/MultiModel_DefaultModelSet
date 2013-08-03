@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
  * PlayerFormLittleMaid共通クラス
  */
 public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implements Modchu_IModelCaps {
-//-@-151
+
 	public MMM_ModelRenderer bipedHead;
 	public MMM_ModelRenderer bipedHeadwear;
 	public MMM_ModelRenderer bipedBody;
@@ -28,7 +28,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 	public MMM_ModelRenderer bipedCloak;
 	public Modchu_ModelRenderer HeadMount;
 	public Modchu_ModelRenderer HeadTop;
-//@-@151
+
 	private int armorType = 0;
 	private boolean oldwalking = false;
 	private boolean firstPerson = false;
@@ -38,16 +38,6 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 	private boolean sittingBan = false;
 	private boolean sleepingBan = false;
 	private boolean ridingBan = false;
-/*//125delete
-    public Entity entity;
-*///125delete
-/*//b181delete
-    public int textureWidth;
-    public int textureHeight;
-    public boolean field_40333_u;
-    private Map modelTextureMap = new HashMap();
-*///b181delete
-    //b173deletepublic List boxList;
 
     /**
      * コンストラクタは全て継承させること
@@ -71,12 +61,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     }
 
     public MultiModelBaseBiped(float psize, float pyoffset, int par3, int par4) {
-/*//151delete
-    	super(psize, pyoffset);
-*///151delete
-//-@-151
     	super(psize, pyoffset, par3, par4);
-//@-@151
     	textureWidth = par3;
     	textureHeight = par4;
     	//b173deleteboxList = new ArrayList();
@@ -92,7 +77,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     @Override
     public void render(MMM_IModelCaps entityCaps, float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5, boolean pIsRender) {
     	setRotationAngles(f, f1, ticksExisted, pheadYaw, pheadPitch, f5, entityCaps);
-    	mainFrame.render(f5);
+    	mainFrame.render(f5, pIsRender);
     	if (entityCaps != null) {
 /*//151delete
     		renderStabilizer(entity, (Map) entityCaps.getCapsValue(caps_stabiliser), f, f1, ticksExisted, pheadYaw, pheadPitch, f5);
@@ -108,7 +93,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     	setCapsValue(entityCaps, caps_setLivingAnimationsBefore, this, f, f1, f2);
     	setLivingAnimationsLM(entityCaps, f, f1, f2);
 //-@-151
-    	EntityLiving entityliving = (EntityLiving) getCapsValue(entityCaps, entityCaps.caps_Entity);
+    	Entity entityliving = (Entity) getCapsValue(entityCaps, entityCaps.caps_Entity);
 //@-@151
     	if (mod_Modchu_ModchuLib.mod_LMM_littleMaidMob != null
     			&& mod_Modchu_ModchuLib.LMM_EntityLittleMaid.isInstance(entityliving)) {
@@ -173,7 +158,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 			float scale = 1.0F;
 			Object inventory = entityCaps.getCapsValue(caps_Inventory);
 			if (inventory != null) {
-				EntityLiving pEntity = (EntityLiving)entityCaps.getCapsValue(caps_Entity);
+				Entity pEntity = (Entity)entityCaps.getCapsValue(caps_Entity);
 				int slot = pEntity instanceof EntityPlayer ? 10 : 16;
 				ItemStack litemstack1 = (ItemStack) Modchu_Reflect.invokeMethod(InventoryPlayer.class, "func_70301_a", "getStackInSlot", new Class[]{ int.class }, inventory, new Object[]{ slot }, -1);
 				if (litemstack1 != null) {
@@ -195,7 +180,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 			}
 		}
 		// アーマー頭部装飾品 対応
-		lis = (ItemStack) getCapsValue(entityCaps, caps_armorItemInSlot, 3);
+		lis = (ItemStack) getCapsValue(entityCaps, caps_currentArmor, 3);
 		if (lis != null) {
 			addSupport = addSupportChecks(lis);
 			headMountRenderItems(entityCaps, lis, addSupport);
@@ -203,7 +188,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 		GL11.glPopMatrix();
 /*
 		// 手持ちの表示
-		EntityLiving pEntity = (EntityLiving) getCapsValue(entityCaps, entityCaps.caps_Entity);
+		Entity pEntity = (Entity) getCapsValue(entityCaps, entityCaps.caps_Entity);
 		GL11.glPushMatrix();
 		boolean lflag = true;
 		if (entityCaps != null) {
@@ -250,7 +235,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 			}
 
 			// アーマー頭部装飾品 対応
-			litemstack = (ItemStack) getCapsValue(caps_armorItemInSlot, 3);
+			litemstack = (ItemStack) getCapsValue(caps_currentArmor, 3);
 			if (litemstack != null) {
 				addSupport = addSupportChecks(litemstack);
 				headMountRenderItems(entityCaps, litemstack, addSupport);
@@ -269,7 +254,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 /*//151delete
     public void OldRenderItemsLM() {
     	// 手持ちの表示
-    	EntityLiving pEntity = (EntityLiving) getCapsValue(entityCaps, entityCaps.caps_Entity);
+    	Entity pEntity = (Entity) getCapsValue(entityCaps, entityCaps.caps_Entity);
     	GL11.glPushMatrix();
 
     	ItemStack litemstack = null;
@@ -335,7 +320,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     }
 *///151delete
     public void headMountRenderItems(MMM_IModelCaps entityCaps, ItemStack litemstack, int addSupport) {
-    	EntityLiving pEntity = (EntityLiving) getCapsValue(entityCaps, entityCaps.caps_Entity);
+    	Entity pEntity = (Entity) getCapsValue(entityCaps, entityCaps.caps_Entity);
     	Item item = litemstack.getItem();
     	Block block = null;
     	boolean isCamouflage = false;
@@ -479,13 +464,6 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
      */
     public double getSittingyOffset() {
     	return -0.35D;
-    }
-
-    /**
-     * 寝ているポーズ時の位置調整
-     */
-    public double getSleepingyOffset() {
-    	return -0.9D;
     }
 
     /**
@@ -659,8 +637,6 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 			return getModchuRemodelingModel();
 		case caps_sittingyOffset:
 			return getSittingyOffset();
-		case caps_sleepingyOffset:
-			return getSleepingyOffset();
 		case caps_texture:
 			if (pArg != null
 			&& pArg.length > 1
@@ -837,14 +813,6 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 				return true;
 			}
 			return false;
-		case caps_changeModel:
-			if (pArg != null
-			&& pArg.length > 0
-			&& pArg[0] != null) {
-				changeModel((MMM_IModelCaps) pArg[0]);
-				return true;
-			}
-			return false;
 		case caps_syncModel:
 			if (pArg != null
 			&& pArg.length > 1
@@ -864,7 +832,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 
 	private int getMaidColor(MMM_IModelCaps entityCaps) {
 //-@-151
-		EntityLiving entityliving = (EntityLiving) getCapsValue(entityCaps, entityCaps.caps_Entity);
+		Entity entityliving = (Entity) getCapsValue(entityCaps, entityCaps.caps_Entity);
 //@-@151
 		Modchu_Debug.mDebug("getMaidColor entityliving != null?"+(entityliving != null));
 		Object o = null;
@@ -878,8 +846,8 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 		return 0;
 	}
 
-	private String getTexture(String s, int i) {
-		return (String) mod_Modchu_ModchuLib.textureManagerGetTexture(s, i);
+	private ResourceLocation getTexture(String s, int i) {
+		return (ResourceLocation) mod_Modchu_ModchuLib.textureManagerGetTexture(s, i);
 	}
 /*
     private float getOnGround()

@@ -74,9 +74,30 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
     	Arms[0].setRotationPoint(0.5F, 6.5F, 0F);
     	Arms[1] = new Modchu_ModelRenderer(this, 0, 0);
     	Arms[1].setRotationPoint(-0.5F, 6.5F, 0F);
-    	((Modchu_ModelRenderer) Arms[1]).isInvertX = true;
+    	Arms[1].isInvertX = true;
+
     	bipedRightArm.addChild(Arms[0]);
     	bipedLeftArm.addChild(Arms[1]);
+    	if (HeadMount != null) {
+    		if (bipedHead instanceof Modchu_ModelRenderer) {
+    			((Modchu_ModelRenderer) bipedHead).removeChild(HeadMount);
+    		} else {
+    			bipedHead.childModels.remove(HeadMount);
+    		}
+    	}
+    	if (HeadTop != null) {
+    		if (HeadTop instanceof Modchu_ModelRenderer) {
+    			((Modchu_ModelRenderer) bipedHead).removeChild(HeadTop);
+    		} else {
+    			bipedHead.childModels.remove(HeadTop);
+    		}
+    	}
+    	HeadMount = new Modchu_ModelRenderer(this, "HeadMount");
+    	HeadMount.setRotationPoint(0F, 0F, 0F);
+    	HeadTop = new Modchu_ModelRenderer(this, "HeadTop");
+    	HeadTop.setRotationPoint(0.0F, -8.0F, 0.0F);
+    	bipedHead.addChild(HeadMount);
+    	bipedHead.addChild(HeadTop);
     }
 
     public void actionPartsInit(float f, float f1) {
@@ -185,12 +206,12 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
 			bipedLeftLeg.rotateAngleY = -((float) Math.PI / 10F);
 		}
 
-		if (heldItemLeft != 0 && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_oldwalking)) {
-			bipedLeftArm.rotateAngleX = bipedLeftArm.rotateAngleX * 0.5F - ((float) Math.PI / 10F) * (float) heldItemLeft;
+		if (heldItem[1] != 0 && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_oldwalking)) {
+			bipedLeftArm.rotateAngleX = bipedLeftArm.rotateAngleX * 0.5F - ((float) Math.PI / 10F) * (float) heldItem[1];
 		}
 
-		if (heldItemRight != 0 && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_oldwalking)) {
-			bipedRightArm.rotateAngleX = bipedRightArm.rotateAngleX * 0.5F - ((float) Math.PI / 10F) * (float) heldItemRight;
+		if (heldItem[0] != 0 && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_oldwalking)) {
+			bipedRightArm.rotateAngleX = bipedRightArm.rotateAngleX * 0.5F - ((float) Math.PI / 10F) * (float) heldItem[0];
 		}
 
 		bipedRightArm.rotateAngleY = 0.0F;

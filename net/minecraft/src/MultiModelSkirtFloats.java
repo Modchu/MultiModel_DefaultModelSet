@@ -44,7 +44,7 @@ public abstract class MultiModelSkirtFloats extends MultiModelAction {
     	super.setLivingAnimationsLM(entityCaps, f, f1, f2);
     	if (Modchu_ModelCapsHelper.getCapsValueInt(this, caps_skirtFloats) == 2) {
 //-@-151
-    		EntityLivingBase entityliving = (EntityLivingBase) getCapsValue(entityCaps, entityCaps.caps_Entity);
+    		Entity entityliving = (Entity) getCapsValue(entityCaps, entityCaps.caps_Entity);
 //@-@151
     		setMotionY(entityliving.motionY + 0.0784000015258789D > 0 ? 0 : (entityliving.motionY + 0.0784000015258789D) * mod_Modchu_ModchuLib.skirtFloatsVolume);
     	}
