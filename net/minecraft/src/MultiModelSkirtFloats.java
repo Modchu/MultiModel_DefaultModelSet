@@ -46,7 +46,7 @@ public abstract class MultiModelSkirtFloats extends MultiModelAction {
 //-@-151
     		Entity entityliving = (Entity) getCapsValue(entityCaps, entityCaps.caps_Entity);
 //@-@151
-    		setMotionY(entityliving.motionY + 0.0784000015258789D > 0 ? 0 : (entityliving.motionY + 0.0784000015258789D) * mod_Modchu_ModchuLib.skirtFloatsVolume);
+    		setMotionY(entityliving.motionY + 0.0784000015258789D > 0 ? 0 : (entityliving.motionY + 0.0784000015258789D) * mod_Modchu_ModchuLib.modchu_Main.skirtFloatsVolume);
     	}
     }
 
@@ -60,7 +60,7 @@ public abstract class MultiModelSkirtFloats extends MultiModelAction {
     }
 
     private boolean getSkirtFloats() {
-    	return mod_Modchu_ModchuLib.skirtFloats;
+    	return mod_Modchu_ModchuLib.modchu_Main.skirtFloats;
     }
 
     @Override

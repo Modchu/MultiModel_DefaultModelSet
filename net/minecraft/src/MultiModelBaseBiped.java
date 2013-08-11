@@ -1,14 +1,6 @@
 package net.minecraft.src;
 
-import static net.minecraft.src.MMM_IModelCaps.caps_Entity;
-import static net.minecraft.src.MMM_IModelCaps.caps_HeadMount;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
 
@@ -95,8 +87,8 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 //-@-151
     	Entity entityliving = (Entity) getCapsValue(entityCaps, entityCaps.caps_Entity);
 //@-@151
-    	if (mod_Modchu_ModchuLib.mod_LMM_littleMaidMob != null
-    			&& mod_Modchu_ModchuLib.LMM_EntityLittleMaid.isInstance(entityliving)) {
+    	if (mod_Modchu_ModchuLib.modchu_Main.mod_LMM_littleMaidMob != null
+    			&& mod_Modchu_ModchuLib.modchu_Main.LMM_EntityLittleMaid.isInstance(entityliving)) {
     		setLivingAnimationsAfter(entityCaps, f, f1, f2);
     	} else {
     		setCapsValue(entityCaps, caps_setLivingAnimationsAfter, this, f, f1, f2);
@@ -128,9 +120,9 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     public void renderItems(MMM_IModelCaps entityCaps) {
     	if (entityCaps != null) {
 /*//151delete
-    		if (mod_Modchu_ModchuLib.oldRenderItems
-    				&& mod_Modchu_ModchuLib.mod_LMM_littleMaidMob != null
-    				&& mod_Modchu_ModchuLib.LMM_EntityLittleMaid.isInstance(pEntity)) {
+    		if (mod_Modchu_ModchuLib.modchu_Main.oldRenderItems
+    				&& mod_Modchu_ModchuLib.modchu_Main.mod_LMM_littleMaidMob != null
+    				&& mod_Modchu_ModchuLib.modchu_Main.LMM_EntityLittleMaid.isInstance(pEntity)) {
     			OldRenderItemsLM();
     		} else
 *///151delete
@@ -369,12 +361,12 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     	Block block = null;
     	try {
     		block = Block.blocksList[item.itemID];
-    		if (mod_Modchu_ModchuLib.isDecoBlock) {
-    			if (mod_Modchu_ModchuLib.decoBlock.isInstance(block)) return 0;
-    			if (mod_Modchu_ModchuLib.decoBlockBase.isInstance(block)) return 1;
+    		if (mod_Modchu_ModchuLib.modchu_Main.isDecoBlock) {
+    			if (mod_Modchu_ModchuLib.modchu_Main.decoBlock.isInstance(block)) return 0;
+    			if (mod_Modchu_ModchuLib.modchu_Main.decoBlockBase.isInstance(block)) return 1;
     		}
-    		if (mod_Modchu_ModchuLib.isFavBlock
-    				&& mod_Modchu_ModchuLib.favBlock.isInstance(block)) {
+    		if (mod_Modchu_ModchuLib.modchu_Main.isFavBlock
+    				&& mod_Modchu_ModchuLib.modchu_Main.favBlock.isInstance(block)) {
     			return 2;
     		}
     	} catch(Exception e) {
@@ -838,16 +830,16 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 		Object o = null;
 		if (entityCaps != null) o = entityCaps.getCapsValue(caps_maidColor);
 		if (o != null) return (Integer) o;
-		if (mod_Modchu_ModchuLib.mod_LMM_littleMaidMob != null
-				&& mod_Modchu_ModchuLib.LMM_EntityLittleMaid.isInstance(entityliving)) {
-			o = (Integer) Modchu_Reflect.getFieldObject(mod_Modchu_ModchuLib.LMM_EntityLittleMaid, "maidColor", entityliving);
+		if (mod_Modchu_ModchuLib.modchu_Main.mod_LMM_littleMaidMob != null
+				&& mod_Modchu_ModchuLib.modchu_Main.LMM_EntityLittleMaid.isInstance(entityliving)) {
+			o = (Integer) Modchu_Reflect.getFieldObject(mod_Modchu_ModchuLib.modchu_Main.LMM_EntityLittleMaid, "maidColor", entityliving);
 		}
 		if (o != null) return (Integer) o;
 		return 0;
 	}
 
-	private ResourceLocation getTexture(String s, int i) {
-		return (ResourceLocation) mod_Modchu_ModchuLib.textureManagerGetTexture(s, i);
+	private Object getTexture(String s, int i) {
+		return mod_Modchu_ModchuLib.modchu_Main.textureManagerGetTexture(s, i);
 	}
 /*
     private float getOnGround()
@@ -1047,15 +1039,15 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     }
 
     private boolean getModchuRemodelingModel() {
-    	return mod_Modchu_ModchuLib.modchuRemodelingModel;
+    	return mod_Modchu_ModchuLib.modchu_Main.modchuRemodelingModel;
     }
 
     private void setModchuRemodelingModel(boolean b) {
-    	mod_Modchu_ModchuLib.modchuRemodelingModel = b;
+    	mod_Modchu_ModchuLib.modchu_Main.modchuRemodelingModel = b;
     }
 
     public float Physical_Hammer(MMM_IModelCaps entityCaps) {
-    	return (Float) Modchu_Reflect.getFieldObject(mod_Modchu_ModchuLib.mod_PFLM_PlayerFormLittleMaid, "Physical_Hammer");
+    	return (Float) Modchu_Reflect.getFieldObject(mod_Modchu_ModchuLib.modchu_Main.mod_PFLM_PlayerFormLittleMaid, "Physical_Hammer");
     }
 
     public MMM_ModelRenderer getBipedHead(MMM_IModelCaps entityCaps) {
