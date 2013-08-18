@@ -472,30 +472,62 @@ public class MultiModel extends MultiModelSkirtFloats {
 
     @Override
     public void setRotationAnglesfirstPerson(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
-    	InventoryPlayer inventoryPlayer = (InventoryPlayer) getCapsValue(caps_Inventory);
-    	if (inventoryPlayer != null
-    			&& inventoryPlayer.getCurrentItem() != null) {
+    	MMM_ModelRenderer arm = getBipedRightArm(entityCaps);
+    	//MMM_ModelRenderer notDominantArm = getNotDominantArm(entityCaps);
+    	Entity entity = (Entity) getCapsValue(entityCaps, entityCaps.caps_Entity);
+    	if (entity != null
+    			&& getCapsValue(entityCaps, entityCaps.caps_currentEquippedItem) != null) {
     		//’n}‚ðŽ‚Á‚Ä‚¢‚éŽž
-    		bipedRightArm.rotationPointX = -3.0F;
-    		bipedRightArm.rotationPointY = 1.5F;
-    		bipedRightArm.rotationPointZ = 0.0F;
-    		bipedLeftArm.rotationPointX = -4.5F;
-    		bipedLeftArm.rotationPointY = 1.5F;
-    		bipedLeftArm.rotationPointZ = 0.0F;
+    		if (dominantArm == 0) {
+    			arm.rotationPointX = -3.0F;
+    			arm.rotationPointY = 1.5F;
+    			arm.rotationPointZ = 0.0F;
+    		} else {
+    			arm.rotationPointX = -8.0F;
+    			arm.rotationPointY = 4.0F;
+    			arm.rotationPointZ = 0.0F;
+    		}
     	} else {
     		//‘fŽèŽž
-    		//setOnGround(((EntityPlayer) entity).getSwingProgress(1.0F));
-    		bipedRightArm.rotateAngleX = 0.0F;
-    		bipedRightArm.rotateAngleY = 0.0F;
-    		bipedRightArm.rotateAngleZ = 0.5F;
-    		bipedLeftArm.rotateAngleX = 0.0F;
-    		bipedLeftArm.rotateAngleY = 0.0F;
-    		bipedLeftArm.rotateAngleZ = 0.0F;
+    		if (dominantArm == 0) {
+    			arm.rotateAngleX = 0.0F;
+    			arm.rotateAngleY = 0.0F;
+    			arm.rotateAngleZ = 0.5F;
+    			arm.rotationPointY = 4.0F;
+    		} else {
+    			arm.rotateAngleX = 0.0F;
+    			arm.rotateAngleY = 0.0F;
+    			arm.rotateAngleZ = -0.5F;
+    			arm.rotationPointX = 8.0F;
+    			arm.rotationPointY = 4.0F;
+    			arm.rotationPointZ = 0.0F;
+    		}
+    		float f6, f7, f8;
+    		//if (onGrounds[0] > 0F) {
+    		//}
+    		// L
+    		if (onGrounds[1] > 0F) {
+    			f6 = 1.0F - onGrounds[1];
+    			f7 = MathHelper.sin(f6 * (float)Math.PI);
+    			f8 = MathHelper.cos(f6 * (float)Math.PI);
+    			//Modchu_Debug.mDebug("f7="+f7);
+    			//arm.rotateAngleZ += f7 * 1.2F;
+    			//arm.rotateAngleX = Modchu_Debug.debaf1;
+    			//arm.rotateAngleY = Modchu_Debug.debaf2;
+    			//arm.rotateAngleZ = Modchu_Debug.debaf3;
+    			arm.rotateAngleX = 0.2F - f8 * 1.4F;
+    			arm.rotateAngleY = 0.1F;
+    			arm.rotateAngleZ = 0.1F;
+    			//arm.rotateAngleY -= f7 * 0.4F;
+    			//Modchu_Debug.dDebug("debaf1="+Modchu_Debug.debaf1+" 2="+Modchu_Debug.debaf2+" 3="+Modchu_Debug.debaf3);
 
-    		bipedRightArm.rotationPointY = 4.0F;
-    		bipedLeftArm.rotationPointX = 4.0F;
-    		bipedLeftArm.rotationPointY = 8.0F;
-    		bipedLeftArm.rotationPointZ = -2.0F;
+    			//arm.rotationPointX += Modchu_Debug.debaf1;
+    			//arm.rotationPointY += Modchu_Debug.debaf2;
+    			//arm.rotationPointZ += Modchu_Debug.debaf3;
+    			arm.rotationPointX -= f8 * 6F;
+    			//arm.rotationPointY -= f8 * 6F;
+    			arm.rotationPointZ -= f8 * 7F;
+    		}
     	}
     }
 

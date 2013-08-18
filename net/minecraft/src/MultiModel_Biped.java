@@ -298,6 +298,31 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
     }
 
     @Override
+    public void setRotationAnglesfirstPerson(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
+    	if (dominantArm != 0) super.setRotationAnglesfirstPerson(f, f1, f2, f3, f4, f5, entityCaps);
+    	MMM_ModelRenderer arm = getBipedRightArm(entityCaps);
+    	Entity entity = (Entity) getCapsValue(entityCaps, entityCaps.caps_Entity);
+    	if (entity != null
+    			&& getCapsValue(entityCaps, entityCaps.caps_currentEquippedItem) != null) {
+    		//ínê}ÇéùÇ¡ÇƒÇ¢ÇÈéû
+    		if (dominantArm == 0) {
+    		} else {
+    			arm.rotationPointX = -7.5F;
+    			arm.rotationPointY = 2.5F;
+    			arm.rotationPointZ = 0.0F;
+    		}
+    	} else {
+    		//ëféËéû
+    		if (dominantArm == 0) {
+    			arm.rotateAngleX = 0.0F;
+    			arm.rotateAngleY = 0.0F;
+    			arm.rotateAngleZ = 0.0F;
+    		} else {
+    		}
+    	}
+    }
+
+    @Override
     public void setDefaultPause(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     	bipedHead.setRotationPoint(0.0F, 0.0F, 0.0F);
     	bipedBody.setRotationPoint(0.0F, 0.0F, 0.0F);

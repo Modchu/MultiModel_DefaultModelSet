@@ -534,7 +534,7 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
 
     public void action30(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     	//デバック用
-    	if (mod_Modchu_ModchuLib.mod_modchu_modchulib.getPackage() == null) return;
+    	if (mod_Modchu_ModchuLib.modchu_Main.getPackage() == null) return;
     	boolean b = true;
     	if (rightArm != null) setCapsValue(caps_visible, rightArm, b);
     	if (rightArm2 != null) setCapsValue(caps_visible, rightArm2, b);

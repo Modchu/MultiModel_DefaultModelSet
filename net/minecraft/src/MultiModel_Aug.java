@@ -108,7 +108,7 @@ public class MultiModel_Aug extends MultiModel_SR2 {
 			f3 *= 8.0F;
 			f4 = -0.2F;
 		} else {
-			f4 = (1F - (Float) Modchu_Reflect.invokeMethod("EntityLivingBase", "func_110143_aJ", entityliving) / 20F) * 0.5F;
+			f4 = (1F - Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_health ) / 20F) * 0.5F;
 		}
 		float f5 = MathHelper.sin(f3 * 0.067F) * 0.05F - f4;
 		float f6 = 40.0F / 57.29578F;
