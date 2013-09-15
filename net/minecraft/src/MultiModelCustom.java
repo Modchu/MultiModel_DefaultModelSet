@@ -264,6 +264,12 @@ public abstract class MultiModelCustom extends MultiModelSkirtFloats {
 	}
 
 	@Override
+	public int showArmorParts(int i, int i2) {
+		if (customModel != null) return customModel.showArmorParts(null, i, i2);
+		return -1;
+	}
+
+	@Override
 	public int showArmorParts(MMM_IModelCaps entityCaps, int i, int i2) {
 		if (customModel != null) return customModel.showArmorParts(entityCaps, i, i2);
 		return -1;

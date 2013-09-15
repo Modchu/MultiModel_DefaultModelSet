@@ -53,7 +53,7 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
      * ショートカットアクション時に呼ばれる
      */
     public void actionInit(MMM_IModelCaps entityCaps, int i) {
-    	setCapsValue(caps_runActionNumber, i);
+    	setCapsValue(entityCaps, caps_runActionNumber, i);
     	switch(i) {
     	case 1:
     		actionInit1(entityCaps);
@@ -340,7 +340,7 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
     	// ｳｯｰｳｯｰｳﾏｳﾏ(ﾟ∀ﾟ)
     	float speed = Modchu_ModelCapsHelper.getCapsValueFloat(this, entityCaps, caps_actionSpeed) / 10;
     	//Modchu_Debug.mDebug("action1 entityCaps != null?"+(entityCaps != null));
-    	//Modchu_Debug.mDebug("action1 "+(Modchu_ModelCapsHelper.getCapsValueFloat(this, entityCaps, caps_actionSpeed))+" speed="+speed+" Type="+getCapsValue(this, entityCaps, caps_armorType));
+    	//Modchu_Debug.Debug("action1 "+(Modchu_ModelCapsHelper.getCapsValueFloat(this, entityCaps, caps_actionSpeed))+" speed="+speed+" Type="+getCapsValue(this, entityCaps, caps_armorType));
     	if (speed < 0.0F) return;
 
     	rightArm.rotationPointX = bipedRightArm.rotationPointX;

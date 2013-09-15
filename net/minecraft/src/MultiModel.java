@@ -600,9 +600,9 @@ public class MultiModel extends MultiModelSkirtFloats {
     @Override
     public void showModelSettingReflects(MMM_IModelCaps entityCaps) {
     	super.showModelSettingReflects(entityCaps);
-    	if (Modchu_ModelCapsHelper.getCapsValueInt(this, caps_skirtFloats) < 2) {
-    		setCapsValue(caps_indexOfAllVisible, "Skirt", Modchu_ModelCapsHelper.getCapsValueInt(this, caps_armorType));
-    	}
+    	//if (Modchu_ModelCapsHelper.getCapsValueInt(this, caps_skirtFloats) < 2) {
+    		setCapsValue(entityCaps, caps_indexOfAllVisible, "Skirt", Modchu_ModelCapsHelper.getCapsValueInt(this, caps_armorType));
+    	//}
     }
 
     /**
