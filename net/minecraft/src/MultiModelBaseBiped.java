@@ -284,59 +284,52 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     }
 
     /**
-     * アーマーモデルとメインモデルの同期。
-     * アーマーモデルに対して、メインモデルのデータが渡されてくるのでそれに合わせるパーツを同期させる
-     */
-    public void syncModel(MMM_IModelCaps entityCaps, MultiModelBaseBiped model) {
-    }
-
-    /**
      * カラー切替時に実行されるコード
      */
     public void changeColor(MMM_IModelCaps entityCaps) {
     }
 
-    public float getyOffset() {
+    public float getyOffset(MMM_IModelCaps pEntityCaps) {
     	return 1.62F;
     }
 
-    public float getRidingHeight() {
-    	return getHeight();
+    public float getRidingHeight(MMM_IModelCaps pEntityCaps) {
+    	return getHeight(pEntityCaps);
     }
 
-    public float getRidingWidth() {
-    	return getWidth();
+    public float getRidingWidth(MMM_IModelCaps pEntityCaps) {
+    	return getWidth(pEntityCaps);
     }
 
-    public float getRidingyOffset() {
-    	return getyOffset();
+    public float getRidingyOffset(MMM_IModelCaps pEntityCaps) {
+    	return getyOffset(pEntityCaps);
     }
 
     /**
      * 他Mobを頭に乗せた時の他Mob基準位置調整
      */
-    public float getMountedYOffset() {
+    public float getMountedYOffset(MMM_IModelCaps pEntityCaps) {
     	return 0.75F;
     }
 
     /**
      * 座っているポーズ「乗り物に乗っていない」時の位置調整
      */
-    public double getSittingyOffset() {
+    public double getSittingyOffset(MMM_IModelCaps entityCaps) {
     	return -0.35D;
     }
 
     /**
      * isModelSize=true時に乗り物に乗っている状態でのカメラ位置調整
      */
-    public float ridingViewCorrection() {
+    public float ridingViewCorrection(MMM_IModelCaps pEntityCaps) {
     	return 0.0F;
     }
 
     /**
      * デフォルトモデルスケール
      */
-    public float getModelScale() {
+    public float getModelScale(MMM_IModelCaps pEntityCaps) {
     	return 0.9375F;
     }
 
@@ -449,7 +442,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 		case caps_oldwalking:
 			return getOldwalking();
 		case caps_isItemHolder:
-			return isItemHolder();
+			return isItemHolder(entityCaps);
 		case caps_bipedHead:
 			if (pArg != null
 			&& pArg.length > 0
@@ -471,11 +464,11 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 			&& pArg[0] != null) return Physical_Hammer((MMM_IModelCaps) pArg[0]);
 			break;
 		case caps_height:
-			return getHeight();
+			return getHeight(entityCaps);
 		case caps_width:
-			return getWidth();
+			return getWidth(entityCaps);
 		case caps_YOffset:
-			return getyOffset();
+			return getyOffset(entityCaps);
 		case caps_convertDegtoRad:
 			if (pArg != null
 			&& pArg.length > 0
@@ -496,7 +489,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 		case caps_modchuRemodelingModel:
 			return getModchuRemodelingModel();
 		case caps_sittingyOffset:
-			return getSittingyOffset();
+			return getSittingyOffset(entityCaps);
 		case caps_texture:
 			if (pArg != null
 			&& pArg.length > 1
@@ -670,15 +663,6 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 			&& pArg.length > 0
 			&& pArg[0] != null) {
 				setModchuRemodelingModel((Boolean) pArg[0]);
-				return true;
-			}
-			return false;
-		case caps_syncModel:
-			if (pArg != null
-			&& pArg.length > 1
-			&& pArg[0] != null
-			&& pArg[1] != null) {
-				syncModel((MMM_IModelCaps) pArg[0], (MultiModelBaseBiped) pArg[1]);
 				return true;
 			}
 			return false;

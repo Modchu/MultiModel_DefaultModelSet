@@ -379,13 +379,23 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
 		return -1;
 	}
 
-    @Override
+	@Override
 	public float getHeight() {
+		return getHeight(null);
+	}
+
+	@Override
+	public float getHeight(MMM_IModelCaps pEntityCaps) {
 		return 1.81F;
 	}
 
-    @Override
+	@Override
 	public float getWidth() {
+		return getWidth(null);
+	}
+
+	@Override
+	public float getWidth(MMM_IModelCaps pEntityCaps) {
 		return 0.6F;
 	}
 
@@ -471,4 +481,14 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
     	super.action3(f, f1, f2, f3, f4, f5, entityCaps);
     	((MMM_ModelRenderer) getCapsValue(caps_bipedRightArm, entityCaps)).rotationPointX += Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm) == 0 ? 2.0F : -2.0F;
     }
+
+	@Override
+	public float getyOffset() {
+		return getyOffset(null);
+	}
+
+	@Override
+	public float getMountedYOffset() {
+		return getMountedYOffset(null);
+	}
 }

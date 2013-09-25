@@ -305,35 +305,7 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
     }
 
     public void action(float f, float f1, float f2, float f3, float f4, float f5, int i, MMM_IModelCaps entityCaps) {
-    	switch(i) {
-    	case 1:
-    		action1(f, f1, f2, f3, f4, f5, entityCaps);
-    		break;
-    	case 2:
-    		action2(f, f1, f2, f3, f4, f5, entityCaps);
-    		break;
-    	case 3:
-    		action3(f, f1, f2, f3, f4, f5, entityCaps);
-    		break;
-    	case 4:
-    		action4(f, f1, f2, f3, f4, f5, entityCaps);
-    		break;
-    	case 5:
-    		action5(f, f1, f2, f3, f4, f5, entityCaps);
-    		break;
-    	case 6:
-    		action6(f, f1, f2, f3, f4, f5, entityCaps);
-    		break;
-    	case 7:
-    		action7(f, f1, f2, f3, f4, f5, entityCaps);
-    		break;
-    	case 8:
-    		action8(f, f1, f2, f3, f4, f5, entityCaps);
-    		break;
-    	case 9:
-    		action9(f, f1, f2, f3, f4, f5, entityCaps);
-    		break;
-    	}
+    	Modchu_Reflect.invokeMethod(MultiModelAction.class, "action"+i, new Class[]{ float.class, float.class, float.class, float.class, float.class, float.class, MMM_IModelCaps.class }, this, new Object[]{ f, f1, f2, f3, f4, f5, entityCaps });
     }
 
     public void action1(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
@@ -517,7 +489,15 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
     }
 
     public void action5(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
-    	//
+    	// óºéËÇè„Ç∞ÇÈÉÇÅ[ÉVÉáÉì
+    	MMM_ModelRenderer arm = (MMM_ModelRenderer) getCapsValue(this, caps_bipedRightArm, entityCaps);
+    	//arm.rotateAngleX -= 0.2F;
+    	//arm.rotateAngleY -= 1.0F;
+    	arm.rotateAngleZ = Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm) == 0 ? 2.4F : -2.4F;
+    	arm = (MMM_ModelRenderer) getCapsValue(this, caps_notDominantArm, entityCaps);
+    	//arm.rotateAngleX -= 0.2F;
+    	//arm.rotateAngleY -= 1.0F;
+    	arm.rotateAngleZ = Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm) == 0 ? -2.4F : 2.4F;
     }
 
     public void action6(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
@@ -554,15 +534,6 @@ public abstract class MultiModelAction extends MultiModelBaseBiped {
     	if (leftLeg2 != null) setCapsValue(caps_visible, leftLeg2, b);
     	if (leftLegPlus != null) setCapsValue(caps_visible, leftLegPlus, b);
     	if (leftLegPlus2 != null) setCapsValue(caps_visible, leftLegPlus2, b);
-    }
-
-    @Override
-    public void syncModel(MMM_IModelCaps entityCaps, MultiModelBaseBiped model) {
-    	super.syncModel(entityCaps, model);
-    	if (Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_runActionNumber) == 1
-    			| Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_runActionNumber) == 3
-    			&& bipedBody != null
-    			&& model.bipedBody != null) bipedBody.rotateAngleZ = model.bipedBody.rotateAngleZ;
     }
 
     @Override

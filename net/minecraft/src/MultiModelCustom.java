@@ -117,60 +117,75 @@ public abstract class MultiModelCustom extends MultiModelSkirtFloats {
 	}
 
 	@Override
-	public void syncModel(MMM_IModelCaps entityCaps, MultiModelBaseBiped model) {
-		customModel.syncModel(entityCaps, model);
+	public float getHeight() {
+		return getHeight(null);
 	}
 
 	@Override
-	public float getHeight() {
-		if (customModel != null) return customModel.getHeight();
+	public float getHeight(MMM_IModelCaps pEntityCaps) {
+		if (customModel != null) return customModel.getHeight(pEntityCaps);
 		return 1.35F;
 	}
 
 	@Override
 	public float getWidth() {
-		if (customModel != null) return customModel.getWidth();
+		return getWidth(null);
+	}
+
+	@Override
+	public float getWidth(MMM_IModelCaps pEntityCaps) {
+		if (customModel != null) return customModel.getWidth(pEntityCaps);
 		return 0.5F;
 	}
 
 	@Override
 	public float getyOffset() {
-		return customModel.getyOffset();
+		return getyOffset(null);
 	}
 
 	@Override
-	public float getRidingHeight() {
-		return customModel.getRidingHeight();
-	}
-
-	@Override
-	public float getRidingWidth() {
-		return customModel.getRidingWidth();
-	}
-
-	@Override
-	public float getRidingyOffset() {
-		return customModel.getRidingyOffset();
+	public float getyOffset(MMM_IModelCaps pEntityCaps) {
+		return customModel.getyOffset(pEntityCaps);
 	}
 
 	@Override
 	public float getMountedYOffset() {
-		return customModel.getMountedYOffset();
+		return getMountedYOffset(null);
 	}
 
 	@Override
-	public double getSittingyOffset() {
-		return customModel.getSittingyOffset();
+	public float getRidingyOffset(MMM_IModelCaps pEntityCaps) {
+		return customModel.getRidingyOffset(pEntityCaps);
 	}
 
 	@Override
-	public float ridingViewCorrection() {
-		return customModel.ridingViewCorrection();
+	public float getRidingHeight(MMM_IModelCaps pEntityCaps) {
+		return customModel.getRidingHeight(pEntityCaps);
 	}
 
 	@Override
-	public float getModelScale() {
-		return customModel.getModelScale();
+	public float getRidingWidth(MMM_IModelCaps pEntityCaps) {
+		return customModel.getRidingWidth(pEntityCaps);
+	}
+
+	@Override
+	public float getMountedYOffset(MMM_IModelCaps pEntityCaps) {
+		return customModel.getMountedYOffset(pEntityCaps);
+	}
+
+	@Override
+	public double getSittingyOffset(MMM_IModelCaps pEntityCaps) {
+		return customModel.getSittingyOffset(pEntityCaps);
+	}
+
+	@Override
+	public float ridingViewCorrection(MMM_IModelCaps pEntityCaps) {
+		return customModel.ridingViewCorrection(pEntityCaps);
+	}
+
+	@Override
+	public float getModelScale(MMM_IModelCaps pEntityCaps) {
+		return customModel.getModelScale(pEntityCaps);
 	}
 
 	@Override

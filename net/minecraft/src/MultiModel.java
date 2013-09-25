@@ -610,6 +610,11 @@ public class MultiModel extends MultiModelSkirtFloats {
      */
     @Override
     public float getHeight() {
+    	return getHeight(null);
+    }
+
+    @Override
+    public float getHeight(MMM_IModelCaps pEntityCaps) {
     	return 1.35F;
     }
 
@@ -618,11 +623,21 @@ public class MultiModel extends MultiModelSkirtFloats {
      */
     @Override
     public float getWidth() {
+    	return getWidth(null);
+    }
+
+    @Override
+    public float getWidth(MMM_IModelCaps pEntityCaps) {
     	return 0.5F;
     }
 
     @Override
     public float getyOffset() {
+    	return getyOffset(null);
+    }
+
+    @Override
+    public float getyOffset(MMM_IModelCaps pEntityCaps) {
     	return 1.17F;
     }
 
@@ -636,6 +651,11 @@ public class MultiModel extends MultiModelSkirtFloats {
      */
     @Override
     public float getMountedYOffset() {
+    	return getMountedYOffset(null);
+    }
+
+    @Override
+    public float getMountedYOffset(MMM_IModelCaps pEntityCaps) {
     	float d = 1.0F;
     	if(isRiding) {
     		//d -= 0.1D;
