@@ -256,33 +256,32 @@ public class MultiModel extends MultiModelSkirtFloats {
     	if (Modchu_ModelCapsHelper.getCapsValueInt(this, caps_skirtFloats) < 2) return;
     	//ふんわりスカート上
     	SkirtTop = new Modchu_ModelRenderer(this, 8, 16);
-    	SkirtTop.addPlate(0.0F, 0.0F, 0.0F, 8, 8, 0);
-    	SkirtTop.setRotationPoint(-4.0F, -4.0F, 4.0F);
+    	SkirtTop.addPlate(0.0F, 0.0F, 0.0F, 8, 8, MMM_ModelPlate.planeXZTop);
+    	SkirtTop.setRotationPoint(-4.0F, -4.0F, -4.0F);
     	if (Skirt != null) Skirt.addChild(SkirtTop);
 
     	//ふんわりスカート前
     	SkirtFront = new Modchu_ModelRenderer(this, 8, 24);
-    	SkirtFront.addPlate(0.0F, 0.0F, 0.0F, 8, 8, 0);
-    	SkirtFront.setRotationPoint(0.0F, 8.0F, 0.0F);
+    	SkirtFront.addPlate(0.0F, 0.0F, 0.0F, 8, 8, MMM_ModelPlate.planeXYFront);
+    	SkirtFront.setRotationPoint(0.0F, 0.0F, 0.0F);
     	SkirtTop.addChild(SkirtFront);
 
     	//ふんわりスカート右
     	SkirtRight = new Modchu_ModelRenderer(this, 0, 24);
-    	SkirtRight.addPlate(0.0F, 0.0F, 0.0F, 8, 8, 1);
-    	SkirtRight.setRotationPoint(0.0F, 0.0F, 0.0F);
+    	SkirtRight.addPlate(0.0F, 0.0F, 0.0F, 8, 8, MMM_ModelPlate.planeZYRight);
+    	SkirtRight.setRotationPoint(8.0F, 0.0F, 0.0F);
     	SkirtTop.addChild(SkirtRight);
 
     	//ふんわりスカート左
     	SkirtLeft = new Modchu_ModelRenderer(this, 16, 24);
-    	SkirtLeft.setMirror(true);
-    	SkirtLeft.addPlate(0.0F, 0.0F, 0.0F, 8, 8, 1);
-    	SkirtLeft.setRotationPoint(8.0F, 8.0F, 0.0F);
+    	SkirtLeft.addPlate(0.0F, 0.0F, 0.0F, 8, 8, MMM_ModelPlate.planeZYLeft);
+    	SkirtLeft.setRotationPoint(0.0F, 0.0F, 0.0F);
     	SkirtTop.addChild(SkirtLeft);
 
     	//ふんわりスカート後ろ
     	SkirtBack = new Modchu_ModelRenderer(this, 24, 24);
-    	SkirtBack.addPlate(0.0F, 0.0F, 0.0F, 8, 8, 0);
-    	SkirtBack.setRotationPoint(0.0F, 0.0F, 0.0F);
+    	SkirtBack.addPlate(0.0F, 0.0F, 0.0F, 8, 8, MMM_ModelPlate.planeXYBack);
+    	SkirtBack.setRotationPoint(0.0F, 0.0F, 8.0F);
     	SkirtTop.addChild(SkirtBack);
     	if (Skirt != null) setCapsValue(caps_visible, Skirt, false);
     }
@@ -410,24 +409,18 @@ public class MultiModel extends MultiModelSkirtFloats {
     @Override
     public void skirtFloats(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
     	if (Modchu_ModelCapsHelper.getCapsValueInt(this, caps_skirtFloats) < 2) return;
-    	float motionY = Modchu_ModelCapsHelper.getCapsValueFloat(this, caps_motionY);
+    	float motionY = (float) Modchu_ModelCapsHelper.getCapsValueDouble(this, caps_motionY);
     	SkirtFront.rotationPointX =
-    			SkirtBack.rotationPointX = motionY * 4.0F;
-    	SkirtRight.rotationPointY = motionY * 4.0F;
-    	SkirtLeft.rotationPointY = 8.0F - motionY * 4.0F;
+    			SkirtBack.rotationPointX =
+    			SkirtRight.rotationPointZ =
+    			SkirtLeft.rotationPointZ = motionY * 4.0F;
 
-    	SkirtTop.rotateAngleX = -1.570796313F;
-    	SkirtBack.rotateAngleX = 1.570796313F;
-    	SkirtFront.rotateAngleX = 1.570796313F;
-    	SkirtRight.rotateAngleX = -1.570796313F;
-    	SkirtRight.rotateAngleY = 3.141592653F;
-    	SkirtLeft.rotateAngleX = 1.570796313F;
-    	SkirtFront.rotateAngleX += motionY;
-    	SkirtRight.rotateAngleY += motionY;
-    	SkirtLeft.rotateAngleY = -motionY;
-    	SkirtBack.rotateAngleX -= motionY;
+    	SkirtFront.rotateAngleX =
+    			SkirtRight.rotateAngleZ = motionY;
+    	SkirtLeft.rotateAngleZ =
+    			SkirtBack.rotateAngleX = -motionY;
 
-    	SkirtFront.scaleX = SkirtBack.scaleX = 1.0F - (motionY * 1.0F);
+    	SkirtFront.scaleX = SkirtBack.scaleX =
     	SkirtRight.scaleZ = SkirtLeft.scaleZ = 1.0F - (motionY * 1.0F);
     }
 
@@ -479,30 +472,62 @@ public class MultiModel extends MultiModelSkirtFloats {
 
     @Override
     public void setRotationAnglesfirstPerson(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
-    	InventoryPlayer inventoryPlayer = (InventoryPlayer) getCapsValue(caps_Inventory);
-    	if (inventoryPlayer != null
-    			&& inventoryPlayer.getCurrentItem() != null) {
+    	MMM_ModelRenderer arm = getBipedRightArm(entityCaps);
+    	//MMM_ModelRenderer notDominantArm = getNotDominantArm(entityCaps);
+    	Entity entity = (Entity) getCapsValue(entityCaps, entityCaps.caps_Entity);
+    	if (entity != null
+    			&& getCapsValue(entityCaps, entityCaps.caps_currentEquippedItem) != null) {
     		//地図を持っている時
-    		bipedRightArm.rotationPointX = -3.0F;
-    		bipedRightArm.rotationPointY = 1.5F;
-    		bipedRightArm.rotationPointZ = 0.0F;
-    		bipedLeftArm.rotationPointX = -4.5F;
-    		bipedLeftArm.rotationPointY = 1.5F;
-    		bipedLeftArm.rotationPointZ = 0.0F;
+    		if (dominantArm == 0) {
+    			arm.rotationPointX = -3.0F;
+    			arm.rotationPointY = 1.5F;
+    			arm.rotationPointZ = 0.0F;
+    		} else {
+    			arm.rotationPointX = -8.0F;
+    			arm.rotationPointY = 4.0F;
+    			arm.rotationPointZ = 0.0F;
+    		}
     	} else {
     		//素手時
-    		//setOnGround(((EntityPlayer) entity).getSwingProgress(1.0F));
-    		bipedRightArm.rotateAngleX = 0.0F;
-    		bipedRightArm.rotateAngleY = 0.0F;
-    		bipedRightArm.rotateAngleZ = 0.5F;
-    		bipedLeftArm.rotateAngleX = 0.0F;
-    		bipedLeftArm.rotateAngleY = 0.0F;
-    		bipedLeftArm.rotateAngleZ = 0.0F;
+    		if (dominantArm == 0) {
+    			arm.rotateAngleX = 0.0F;
+    			arm.rotateAngleY = 0.0F;
+    			arm.rotateAngleZ = 0.5F;
+    			arm.rotationPointY = 4.0F;
+    		} else {
+    			arm.rotateAngleX = 0.0F;
+    			arm.rotateAngleY = 0.0F;
+    			arm.rotateAngleZ = -0.5F;
+    			arm.rotationPointX = 8.0F;
+    			arm.rotationPointY = 4.0F;
+    			arm.rotationPointZ = 0.0F;
+    		}
+    		float f6, f7, f8;
+    		//if (onGrounds[0] > 0F) {
+    		//}
+    		// L
+    		if (onGrounds[1] > 0F) {
+    			f6 = 1.0F - onGrounds[1];
+    			f7 = MathHelper.sin(f6 * (float)Math.PI);
+    			f8 = MathHelper.cos(f6 * (float)Math.PI);
+    			//Modchu_Debug.mDebug("f7="+f7);
+    			//arm.rotateAngleZ += f7 * 1.2F;
+    			//arm.rotateAngleX = Modchu_Debug.debaf1;
+    			//arm.rotateAngleY = Modchu_Debug.debaf2;
+    			//arm.rotateAngleZ = Modchu_Debug.debaf3;
+    			arm.rotateAngleX = 0.2F - f8 * 1.4F;
+    			arm.rotateAngleY = 0.1F;
+    			arm.rotateAngleZ = 0.1F;
+    			//arm.rotateAngleY -= f7 * 0.4F;
+    			//Modchu_Debug.dDebug("debaf1="+Modchu_Debug.debaf1+" 2="+Modchu_Debug.debaf2+" 3="+Modchu_Debug.debaf3);
 
-    		bipedRightArm.rotationPointY = 4.0F;
-    		bipedLeftArm.rotationPointX = 4.0F;
-    		bipedLeftArm.rotationPointY = 8.0F;
-    		bipedLeftArm.rotationPointZ = -2.0F;
+    			//arm.rotationPointX += Modchu_Debug.debaf1;
+    			//arm.rotationPointY += Modchu_Debug.debaf2;
+    			//arm.rotationPointZ += Modchu_Debug.debaf3;
+    			arm.rotationPointX -= f8 * 6F;
+    			//arm.rotationPointY -= f8 * 6F;
+    			arm.rotationPointZ -= f8 * 7F;
+    		}
     	}
     }
 
@@ -575,9 +600,9 @@ public class MultiModel extends MultiModelSkirtFloats {
     @Override
     public void showModelSettingReflects(MMM_IModelCaps entityCaps) {
     	super.showModelSettingReflects(entityCaps);
-    	if (Modchu_ModelCapsHelper.getCapsValueInt(this, caps_skirtFloats) < 2) {
-    		setCapsValue(caps_indexOfAllVisible, "Skirt", Modchu_ModelCapsHelper.getCapsValueInt(this, caps_armorType));
-    	}
+    	//if (Modchu_ModelCapsHelper.getCapsValueInt(this, caps_skirtFloats) < 2) {
+    		setCapsValue(entityCaps, caps_indexOfAllVisible, "Skirt", Modchu_ModelCapsHelper.getCapsValueInt(this, caps_armorType));
+    	//}
     }
 
     /**
@@ -585,6 +610,11 @@ public class MultiModel extends MultiModelSkirtFloats {
      */
     @Override
     public float getHeight() {
+    	return getHeight(null);
+    }
+
+    @Override
+    public float getHeight(MMM_IModelCaps pEntityCaps) {
     	return 1.35F;
     }
 
@@ -593,11 +623,21 @@ public class MultiModel extends MultiModelSkirtFloats {
      */
     @Override
     public float getWidth() {
+    	return getWidth(null);
+    }
+
+    @Override
+    public float getWidth(MMM_IModelCaps pEntityCaps) {
     	return 0.5F;
     }
 
     @Override
     public float getyOffset() {
+    	return getyOffset(null);
+    }
+
+    @Override
+    public float getyOffset(MMM_IModelCaps pEntityCaps) {
     	return 1.17F;
     }
 
@@ -611,6 +651,11 @@ public class MultiModel extends MultiModelSkirtFloats {
      */
     @Override
     public float getMountedYOffset() {
+    	return getMountedYOffset(null);
+    }
+
+    @Override
+    public float getMountedYOffset(MMM_IModelCaps pEntityCaps) {
     	float d = 1.0F;
     	if(isRiding) {
     		//d -= 0.1D;

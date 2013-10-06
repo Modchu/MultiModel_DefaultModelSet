@@ -1,14 +1,6 @@
 package net.minecraft.src;
 
-import static net.minecraft.src.MMM_IModelCaps.caps_Entity;
-import static net.minecraft.src.MMM_IModelCaps.caps_HeadMount;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
 
@@ -16,7 +8,7 @@ import org.lwjgl.opengl.GL11;
  * PlayerFormLittleMaid共通クラス
  */
 public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implements Modchu_IModelCaps {
-//-@-151
+
 	public MMM_ModelRenderer bipedHead;
 	public MMM_ModelRenderer bipedHeadwear;
 	public MMM_ModelRenderer bipedBody;
@@ -28,7 +20,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 	public MMM_ModelRenderer bipedCloak;
 	public Modchu_ModelRenderer HeadMount;
 	public Modchu_ModelRenderer HeadTop;
-//@-@151
+
 	private int armorType = 0;
 	private boolean oldwalking = false;
 	private boolean firstPerson = false;
@@ -38,16 +30,6 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 	private boolean sittingBan = false;
 	private boolean sleepingBan = false;
 	private boolean ridingBan = false;
-/*//125delete
-    public Entity entity;
-*///125delete
-/*//b181delete
-    public int textureWidth;
-    public int textureHeight;
-    public boolean field_40333_u;
-    private Map modelTextureMap = new HashMap();
-*///b181delete
-    //b173deletepublic List boxList;
 
     /**
      * コンストラクタは全て継承させること
@@ -71,12 +53,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     }
 
     public MultiModelBaseBiped(float psize, float pyoffset, int par3, int par4) {
-/*//151delete
-    	super(psize, pyoffset);
-*///151delete
-//-@-151
     	super(psize, pyoffset, par3, par4);
-//@-@151
     	textureWidth = par3;
     	textureHeight = par4;
     	//b173deleteboxList = new ArrayList();
@@ -107,11 +84,9 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     public void setLivingAnimations(MMM_IModelCaps entityCaps, float f, float f1, float f2) {
     	setCapsValue(entityCaps, caps_setLivingAnimationsBefore, this, f, f1, f2);
     	setLivingAnimationsLM(entityCaps, f, f1, f2);
-//-@-151
-    	EntityLiving entityliving = (EntityLiving) getCapsValue(entityCaps, entityCaps.caps_Entity);
-//@-@151
-    	if (mod_Modchu_ModchuLib.mod_LMM_littleMaidMob != null
-    			&& mod_Modchu_ModchuLib.LMM_EntityLittleMaid.isInstance(entityliving)) {
+    	Entity entityliving = (Entity) getCapsValue(entityCaps, entityCaps.caps_Entity);
+    	if (mod_Modchu_ModchuLib.modchu_Main.mod_LMM_littleMaidMob != null
+    			&& mod_Modchu_ModchuLib.modchu_Main.LMM_EntityLittleMaid.isInstance(entityliving)) {
     		setLivingAnimationsAfter(entityCaps, f, f1, f2);
     	} else {
     		setCapsValue(entityCaps, caps_setLivingAnimationsAfter, this, f, f1, f2);
@@ -142,200 +117,70 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     @Override
     public void renderItems(MMM_IModelCaps entityCaps) {
     	if (entityCaps != null) {
-/*//151delete
-    		if (mod_Modchu_ModchuLib.oldRenderItems
-    				&& mod_Modchu_ModchuLib.mod_LMM_littleMaidMob != null
-    				&& mod_Modchu_ModchuLib.LMM_EntityLittleMaid.isInstance(pEntity)) {
-    			OldRenderItemsLM();
-    		} else
-*///151delete
     		renderItemsLM(entityCaps);
     	}
     }
 
-	public void renderItemsLM(MMM_IModelCaps entityCaps) {
-		// 手持ちの表示
-		GL11.glPushMatrix();
-		// R
-		Arms[0].loadMatrix();
-		GL11.glTranslatef(0F, 0.05F, -0.05F);
-		Arms[0].renderItems(this, entityCaps, false, 0);
-		// L
-		Arms[1].loadMatrix();
-		GL11.glTranslatef(0F, 0.05F, -0.05F);
-		Arms[1].renderItems(this, entityCaps, false, 1);
-		// 頭部装飾品
-		boolean lplanter = MMM_ModelCapsHelper.getCapsValueBoolean(entityCaps, caps_isPlanter);
-		ItemStack lis = (ItemStack)entityCaps.getCapsValue(caps_HeadMount);
-		int addSupport = addSupportChecks(lis);
-		if (Modchu_ModelCapsHelper.getCapsValueBoolean(entityCaps, caps_isCamouflage) || lplanter
-				|| addSupport > -1) {
-			float scale = 1.0F;
-			Object inventory = entityCaps.getCapsValue(caps_Inventory);
-			if (inventory != null) {
-				EntityLiving pEntity = (EntityLiving)entityCaps.getCapsValue(caps_Entity);
-				int slot = pEntity instanceof EntityPlayer ? 10 : 16;
-				ItemStack litemstack1 = (ItemStack) Modchu_Reflect.invokeMethod(InventoryPlayer.class, "func_70301_a", "getStackInSlot", new Class[]{ int.class }, inventory, new Object[]{ slot }, -1);
-				if (litemstack1 != null) {
-					Item item2 = litemstack1.getItem();
-					if (item2 == item2.dyePowder) {
-						scale = 1.0F + (0.2F * litemstack1.getItemDamage());
-					}
-				}
-				HeadMount.loadMatrix();
-				if (lplanter
-						|| (addSupport > -1 && addSupport < 3)) {
-					HeadTop.loadMatrix();
-					Modchu_Reflect.invokeMethod(HeadTop.getClass(), "renderItemsHead", new Class[]{ MMM_ModelMultiBase.class, MMM_IModelCaps.class, float.class, int.class }, HeadTop, new Object[]{ this, entityCaps, scale, addSupport });
-					//HeadTop.loadMatrix().renderItemsHead(this, entityCaps);
-				} else {
-					Modchu_Reflect.invokeMethod(HeadMount.getClass(), "renderItemsHead", new Class[]{ MMM_ModelMultiBase.class, MMM_IModelCaps.class, float.class, int.class }, HeadMount, new Object[]{ this, entityCaps, scale, addSupport });
-					//HeadMount.loadMatrix().renderItemsHead(this, entityCaps);
-				}
-			}
-		}
-		// アーマー頭部装飾品 対応
-		lis = (ItemStack) getCapsValue(entityCaps, caps_currentArmor, 3);
-		if (lis != null) {
-			addSupport = addSupportChecks(lis);
-			headMountRenderItems(entityCaps, lis, addSupport);
-		}
-		GL11.glPopMatrix();
-/*
-		// 手持ちの表示
-		EntityLiving pEntity = (EntityLiving) getCapsValue(entityCaps, entityCaps.caps_Entity);
-		GL11.glPushMatrix();
-		boolean lflag = true;
-		if (entityCaps != null) {
-			ItemStack[] litemstacks = (ItemStack[])entityCaps.getCapsValue(caps_Items);
-			EnumAction[] lactions = (EnumAction[])entityCaps.getCapsValue(caps_Actions);
-			if (litemstacks != null) {
-				Object Arms;
-				for (int i = 0; i < litemstacks.length; i++) {
-					Arms = getArms(i);
-					if (Arms != null
-							&& litemstacks[i] != null) {
-						Modchu_Reflect.invokeMethod(Arms.getClass(), "loadMatrix", Arms);
-						Modchu_Reflect.invokeMethod(Arms.getClass(), "renderItems", new Class[]{ EntityLiving.class, Render.class, boolean.class, EnumAction.class, ItemStack.class }, Arms, new Object[]{ pEntity, render, false, lactions[i] ,litemstacks[i] });
-					}
-				}
-				lflag = false;
-			}
-			// 頭部装飾品
-			boolean lplanter = (Boolean) entityCaps.getCapsValue(caps_isPlanter);
-			ItemStack litemstack = (ItemStack)entityCaps.getCapsValue(caps_HeadMount);
-			int addSupport = addSupportChecks(litemstack);
-			if ((Boolean) entityCaps.getCapsValue(caps_isCamouflage) || lplanter
-					|| addSupport > -1) {
-				Object HeadMount = getHeadMount();
-				Modchu_Reflect.invokeMethod(HeadMount.getClass(), "loadMatrix", HeadMount);
-				if (lplanter
-						|| (addSupport > -1 && addSupport < 3)) {
-					equippedItemPositionFlower();
-				}
-				float scale = 1.0F;
-				Object inventory = entityCaps.getCapsValue(caps_Inventory);
-				if (inventory != null) {
-					int slot = pEntity instanceof EntityPlayer ? 10 : 16;
-					ItemStack litemstack1 = (ItemStack) Modchu_Reflect.invokeMethod(InventoryPlayer.class, "func_70301_a", "getStackInSlot", new Class[]{ int.class }, inventory, new Object[]{ slot });
-					if (litemstack1 != null) {
-						Item item2 = litemstack1.getItem();
-						if (item2 == item2.dyePowder) {
-							scale = 1.0F + (0.2F * litemstack1.getItemDamage());
-						}
-					}
-					Modchu_Reflect.invokeMethod(HeadMount.getClass(), "renderItems", new Class[]{ EntityLiving.class, Render.class, boolean.class, EnumAction.class, ItemStack.class, float.class, int.class }, HeadMount, new Object[]{ pEntity, render, true, null, litemstack, scale, addSupport });
-					//HeadMount.renderItems(pEntity, render, true, null, (ItemStack)entityCaps.getCapsValue(caps_HeadMount));
-				}
-			}
-
-			// アーマー頭部装飾品 対応
-			litemstack = (ItemStack) getCapsValue(caps_currentArmor, 3);
-			if (litemstack != null) {
-				addSupport = addSupportChecks(litemstack);
-				headMountRenderItems(entityCaps, litemstack, addSupport);
-			}
-		}
-		if (lflag) {
-			Object Arms = getArms(0);
-			if (Arms != null) {
-				Modchu_Reflect.invokeMethod(Arms.getClass(), "loadMatrix", Arms);
-				Modchu_Reflect.invokeMethod(Arms.getClass(), "renderItems", new Class[]{ EntityLiving.class, Render.class, boolean.class, EnumAction.class, ItemStack.class }, Arms, new Object[]{ pEntity, render, false, null, pEntity.getHeldItem() });
-			}
-		}
-		GL11.glPopMatrix();
-*/
-	}
-/*//151delete
-    public void OldRenderItemsLM() {
+    public void renderItemsLM(MMM_IModelCaps entityCaps) {
     	// 手持ちの表示
-    	EntityLiving pEntity = (EntityLiving) getCapsValue(entityCaps, entityCaps.caps_Entity);
     	GL11.glPushMatrix();
-
-    	ItemStack litemstack = null;
-    	EnumAction laction;
-    	Class pEntityClass = pEntity.getClass();
-    	Object obj = null;
-    	// int i = 0 R
-    	// int i = 1 L
-    	for (int i = 0; i < 2 ; i++) {
-    		obj = Modchu_Reflect.invokeMethod(pEntity.getClass(), "getSwingStatus", new Class[]{ int.class }, pEntity, new Object[]{ i });
-    		litemstack = (ItemStack) Modchu_Reflect.invokeMethod(obj.getClass(), "getItemStack", new Class[]{ pEntity.getClass() }, obj, new Object[]{ pEntity });
-    		//litemstack = ((LMM_EntityLittleMaid) pEntity).mstatSwingStatus[i].getItemStack((LMM_EntityLittleMaid) pEntity);
-    		int maidDominantArm = (Integer) Modchu_Reflect.getFieldObject(pEntity.getClass(), "maidDominantArm", pEntity);
-    		Object maidAvatar = Modchu_Reflect.getFieldObject(pEntity.getClass(), "maidAvatar", pEntity);
-    		int itemInUseCount = (Integer) Modchu_Reflect.invokeMethod(EntityPlayer.class, "func_71052_bv", "getItemInUseCount", maidAvatar);
-    		laction = maidDominantArm == i && itemInUseCount > 0 ? litemstack.getItemUseAction() : null;
-    		//laction = (((LMM_EntityLittleMaid) pEntity).maidDominantArm == i && ((LMM_EntityLittleMaid) pEntity).maidAvatar.getItemInUseCount() > 0) ? litemstack.getItemUseAction() : null;
-
-    		if (litemstack != null) {
-    			Object Arms = getArms(i);
-    			if (Arms != null) {
-    				Modchu_Reflect.invokeMethod(Arms.getClass(), "loadMatrix", Arms);
-    				Modchu_Reflect.invokeMethod(Arms.getClass(), "renderItems", new Class[]{ EntityLiving.class, Render.class, boolean.class, EnumAction.class, ItemStack.class }, Arms, new Object[]{ pEntity, render, false, laction, litemstack });
-    			}
-    		}
-    	}
-
-    	// 頭部装飾品
-    	Object maidInventory = Modchu_Reflect.getFieldObject(pEntity.getClass(), "maidInventory", pEntity);
-    	litemstack = (ItemStack) Modchu_Reflect.invokeMethod(maidInventory.getClass(), "getHeadMount", maidInventory);
-    	if (litemstack != null) {
-    		boolean isCamouflage = (Boolean) Modchu_Reflect.invokeMethod(pEntity.getClass(), "isCamouflage", pEntity);
-    		boolean isPlanter = (Boolean) Modchu_Reflect.invokeMethod(pEntity.getClass(), "isPlanter", pEntity);
-    		int addSupport = addSupportChecks(pEntity, litemstack);
-    		if (isCamouflage
-    				|| isPlanter
-    				|| addSupport > -1) {
-    		//if (((LMM_EntityLittleMaid) pEntity).isCamouflage() || ((LMM_EntityLittleMaid) pEntity).isPlanter()) {
-    			ItemStack[] litemstack1 = (ItemStack[]) Modchu_Reflect.getFieldObject(InventoryPlayer.class, "field_70462_a", "mainInventory", maidInventory);
-    			if (litemstack1 != null) {
-    				ItemStack litemstack2 = litemstack1[litemstack1.length - 2];
-    				Object HeadMount = getHeadMount();
-    				Modchu_Reflect.invokeMethod(HeadMount.getClass(), "loadMatrix", HeadMount);
-    				if (isPlanter
-    						|| (addSupport > -1 && addSupport < 3)) {
-    					//if (((LMM_EntityLittleMaid) pEntity).isPlanter()) {
-    					equippedItemPositionFlower();
-    				}
-    				float scale = 1.0F;
-    				if (litemstack2 != null) {
-    					Item item2 = litemstack2.getItem();
-    					if (item2 == item2.dyePowder) {
-    						scale = 1.0F + (0.2F * litemstack2.getItemDamage());
-    					}
-    				}
-    				Modchu_Reflect.invokeMethod(HeadMount.getClass(), "renderItems", new Class[]{ EntityLiving.class, Render.class, boolean.class, EnumAction.class, ItemStack.class, float.class, int.class }, HeadMount, new Object[]{ pEntity, render, true, null, litemstack, scale, addSupport });
-    				//HeadMount.renderItems(pEntity, render, true, null, ((LMM_EntityLittleMaid) pEntity).maidInventory.getHeadMount());
-    			}
-    		}
-    	}
-
+    	// R
+    	Arms[0].loadMatrix();
+    	GL11.glTranslatef(0F, 0.05F, -0.05F);
+    	Arms[0].renderItems(this, entityCaps, false, 0);
+    	// L
+    	Arms[1].loadMatrix();
+    	GL11.glTranslatef(0F, 0.05F, -0.05F);
+    	Arms[1].renderItems(this, entityCaps, false, 1);
+    	renderItemsHead(entityCaps);
+    	renderItemsArmorHead(entityCaps);
     	GL11.glPopMatrix();
     }
-*///151delete
+
+    public void renderItemsHead(MMM_IModelCaps entityCaps) {
+    	// 頭部装飾品の表示
+    	boolean lplanter = MMM_ModelCapsHelper.getCapsValueBoolean(entityCaps, caps_isPlanter);
+    	ItemStack lis = (ItemStack)entityCaps.getCapsValue(caps_HeadMount);
+    	int addSupport = addSupportChecks(lis);
+    	if (Modchu_ModelCapsHelper.getCapsValueBoolean(entityCaps, caps_isCamouflage) || lplanter
+    			|| addSupport > -1) {
+    		float scale = 1.0F;
+    		Object inventory = entityCaps.getCapsValue(caps_Inventory);
+    		if (inventory != null) {
+    			Entity pEntity = (Entity)entityCaps.getCapsValue(caps_Entity);
+    			int slot = pEntity instanceof EntityPlayer ? 10 : 16;
+    			ItemStack litemstack1 = (ItemStack) Modchu_Reflect.invokeMethod(InventoryPlayer.class, "func_70301_a", "getStackInSlot", new Class[]{ int.class }, inventory, new Object[]{ slot }, -1);
+    			if (litemstack1 != null) {
+    				Item item2 = litemstack1.getItem();
+    				if (item2 == item2.dyePowder) {
+    					scale = 1.0F + (0.2F * litemstack1.getItemDamage());
+    				}
+    			}
+    			HeadMount.loadMatrix();
+    			if (lplanter
+    					|| (addSupport > -1 && addSupport < 3)) {
+    				HeadTop.loadMatrix();
+    				Modchu_Reflect.invokeMethod(HeadTop.getClass(), "renderItemsHead", new Class[]{ MMM_ModelMultiBase.class, MMM_IModelCaps.class, float.class, int.class }, HeadTop, new Object[]{ this, entityCaps, scale, addSupport });
+    				//HeadTop.loadMatrix().renderItemsHead(this, entityCaps);
+    			} else {
+    				Modchu_Reflect.invokeMethod(HeadMount.getClass(), "renderItemsHead", new Class[]{ MMM_ModelMultiBase.class, MMM_IModelCaps.class, float.class, int.class }, HeadMount, new Object[]{ this, entityCaps, scale, addSupport });
+    				//HeadMount.loadMatrix().renderItemsHead(this, entityCaps);
+    			}
+    		}
+    	}
+    }
+
+    public void renderItemsArmorHead(MMM_IModelCaps entityCaps) {
+    	// アーマー頭部装飾品の表示
+    	ItemStack lis = (ItemStack) getCapsValue(entityCaps, caps_currentArmor, 3);
+    	if (lis != null) {
+    		int addSupport = addSupportChecks(lis);
+    		headMountRenderItems(entityCaps, lis, addSupport);
+    	}
+    }
+
     public void headMountRenderItems(MMM_IModelCaps entityCaps, ItemStack litemstack, int addSupport) {
-    	EntityLiving pEntity = (EntityLiving) getCapsValue(entityCaps, entityCaps.caps_Entity);
+    	Entity pEntity = (Entity) getCapsValue(entityCaps, entityCaps.caps_Entity);
     	Item item = litemstack.getItem();
     	Block block = null;
     	boolean isCamouflage = false;
@@ -356,7 +201,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     		if (inventory != null) {
     			int slot = pEntity instanceof EntityPlayer ? 10 : 16;
     			ItemStack litemstack2 = (ItemStack) Modchu_Reflect.invokeMethod(InventoryPlayer.class, "func_70301_a", "getStackInSlot", new Class[]{ int.class }, inventory, new Object[]{ slot }, -1);
-    			Modchu_Reflect.invokeMethod(HeadMount.getClass(), "loadMatrix", HeadMount);
+    			HeadMount.loadMatrix();
     			if (litemstack2 != null) {
     				Item item2 = litemstack2.getItem();
     				if (item2 == item2.dyePowder) {
@@ -384,12 +229,12 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     	Block block = null;
     	try {
     		block = Block.blocksList[item.itemID];
-    		if (mod_Modchu_ModchuLib.isDecoBlock) {
-    			if (mod_Modchu_ModchuLib.decoBlock.isInstance(block)) return 0;
-    			if (mod_Modchu_ModchuLib.decoBlockBase.isInstance(block)) return 1;
+    		if (mod_Modchu_ModchuLib.modchu_Main.isDecoBlock) {
+    			if (mod_Modchu_ModchuLib.modchu_Main.decoBlock.isInstance(block)) return 0;
+    			if (mod_Modchu_ModchuLib.modchu_Main.decoBlockBase.isInstance(block)) return 1;
     		}
-    		if (mod_Modchu_ModchuLib.isFavBlock
-    				&& mod_Modchu_ModchuLib.favBlock.isInstance(block)) {
+    		if (mod_Modchu_ModchuLib.modchu_Main.isFavBlock
+    				&& mod_Modchu_ModchuLib.modchu_Main.favBlock.isInstance(block)) {
     			return 2;
     		}
     	} catch(Exception e) {
@@ -439,59 +284,52 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     }
 
     /**
-     * アーマーモデルとメインモデルの同期。
-     * アーマーモデルに対して、メインモデルのデータが渡されてくるのでそれに合わせるパーツを同期させる
-     */
-    public void syncModel(MMM_IModelCaps entityCaps, MultiModelBaseBiped model) {
-    }
-
-    /**
      * カラー切替時に実行されるコード
      */
     public void changeColor(MMM_IModelCaps entityCaps) {
     }
 
-    public float getyOffset() {
+    public float getyOffset(MMM_IModelCaps pEntityCaps) {
     	return 1.62F;
     }
 
-    public float getRidingHeight() {
-    	return getHeight();
+    public float getRidingHeight(MMM_IModelCaps pEntityCaps) {
+    	return getHeight(pEntityCaps);
     }
 
-    public float getRidingWidth() {
-    	return getWidth();
+    public float getRidingWidth(MMM_IModelCaps pEntityCaps) {
+    	return getWidth(pEntityCaps);
     }
 
-    public float getRidingyOffset() {
-    	return getyOffset();
+    public float getRidingyOffset(MMM_IModelCaps pEntityCaps) {
+    	return getyOffset(pEntityCaps);
     }
 
     /**
      * 他Mobを頭に乗せた時の他Mob基準位置調整
      */
-    public float getMountedYOffset() {
+    public float getMountedYOffset(MMM_IModelCaps pEntityCaps) {
     	return 0.75F;
     }
 
     /**
      * 座っているポーズ「乗り物に乗っていない」時の位置調整
      */
-    public double getSittingyOffset() {
+    public double getSittingyOffset(MMM_IModelCaps entityCaps) {
     	return -0.35D;
     }
 
     /**
      * isModelSize=true時に乗り物に乗っている状態でのカメラ位置調整
      */
-    public float ridingViewCorrection() {
+    public float ridingViewCorrection(MMM_IModelCaps pEntityCaps) {
     	return 0.0F;
     }
 
     /**
      * デフォルトモデルスケール
      */
-    public float getModelScale() {
+    public float getModelScale(MMM_IModelCaps pEntityCaps) {
     	return 0.9375F;
     }
 
@@ -604,7 +442,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 		case caps_oldwalking:
 			return getOldwalking();
 		case caps_isItemHolder:
-			return isItemHolder();
+			return isItemHolder(entityCaps);
 		case caps_bipedHead:
 			if (pArg != null
 			&& pArg.length > 0
@@ -626,11 +464,11 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 			&& pArg[0] != null) return Physical_Hammer((MMM_IModelCaps) pArg[0]);
 			break;
 		case caps_height:
-			return getHeight();
+			return getHeight(entityCaps);
 		case caps_width:
-			return getWidth();
+			return getWidth(entityCaps);
 		case caps_YOffset:
-			return getyOffset();
+			return getyOffset(entityCaps);
 		case caps_convertDegtoRad:
 			if (pArg != null
 			&& pArg.length > 0
@@ -651,7 +489,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 		case caps_modchuRemodelingModel:
 			return getModchuRemodelingModel();
 		case caps_sittingyOffset:
-			return getSittingyOffset();
+			return getSittingyOffset(entityCaps);
 		case caps_texture:
 			if (pArg != null
 			&& pArg.length > 1
@@ -828,15 +666,6 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 				return true;
 			}
 			return false;
-		case caps_syncModel:
-			if (pArg != null
-			&& pArg.length > 1
-			&& pArg[0] != null
-			&& pArg[1] != null) {
-				syncModel((MMM_IModelCaps) pArg[0], (MultiModelBaseBiped) pArg[1]);
-				return true;
-			}
-			return false;
 		}
 		boolean b = super.setCapsValue(pIndex, pArg);
 		if (b) return true;
@@ -846,23 +675,21 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 	}
 
 	private int getMaidColor(MMM_IModelCaps entityCaps) {
-//-@-151
-		EntityLiving entityliving = (EntityLiving) getCapsValue(entityCaps, entityCaps.caps_Entity);
-//@-@151
-		Modchu_Debug.mDebug("getMaidColor entityliving != null?"+(entityliving != null));
+		Entity entityliving = (Entity) getCapsValue(entityCaps, entityCaps.caps_Entity);
+		//Modchu_Debug.mDebug("getMaidColor entityliving != null?"+(entityliving != null));
 		Object o = null;
 		if (entityCaps != null) o = entityCaps.getCapsValue(caps_maidColor);
 		if (o != null) return (Integer) o;
-		if (mod_Modchu_ModchuLib.mod_LMM_littleMaidMob != null
-				&& mod_Modchu_ModchuLib.LMM_EntityLittleMaid.isInstance(entityliving)) {
-			o = (Integer) Modchu_Reflect.getFieldObject(mod_Modchu_ModchuLib.LMM_EntityLittleMaid, "maidColor", entityliving);
+		if (mod_Modchu_ModchuLib.modchu_Main.mod_LMM_littleMaidMob != null
+				&& mod_Modchu_ModchuLib.modchu_Main.LMM_EntityLittleMaid.isInstance(entityliving)) {
+			o = (Integer) Modchu_Reflect.getFieldObject(mod_Modchu_ModchuLib.modchu_Main.LMM_EntityLittleMaid, "maidColor", entityliving);
 		}
 		if (o != null) return (Integer) o;
 		return 0;
 	}
 
-	private String getTexture(String s, int i) {
-		return (String) mod_Modchu_ModchuLib.textureManagerGetTexture(s, i);
+	private Object getTexture(String s, int i) {
+		return mod_Modchu_ModchuLib.modchu_Main.textureManagerGetTexture(s, i);
 	}
 /*
     private float getOnGround()
@@ -1062,15 +889,15 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     }
 
     private boolean getModchuRemodelingModel() {
-    	return mod_Modchu_ModchuLib.modchuRemodelingModel;
+    	return mod_Modchu_ModchuLib.modchu_Main.modchuRemodelingModel;
     }
 
     private void setModchuRemodelingModel(boolean b) {
-    	mod_Modchu_ModchuLib.modchuRemodelingModel = b;
+    	mod_Modchu_ModchuLib.modchu_Main.modchuRemodelingModel = b;
     }
 
     public float Physical_Hammer(MMM_IModelCaps entityCaps) {
-    	return (Float) Modchu_Reflect.getFieldObject(mod_Modchu_ModchuLib.mod_PFLM_PlayerFormLittleMaid, "Physical_Hammer");
+    	return (Float) Modchu_Reflect.getFieldObject(mod_Modchu_ModchuLib.modchu_Main.mod_PFLM_PlayerFormLittleMaid, "Physical_Hammer");
     }
 
     public MMM_ModelRenderer getBipedHead(MMM_IModelCaps entityCaps) {

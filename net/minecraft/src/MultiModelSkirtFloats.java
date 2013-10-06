@@ -5,7 +5,7 @@ package net.minecraft.src;
  */
 public abstract class MultiModelSkirtFloats extends MultiModelAction {
 
-    private float motionY = 0.0F;
+    private double motionY = 0.0D;
 
     /**
      * コンストラクタは全て継承させること
@@ -44,9 +44,9 @@ public abstract class MultiModelSkirtFloats extends MultiModelAction {
     	super.setLivingAnimationsLM(entityCaps, f, f1, f2);
     	if (Modchu_ModelCapsHelper.getCapsValueInt(this, caps_skirtFloats) == 2) {
 //-@-151
-    		EntityLiving entityliving = (EntityLiving) getCapsValue(entityCaps, entityCaps.caps_Entity);
+    		Entity entityliving = (Entity) getCapsValue(entityCaps, entityCaps.caps_Entity);
 //@-@151
-    		setMotionY(entityliving.motionY + 0.0784000015258789D > 0 ? 0 : (float) ((entityliving.motionY + 0.0784000015258789D)) * mod_Modchu_ModchuLib.skirtFloatsVolume);
+    		setMotionY(entityliving.motionY + 0.0784000015258789D > 0 ? 0 : (entityliving.motionY + 0.0784000015258789D) * mod_Modchu_ModchuLib.modchu_Main.skirtFloatsVolume);
     	}
     }
 
@@ -60,7 +60,7 @@ public abstract class MultiModelSkirtFloats extends MultiModelAction {
     }
 
     private boolean getSkirtFloats() {
-    	return mod_Modchu_ModchuLib.skirtFloats;
+    	return mod_Modchu_ModchuLib.modchu_Main.skirtFloats;
     }
 
     @Override
@@ -81,18 +81,18 @@ public abstract class MultiModelSkirtFloats extends MultiModelAction {
     		if (pArg != null
     		&& pArg.length > 0
     		&& pArg[0] != null) {
-    			setMotionY((Float) pArg[0]);
+    			setMotionY((Double) pArg[0]);
     			return true;
     		}
     	}
     	return super.setCapsValue(pIndex, pArg);
     }
 
-    private float getMotionY() {
+    private double getMotionY() {
     	return motionY;
     }
 
-    private void setMotionY(float f) {
+    private void setMotionY(double f) {
     	motionY = f;
     }
 }

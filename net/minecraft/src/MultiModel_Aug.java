@@ -99,7 +99,7 @@ public class MultiModel_Aug extends MultiModel_SR2 {
 	public void setLivingAnimationsLM(MMM_IModelCaps entityCaps, float f, float f1, float renderPartialTicks)
 	{
 		super.setLivingAnimationsLM(entityCaps, f, f1, renderPartialTicks);
-		EntityLiving entityliving = (EntityLiving) getCapsValue(entityCaps, entityCaps.caps_Entity);
+		Entity entityliving = (Entity) getCapsValue(entityCaps, entityCaps.caps_Entity);
 		if (entityliving != null) ;else return;
 
 		float f3 = (float)entityliving.ticksExisted + renderPartialTicks + Modchu_ModelCapsHelper.getCapsValueFloat(this, caps_entityIdFactor);
@@ -108,7 +108,7 @@ public class MultiModel_Aug extends MultiModel_SR2 {
 			f3 *= 8.0F;
 			f4 = -0.2F;
 		} else {
-			f4 = (1F - (float)entityliving.health / 20F) * 0.5F;
+			f4 = (1F - Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_health ) / 20F) * 0.5F;
 		}
 		float f5 = MathHelper.sin(f3 * 0.067F) * 0.05F - f4;
 		float f6 = 40.0F / 57.29578F;
