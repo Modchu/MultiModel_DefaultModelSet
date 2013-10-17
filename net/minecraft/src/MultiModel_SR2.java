@@ -40,7 +40,7 @@ public class MultiModel_SR2 extends MultiModel {
 	}
 
 	@Override
-	public void setLivingAnimationsLM(MMM_IModelCaps entityCaps, float f, float f1, float renderPartialTicks) {
+	public void setLivingAnimationsLM(Modchu_IModelCaps entityCaps, float f, float f1, float renderPartialTicks) {
 		super.setLivingAnimationsLM(entityCaps, f, f1, renderPartialTicks);
 		Entity entityliving = (Entity) getCapsValue(entityCaps, entityCaps.caps_Entity);
 		if (entityliving != null) ;else return;
@@ -56,7 +56,7 @@ public class MultiModel_SR2 extends MultiModel {
 	}
 
 	@Override
-	public void setRotationAnglesLM(float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5, MMM_IModelCaps entityCaps) {
+	public void setRotationAnglesLM(float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5, Modchu_IModelCaps entityCaps) {
 		super.setRotationAnglesLM(f, f1, ticksExisted, pheadYaw, pheadPitch, f5, entityCaps);
 		if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_aimedBow)) {
 			setCapsValue(caps_visible, eyeL, true);

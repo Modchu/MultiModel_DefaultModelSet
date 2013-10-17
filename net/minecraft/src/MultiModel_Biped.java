@@ -177,7 +177,7 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
      * Sets the models various rotation angles.
      */
     @Override
-    public void setRotationAnglesLM(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
+    public void setRotationAnglesLM(float f, float f1, float f2, float f3, float f4, float f5, Modchu_IModelCaps entityCaps) {
     	setDefaultPause(f, f1, f2, f3, f4, f5, entityCaps);
 		bipedHead.rotateAngleY = f3 / (180F / (float) Math.PI);
 		bipedHead.rotateAngleX = f4 / (180F / (float) Math.PI);
@@ -263,7 +263,7 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
 		}
 	}
 
-    public void armSwing(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
+    public void armSwing(float f, float f1, float f2, float f3, float f4, float f5, Modchu_IModelCaps entityCaps) {
     	if ((onGrounds[0] > -9990F || onGrounds[1] > -9990F) && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_aimedBow) && !Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_oldwalking)) {
     		// òrêUÇË
     		float f6, f7, f8;
@@ -298,9 +298,9 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
     }
 
     @Override
-    public void setRotationAnglesfirstPerson(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
+    public void setRotationAnglesfirstPerson(float f, float f1, float f2, float f3, float f4, float f5, Modchu_IModelCaps entityCaps) {
     	if (dominantArm != 0) super.setRotationAnglesfirstPerson(f, f1, f2, f3, f4, f5, entityCaps);
-    	MMM_ModelRenderer arm = getBipedRightArm(entityCaps);
+    	Modchu_ModelRenderer arm = getBipedRightArm(entityCaps);
     	Entity entity = (Entity) getCapsValue(entityCaps, entityCaps.caps_Entity);
     	if (entity != null
     			&& getCapsValue(entityCaps, entityCaps.caps_currentEquippedItem) != null) {
@@ -323,7 +323,7 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
     }
 
     @Override
-    public void setDefaultPause(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
+    public void setDefaultPause(float f, float f1, float f2, float f3, float f4, float f5, Modchu_IModelCaps entityCaps) {
     	bipedHead.setRotationPoint(0.0F, 0.0F, 0.0F);
     	bipedBody.setRotationPoint(0.0F, 0.0F, 0.0F);
     	bipedHeadwear.setRotationPoint(0.0F, 0.0F, 0.0F);
@@ -358,7 +358,7 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
 	}
 
     @Override
-	public int showArmorParts(MMM_IModelCaps entityCaps, int parts, int index) {
+	public int showArmorParts(Modchu_IModelCaps entityCaps, int parts, int index) {
 		// äZÇÃï\é¶óp
 		boolean f;
 		// äï
@@ -385,7 +385,7 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
 	}
 
 	@Override
-	public float getHeight(MMM_IModelCaps pEntityCaps) {
+	public float getHeight(Modchu_IModelCaps pEntityCaps) {
 		return 1.81F;
 	}
 
@@ -395,7 +395,7 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
 	}
 
 	@Override
-	public float getWidth(MMM_IModelCaps pEntityCaps) {
+	public float getWidth(Modchu_IModelCaps pEntityCaps) {
 		return 0.6F;
 	}
 
@@ -405,7 +405,7 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
 	}
 
     @Override
-    public void defaultPartsSettingBefore(MMM_IModelCaps entityCaps) {
+    public void defaultPartsSettingBefore(Modchu_IModelCaps entityCaps) {
     	String[] s = {
     			"rightArm", "rightArm2", "rightArmPlus", "rightArmPlus2", "rightHand",
     			"rightLeg", "rightLeg2", "rightLegPlus", "rightLegPlus2", "leftArm",
@@ -433,7 +433,7 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
     }
 
     @Override
-    public void action1(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
+    public void action1(float f, float f1, float f2, float f3, float f4, float f5, Modchu_IModelCaps entityCaps) {
     	super.action1(f, f1, f2, f3, f4, f5, entityCaps);
 		float f6 = bipedBody.rotateAngleZ;
 		if (f6 > 0.0F) {
@@ -469,17 +469,17 @@ public class MultiModel_Biped extends MultiModelSkirtFloats
     }
 
     @Override
-    public void action2(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
+    public void action2(float f, float f1, float f2, float f3, float f4, float f5, Modchu_IModelCaps entityCaps) {
     	// éËÇè„Ç∞ÇÈÉÇÅ[ÉVÉáÉì
     	super.action2(f, f1, f2, f3, f4, f5, entityCaps);
-    	((MMM_ModelRenderer) getCapsValue(caps_bipedRightArm, entityCaps)).rotationPointX += Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm) == 0 ? 2.0F : -2.0F;
+    	((Modchu_ModelRenderer) getCapsValue(caps_bipedRightArm, entityCaps)).rotationPointX += Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm) == 0 ? 2.0F : -2.0F;
     }
 
     @Override
-    public void action3(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
+    public void action3(float f, float f1, float f2, float f3, float f4, float f5, Modchu_IModelCaps entityCaps) {
     	// éËÇè„Ç∞ÇƒêUÇÈÉÇÅ[ÉVÉáÉì
     	super.action3(f, f1, f2, f3, f4, f5, entityCaps);
-    	((MMM_ModelRenderer) getCapsValue(caps_bipedRightArm, entityCaps)).rotationPointX += Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm) == 0 ? 2.0F : -2.0F;
+    	((Modchu_ModelRenderer) getCapsValue(caps_bipedRightArm, entityCaps)).rotationPointX += Modchu_ModelCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm) == 0 ? 2.0F : -2.0F;
     }
 
 	@Override

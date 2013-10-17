@@ -96,7 +96,7 @@ public class MultiModel_Aug extends MultiModel_SR2 {
 	}
 
 	@Override
-	public void setLivingAnimationsLM(MMM_IModelCaps entityCaps, float f, float f1, float renderPartialTicks)
+	public void setLivingAnimationsLM(Modchu_IModelCaps entityCaps, float f, float f1, float renderPartialTicks)
 	{
 		super.setLivingAnimationsLM(entityCaps, f, f1, renderPartialTicks);
 		Entity entityliving = (Entity) getCapsValue(entityCaps, entityCaps.caps_Entity);
@@ -119,7 +119,7 @@ public class MultiModel_Aug extends MultiModel_SR2 {
 	}
 
 	@Override
-	public void setRotationAnglesLM(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
+	public void setRotationAnglesLM(float f, float f1, float f2, float f3, float f4, float f5, Modchu_IModelCaps entityCaps) {
 		super.setRotationAnglesLM(f, f1, f2, f3, f4, f5, entityCaps);
 		SideTailR.rotateAngleX = SideTailL.rotateAngleX = -bipedHead.rotateAngleX / 1.5F;
 		float y = -8.0F;
@@ -129,7 +129,7 @@ public class MultiModel_Aug extends MultiModel_SR2 {
 	}
 
 	@Override
-	public void defaultPartsSettingBefore(MMM_IModelCaps entityCaps) {
+	public void defaultPartsSettingBefore(Modchu_IModelCaps entityCaps) {
 		super.defaultPartsSettingBefore(entityCaps);
 		String[] s1 = {
 				"sidetailUpperR", "sidetailUpperL"

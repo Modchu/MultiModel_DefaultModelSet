@@ -7,17 +7,17 @@ import org.lwjgl.opengl.GL11;
 /**
  * PlayerFormLittleMaid共通クラス
  */
-public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implements Modchu_IModelCaps {
+public abstract class MultiModelBaseBiped extends Modchu_ModelMultiModchuBase implements Modchu_IModelCaps {
 
-	public MMM_ModelRenderer bipedHead;
-	public MMM_ModelRenderer bipedHeadwear;
-	public MMM_ModelRenderer bipedBody;
-	public MMM_ModelRenderer bipedRightArm;
-	public MMM_ModelRenderer bipedLeftArm;
-	public MMM_ModelRenderer bipedRightLeg;
-	public MMM_ModelRenderer bipedLeftLeg;
-	public MMM_ModelRenderer bipedEars;
-	public MMM_ModelRenderer bipedCloak;
+	public Modchu_ModelRenderer bipedHead;
+	public Modchu_ModelRenderer bipedHeadwear;
+	public Modchu_ModelRenderer bipedBody;
+	public Modchu_ModelRenderer bipedRightArm;
+	public Modchu_ModelRenderer bipedLeftArm;
+	public Modchu_ModelRenderer bipedRightLeg;
+	public Modchu_ModelRenderer bipedLeftLeg;
+	public Modchu_ModelRenderer bipedEars;
+	public Modchu_ModelRenderer bipedCloak;
 	public Modchu_ModelRenderer HeadMount;
 	public Modchu_ModelRenderer HeadTop;
 
@@ -52,6 +52,9 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     	this(psize, pyoffset, 64, 32);
     }
 
+    /**
+     * コンストラクタは全て継承させること
+     */
     public MultiModelBaseBiped(float psize, float pyoffset, int par3, int par4) {
     	super(psize, pyoffset, par3, par4);
     	textureWidth = par3;
@@ -67,7 +70,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     }
 
     @Override
-    public void render(MMM_IModelCaps entityCaps, float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5, boolean pIsRender) {
+    public void render(Modchu_IModelCaps entityCaps, float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5, boolean pIsRender) {
     	setRotationAngles(f, f1, ticksExisted, pheadYaw, pheadPitch, f5, entityCaps);
     	mainFrame.render(f5, pIsRender);
     	if (entityCaps != null) {
@@ -81,7 +84,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     }
 
     @Override
-    public void setLivingAnimations(MMM_IModelCaps entityCaps, float f, float f1, float f2) {
+    public void setLivingAnimations(Modchu_IModelCaps entityCaps, float f, float f1, float f2) {
     	setCapsValue(entityCaps, caps_setLivingAnimationsBefore, this, f, f1, f2);
     	setLivingAnimationsLM(entityCaps, f, f1, f2);
     	Entity entityliving = (Entity) getCapsValue(entityCaps, entityCaps.caps_Entity);
@@ -93,11 +96,11 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     	}
     }
 
-    public void setLivingAnimationsLM(MMM_IModelCaps entityCaps, float f, float f1, float f2) {
+    public void setLivingAnimationsLM(Modchu_IModelCaps entityCaps, float f, float f1, float f2) {
     }
 
     @Override
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Modchu_IModelCaps entityCaps) {
     	if (entityCaps != null) {
     		setCapsValue(entityCaps, caps_setRotationAnglesBefore, this, f, f1, f2, f3, f4, f5);
     		setRotationAnglesLM(f, f1, f2, f3, f4, f5, entityCaps);
@@ -105,7 +108,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     	}
     }
 
-    public void setRotationAnglesLM(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
+    public void setRotationAnglesLM(float f, float f1, float f2, float f3, float f4, float f5, Modchu_IModelCaps entityCaps) {
     }
 
     public void renderEars(float par1) {
@@ -115,13 +118,13 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     }
 
     @Override
-    public void renderItems(MMM_IModelCaps entityCaps) {
+    public void renderItems(Modchu_IModelCaps entityCaps) {
     	if (entityCaps != null) {
     		renderItemsLM(entityCaps);
     	}
     }
 
-    public void renderItemsLM(MMM_IModelCaps entityCaps) {
+    public void renderItemsLM(Modchu_IModelCaps entityCaps) {
     	// 手持ちの表示
     	GL11.glPushMatrix();
     	// R
@@ -137,9 +140,9 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     	GL11.glPopMatrix();
     }
 
-    public void renderItemsHead(MMM_IModelCaps entityCaps) {
+    public void renderItemsHead(Modchu_IModelCaps entityCaps) {
     	// 頭部装飾品の表示
-    	boolean lplanter = MMM_ModelCapsHelper.getCapsValueBoolean(entityCaps, caps_isPlanter);
+    	boolean lplanter = Modchu_ModelCapsHelper.getCapsValueBoolean(entityCaps, caps_isPlanter);
     	ItemStack lis = (ItemStack)entityCaps.getCapsValue(caps_HeadMount);
     	int addSupport = addSupportChecks(lis);
     	if (Modchu_ModelCapsHelper.getCapsValueBoolean(entityCaps, caps_isCamouflage) || lplanter
@@ -160,17 +163,17 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     			if (lplanter
     					|| (addSupport > -1 && addSupport < 3)) {
     				HeadTop.loadMatrix();
-    				Modchu_Reflect.invokeMethod(HeadTop.getClass(), "renderItemsHead", new Class[]{ MMM_ModelMultiBase.class, MMM_IModelCaps.class, float.class, int.class }, HeadTop, new Object[]{ this, entityCaps, scale, addSupport });
+    				Modchu_Reflect.invokeMethod(Modchu_ModelRenderer.class, "renderItemsHead", new Class[]{ mod_Modchu_ModchuLib.modchu_Main.MMM_ModelMultiBase, Modchu_IModelCaps.class, float.class, int.class }, HeadTop, new Object[]{ this, entityCaps, scale, addSupport });
     				//HeadTop.loadMatrix().renderItemsHead(this, entityCaps);
     			} else {
-    				Modchu_Reflect.invokeMethod(HeadMount.getClass(), "renderItemsHead", new Class[]{ MMM_ModelMultiBase.class, MMM_IModelCaps.class, float.class, int.class }, HeadMount, new Object[]{ this, entityCaps, scale, addSupport });
+    				Modchu_Reflect.invokeMethod(Modchu_ModelRenderer.class, "renderItemsHead", new Class[]{ mod_Modchu_ModchuLib.modchu_Main.MMM_ModelMultiBase, Modchu_IModelCaps.class, float.class, int.class }, HeadMount, new Object[]{ this, entityCaps, scale, addSupport });
     				//HeadMount.loadMatrix().renderItemsHead(this, entityCaps);
     			}
     		}
     	}
     }
 
-    public void renderItemsArmorHead(MMM_IModelCaps entityCaps) {
+    public void renderItemsArmorHead(Modchu_IModelCaps entityCaps) {
     	// アーマー頭部装飾品の表示
     	ItemStack lis = (ItemStack) getCapsValue(entityCaps, caps_currentArmor, 3);
     	if (lis != null) {
@@ -179,7 +182,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     	}
     }
 
-    public void headMountRenderItems(MMM_IModelCaps entityCaps, ItemStack litemstack, int addSupport) {
+    public void headMountRenderItems(Modchu_IModelCaps entityCaps, ItemStack litemstack, int addSupport) {
     	Entity pEntity = (Entity) getCapsValue(entityCaps, entityCaps.caps_Entity);
     	Item item = litemstack.getItem();
     	Block block = null;
@@ -211,7 +214,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     		}
     		GL11.glPushMatrix();
     		HeadMount.loadMatrix();
-    		Modchu_Reflect.invokeMethod(HeadMount.getClass(), "renderItemsHead", new Class[]{ MMM_ModelMultiBase.class, MMM_IModelCaps.class, ItemStack.class, float.class, int.class }, HeadMount, new Object[]{ this, entityCaps, litemstack, scale, addSupport });
+    		Modchu_Reflect.invokeMethod(Modchu_ModelRenderer.class, "renderItemsHead", new Class[]{ mod_Modchu_ModchuLib.modchu_Main.MMM_ModelMultiBase, Modchu_IModelCaps.class, ItemStack.class, float.class, int.class }, HeadMount, new Object[]{ this, entityCaps, litemstack, scale, addSupport });
     		//HeadMount.loadMatrix().renderItemsHead(this, entityCaps);
     		GL11.glPopMatrix();
     	}
@@ -247,11 +250,11 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     	return flag;
     }
 
-    public MMM_ModelRenderer getArms(int i) {
-    	return Arms[i];
+    public Modchu_ModelRenderer getArms(int i) {
+    	return (Modchu_ModelRenderer) Arms[i];
     }
 
-    public MMM_ModelRenderer getHeadMount() {
+    public Modchu_ModelRenderer getHeadMount() {
     	return HeadMount;
     }
 
@@ -260,88 +263,92 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
      * setRotationAngles 呼び出し後に通常視点時なら呼ばれる。
      * 通常視点時の手の描画位置、角度調整を入れる。
      */
-    public void setRotationAnglesfirstPerson(float f, float f1, float f2, float f3, float f4, float f5, MMM_IModelCaps entityCaps) {
+    public void setRotationAnglesfirstPerson(float f, float f1, float f2, float f3, float f4, float f5, Modchu_IModelCaps entityCaps) {
     }
 
     /**
      * GUI パーツ表示・非表示 モデル初期化時とPFLM_Gui Customize Defaultボタンが押された時、
      * setPartsの前に呼ばれる。自動取得されたリストの編集など
      */
-    public void defaultPartsSettingBefore(MMM_IModelCaps entityCaps) {
+    public void defaultPartsSettingBefore(Modchu_IModelCaps entityCaps) {
     }
 
     /**
      * GUI パーツ表示・非表示 モデル初期化時とPFLM_Gui Customize Defaultボタンが押された時、
      * setPartsの後に呼ばれる。デフォルトOFFにする設定など
      */
-    public void defaultPartsSettingAfter(MMM_IModelCaps entityCaps) {
+    public void defaultPartsSettingAfter(Modchu_IModelCaps entityCaps) {
     }
 
     /**
      * GUI パーツ表示・非表示反映
      */
-    public void showModelSettingReflects(MMM_IModelCaps entityCaps) {
+    public void showModelSettingReflects(Modchu_IModelCaps entityCaps) {
+    }
+
+    @Override
+    public void changeModel(Modchu_IModelCaps entityCaps) {
     }
 
     /**
      * カラー切替時に実行されるコード
      */
-    public void changeColor(MMM_IModelCaps entityCaps) {
+    public void changeColor(Modchu_IModelCaps entityCaps) {
     }
 
-    public float getyOffset(MMM_IModelCaps pEntityCaps) {
+    public float getyOffset(Modchu_IModelCaps pEntityCaps) {
     	return 1.62F;
     }
 
-    public float getRidingHeight(MMM_IModelCaps pEntityCaps) {
+    public float getRidingHeight(Modchu_IModelCaps pEntityCaps) {
     	return getHeight(pEntityCaps);
     }
 
-    public float getRidingWidth(MMM_IModelCaps pEntityCaps) {
+    public float getRidingWidth(Modchu_IModelCaps pEntityCaps) {
     	return getWidth(pEntityCaps);
     }
 
-    public float getRidingyOffset(MMM_IModelCaps pEntityCaps) {
+    public float getRidingyOffset(Modchu_IModelCaps pEntityCaps) {
     	return getyOffset(pEntityCaps);
     }
 
     /**
      * 他Mobを頭に乗せた時の他Mob基準位置調整
      */
-    public float getMountedYOffset(MMM_IModelCaps pEntityCaps) {
+    public float getMountedYOffset(Modchu_IModelCaps pEntityCaps) {
     	return 0.75F;
     }
 
     /**
      * 座っているポーズ「乗り物に乗っていない」時の位置調整
      */
-    public double getSittingyOffset(MMM_IModelCaps entityCaps) {
+    public double getSittingyOffset(Modchu_IModelCaps entityCaps) {
     	return -0.35D;
     }
 
     /**
      * isModelSize=true時に乗り物に乗っている状態でのカメラ位置調整
      */
-    public float ridingViewCorrection(MMM_IModelCaps pEntityCaps) {
+    public float ridingViewCorrection(Modchu_IModelCaps pEntityCaps) {
     	return 0.0F;
     }
 
     /**
      * デフォルトモデルスケール
      */
-    public float getModelScale(MMM_IModelCaps pEntityCaps) {
+    public float getModelScale(Modchu_IModelCaps pEntityCaps) {
     	return 0.9375F;
     }
 
-    public void setArmorBipedHeadShowModel(MMM_IModelCaps entityCaps, boolean b) {
+    public void setArmorBipedHeadShowModel(Modchu_IModelCaps entityCaps, boolean b) {
     	setCapsValue(caps_visible, bipedHead, b);
     }
 
-    public void setArmorBipedBodyShowModel(MMM_IModelCaps entityCaps, boolean b) {
+    public void setArmorBipedBodyShowModel(Modchu_IModelCaps entityCaps, boolean b) {
     	setCapsValue(caps_visible, bipedBody, b);
     }
 
-    public void setArmorBipedRightArmShowModel(MMM_IModelCaps entityCaps, boolean b) {
+    public void setArmorBipedRightArmShowModel(Modchu_IModelCaps entityCaps, boolean b) {
     	if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_shortcutKeysAction)
     			&& Modchu_ModelCapsHelper.getCapsValueInt(this, caps_runActionNumber) == 0
     			| Modchu_ModelCapsHelper.getCapsValueInt(this, caps_runActionNumber) == 1) {
@@ -350,7 +357,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     	else setCapsValue(caps_visible, bipedRightArm, b);
     }
 
-    public void setArmorBipedLeftArmShowModel(MMM_IModelCaps entityCaps, boolean b) {
+    public void setArmorBipedLeftArmShowModel(Modchu_IModelCaps entityCaps, boolean b) {
     	if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_shortcutKeysAction)
     			&& Modchu_ModelCapsHelper.getCapsValueInt(this, caps_runActionNumber) == 0
     			| Modchu_ModelCapsHelper.getCapsValueInt(this, caps_runActionNumber) == 1) {
@@ -359,7 +366,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     	else setCapsValue(caps_visible, bipedLeftArm, b);
     }
 
-    public void setArmorBipedRightLegShowModel(MMM_IModelCaps entityCaps, boolean b) {
+    public void setArmorBipedRightLegShowModel(Modchu_IModelCaps entityCaps, boolean b) {
     	if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_shortcutKeysAction)
     			&& Modchu_ModelCapsHelper.getCapsValueInt(this, caps_runActionNumber) == 0
     			| Modchu_ModelCapsHelper.getCapsValueInt(this, caps_runActionNumber) == 1) {
@@ -368,7 +375,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     	else setCapsValue(caps_visible, bipedRightLeg, b);
     }
 
-    public void setArmorBipedLeftLegShowModel(MMM_IModelCaps entityCaps, boolean b) {
+    public void setArmorBipedLeftLegShowModel(Modchu_IModelCaps entityCaps, boolean b) {
     	if (Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_shortcutKeysAction)
     			&& Modchu_ModelCapsHelper.getCapsValueInt(this, caps_runActionNumber) == 0
     			| Modchu_ModelCapsHelper.getCapsValueInt(this, caps_runActionNumber) == 1) {
@@ -377,12 +384,12 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     	else setCapsValue(caps_visible, bipedLeftLeg, b);
     }
 
-    public void setArmorSkirtShowModel(MMM_IModelCaps entityCaps, boolean b) {
+    public void setArmorSkirtShowModel(Modchu_IModelCaps entityCaps, boolean b) {
     }
 
 	@Override
-	public Object getCapsValue(MultiModelBaseBiped model, MMM_IModelCaps entityCaps, int pIndex, Object ...pArg) {
-		return getCapsValue(pIndex, entityCaps, (Object[]) pArg);
+	public Object getCapsValue(MultiModelBaseBiped model, Modchu_IModelCaps entityCaps, int pIndex, Object ...pArg) {
+		return getCapsValue(entityCaps, pIndex, (Object[]) pArg);
 	}
 
 	@Override
@@ -392,11 +399,10 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 
 	@Override
 	public Object getCapsValue(int pIndex, Object ...pArg) {
-		return getCapsValue((MMM_IModelCaps) null, pIndex, (Object[]) pArg);
+		return getCapsValue((Modchu_IModelCaps) null, pIndex, (Object[]) pArg);
 	}
 
-	@Override
-	public Object getCapsValue(MMM_IModelCaps entityCaps, int pIndex, Object ...pArg) {
+	public Object getCapsValue(Modchu_IModelCaps entityCaps, int pIndex, Object ...pArg) {
 		if (entityCaps != null) {
 			Object o = entityCaps instanceof Modchu_IModelCaps ? ((Modchu_IModelCaps) entityCaps).getCapsValue(this, pIndex, pArg) : entityCaps.getCapsValue(pIndex, pArg);
 			if (o != null) return o;
@@ -406,15 +412,15 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 		case caps_Grounds:
 			if (pArg != null
 			&& pArg.length > 0
-			&& pArg[0] != null) return getGrounds((MMM_IModelCaps) pArg[0]);
+			&& pArg[0] != null) return getGrounds((Modchu_IModelCaps) pArg[0]);
 			break;
 		case caps_onGround:
 			if (pArg != null
 			&& pArg.length > 0
 			&& pArg[0] != null) {
 				if (pArg.length > 1
-						&& pArg[1] != null) return getOnGround((MMM_IModelCaps) pArg[0], (Integer) pArg[1]);
-				return getGrounds((MMM_IModelCaps) pArg[0])[0];
+						&& pArg[1] != null) return getOnGround((Modchu_IModelCaps) pArg[0], (Integer) pArg[1]);
+				return getGrounds((Modchu_IModelCaps) pArg[0])[0];
 			}
 			break;
 */
@@ -431,7 +437,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 		case caps_isSitting:
 			if (pArg != null
 			&& pArg.length > 0
-			&& pArg[0] != null) return getIsSitting((MMM_IModelCaps) pArg[0]);
+			&& pArg[0] != null) return getIsSitting((Modchu_IModelCaps) pArg[0]);
 			break;
 		case caps_getIsSleeping:
 			return getIsSleeping();
@@ -446,22 +452,22 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 		case caps_bipedHead:
 			if (pArg != null
 			&& pArg.length > 0
-			&& pArg[0] != null) return getBipedHead((MMM_IModelCaps) pArg[0]);
+			&& pArg[0] != null) return getBipedHead((Modchu_IModelCaps) pArg[0]);
 			break;
 		case caps_bipedRightArm:
 			if (pArg != null
 			&& pArg.length > 0
-			&& pArg[0] != null) return getBipedRightArm((MMM_IModelCaps) pArg[0]);
+			&& pArg[0] != null) return getBipedRightArm((Modchu_IModelCaps) pArg[0]);
 			break;
 		case caps_notDominantArm:
 			if (pArg != null
 			&& pArg.length > 0
-			&& pArg[0] != null) return getNotDominantArm((MMM_IModelCaps) pArg[0]);
+			&& pArg[0] != null) return getNotDominantArm((Modchu_IModelCaps) pArg[0]);
 			break;
 		case caps_Physical_Hammer:
 			if (pArg != null
 			&& pArg.length > 0
-			&& pArg[0] != null) return Physical_Hammer((MMM_IModelCaps) pArg[0]);
+			&& pArg[0] != null) return Physical_Hammer((Modchu_IModelCaps) pArg[0]);
 			break;
 		case caps_height:
 			return getHeight(entityCaps);
@@ -499,7 +505,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 
 		//entityCaps相当機能が無いLMM対策
 		case caps_maidColor:
-			return getMaidColor((MMM_IModelCaps) pArg[0]);
+			return getMaidColor((Modchu_IModelCaps) pArg[0]);
 		}
 		return super.getCapsValue(pIndex, pArg);
 	}
@@ -510,17 +516,17 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 	}
 
 	@Override
-	public boolean setCapsValue(MultiModelBaseBiped model, MMM_IModelCaps entityCaps, int pIndex, Object... pArg) {
+	public boolean setCapsValue(MultiModelBaseBiped model, Modchu_IModelCaps entityCaps, int pIndex, Object... pArg) {
 		return setCapsValue(pIndex, (Object[]) pArg);
 	}
 
 	@Override
 	public boolean setCapsValue(int pIndex, Object... pArg) {
-		return setCapsValue((MMM_IModelCaps) null, pIndex, (Object[]) pArg);
+		return setCapsValue((Modchu_IModelCaps) null, pIndex, (Object[]) pArg);
 	}
 
 	@Override
-	public boolean setCapsValue(MMM_IModelCaps entityCaps, int pIndex, Object ...pArg) {
+	public boolean setCapsValue(Modchu_IModelCaps entityCaps, int pIndex, Object ...pArg) {
 		switch (pIndex) {
 		case caps_isRiding:
 			if (pArg != null
@@ -596,10 +602,10 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 			&& pArg[1] != null) {
 				if (pArg.length > 2
 						&& pArg[2] != null) {
-					setVisible((MMM_ModelRenderer) pArg[0], (Boolean) pArg[1], (Boolean) pArg[2]);
+					setVisible((Modchu_ModelRenderer) pArg[0], (Boolean) pArg[1], (Boolean) pArg[2]);
 					return true;
 				}
-				setVisible((MMM_ModelRenderer) pArg[0], (Boolean) pArg[1]);
+				setVisible((Modchu_ModelRenderer) pArg[0], (Boolean) pArg[1]);
 				return true;
 			}
 			return false;
@@ -674,7 +680,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
 		return false;
 	}
 
-	private int getMaidColor(MMM_IModelCaps entityCaps) {
+	private int getMaidColor(Modchu_IModelCaps entityCaps) {
 		Entity entityliving = (Entity) getCapsValue(entityCaps, entityCaps.caps_Entity);
 		//Modchu_Debug.mDebug("getMaidColor entityliving != null?"+(entityliving != null));
 		Object o = null;
@@ -697,7 +703,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     	return onGrounds[0];
     }
 
-    private float getOnGround(MMM_IModelCaps entityCaps, int i) {
+    private float getOnGround(Modchu_IModelCaps entityCaps, int i) {
     	if (Modchu_ModelCapsHelper.getCapsValueInt(this, caps_dominantArm) == i) {
     		//Modchu_Debug.mDebug("getOnGround()="+getOnGround() +" i="+i);
     		return getGrounds(entityCaps)[i];
@@ -705,7 +711,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     	return 0.0F;
     }
 
-    private float[] getGrounds(MMM_IModelCaps entityCaps) {
+    private float[] getGrounds(Modchu_IModelCaps entityCaps) {
     	float[] f = new float[]{ 0.0F, 0.0F };
     	int i = Modchu_ModelCapsHelper.getCapsValueInt(this, caps_dominantArm);
     	if (i < f.length) {
@@ -759,7 +765,7 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     	return Modchu_ModelCapsHelper.getCapsValueBoolean(this, caps_isWait) && !waitBan;
     }
 
-    private boolean getIsSitting(MMM_IModelCaps entityCaps)
+    private boolean getIsSitting(Modchu_IModelCaps entityCaps)
     {
     	if (entityCaps != null) return (Boolean) entityCaps.getCapsValue(caps_isSitting) && !sittingBan;
     	return false;
@@ -864,11 +870,11 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     	ridingBan = b;
     }
 
-    private void setVisible(MMM_ModelRenderer renderer, boolean b) {
+    private void setVisible(Modchu_ModelRenderer renderer, boolean b) {
     	setVisible(renderer, b, false);
     }
 
-    private void setVisible(MMM_ModelRenderer renderer, boolean b, boolean b1) {
+    private void setVisible(Modchu_ModelRenderer renderer, boolean b, boolean b1) {
     	if (renderer != null
     			&& renderer.showModel != b) ;else return;
     	if (!b1) {
@@ -896,31 +902,31 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     	mod_Modchu_ModchuLib.modchu_Main.modchuRemodelingModel = b;
     }
 
-    public float Physical_Hammer(MMM_IModelCaps entityCaps) {
+    public float Physical_Hammer(Modchu_IModelCaps entityCaps) {
     	return (Float) Modchu_Reflect.getFieldObject(mod_Modchu_ModchuLib.modchu_Main.mod_PFLM_PlayerFormLittleMaid, "Physical_Hammer");
     }
 
-    public MMM_ModelRenderer getBipedHead(MMM_IModelCaps entityCaps) {
+    public Modchu_ModelRenderer getBipedHead(Modchu_IModelCaps entityCaps) {
     	return bipedHead;
     }
 
-    public MMM_ModelRenderer getBipedRightArm(MMM_IModelCaps entityCaps) {
+    public Modchu_ModelRenderer getBipedRightArm(Modchu_IModelCaps entityCaps) {
     	if (Modchu_ModelCapsHelper.getCapsValueInt(entityCaps, caps_dominantArm, getCapsValue(caps_armorType)) == 0) return bipedRightArm;
     	return bipedLeftArm;
     }
 
-    public MMM_ModelRenderer getNotDominantArm(MMM_IModelCaps entityCaps) {
+    public Modchu_ModelRenderer getNotDominantArm(Modchu_IModelCaps entityCaps) {
     	if (Modchu_ModelCapsHelper.getCapsValueInt(entityCaps, caps_dominantArm, getCapsValue(caps_armorType)) == 0) return bipedLeftArm;
     	return bipedRightArm;
     }
 
     @Override
-    public void renderFirstPersonHand(MMM_IModelCaps entityCaps) {
+    public void renderFirstPersonHand(Modchu_IModelCaps entityCaps) {
     	renderFirstPersonHand(entityCaps, 0.0625F);
     }
 
-    public void renderFirstPersonHand(MMM_IModelCaps entityCaps, float f) {
-    	((MMM_ModelRenderer) getCapsValue(caps_bipedRightArm, entityCaps)).render(f);
+    public void renderFirstPersonHand(Modchu_IModelCaps entityCaps, float f) {
+    	((Modchu_ModelRenderer) getCapsValue(caps_bipedRightArm, entityCaps)).render(f);
     }
 
     @Override
@@ -928,13 +934,13 @@ public abstract class MultiModelBaseBiped extends MMM_ModelMultiMMMBase implemen
     	return showArmorParts(null, parts, index);
     }
 
-    abstract int showArmorParts(MMM_IModelCaps entityCaps, int parts, int index);
+    abstract int showArmorParts(Modchu_IModelCaps entityCaps, int parts, int index);
     // 以下、LMM_EntityCaps側にあってほしいもの
 	/**
      * LMM専用処理
      * setLivingAnimations 呼び出し後に呼ばれる。
      */
-    public void setLivingAnimationsAfter(MMM_IModelCaps entityCaps, float f, float f1, float f2) {
+    public void setLivingAnimationsAfter(Modchu_IModelCaps entityCaps, float f, float f1, float f2) {
     	if (bipedHead != null) {
     		float angle = (Float) entityCaps.getCapsValue(caps_interestedAngle, f2);
     		bipedHead.rotateAngleZ = angle;
