@@ -1,0 +1,1 @@
+package modchu.model.replacepoint;import modchu.model.replace.ModchuModel_EntityCapsBase;public abstract class ModchuModel_EntityCapsReplacePoint extends ModchuModel_EntityCapsBase {	public ModchuModel_EntityCapsReplacePoint() {		super(null);	}}
