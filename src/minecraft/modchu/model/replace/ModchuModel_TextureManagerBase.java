@@ -175,7 +175,7 @@ public class ModchuModel_TextureManagerBase {
 	}
 
 	public ModchuModel_TextureBoxServer getTextureBoxServer(int pIndex) {
-//		Modchu_Debug.Debug("getTextureBoxServer: %d / %d", pIndex, textureServer.size());
+//		Modchu_Debug.tDebug("getTextureBoxServer: %d / %d", pIndex, textureServer.size());
 		if (textureServer.size() > pIndex) {
 			return textureServer.get(pIndex);
 		}
@@ -196,7 +196,7 @@ public class ModchuModel_TextureManagerBase {
 
 
 	public boolean loadTextures() {
-		Modchu_Debug.Debug("loadTexturePacks.");
+		Modchu_Debug.tDebug("loadTexturePacks.");
 		// アーマーのファイル名を識別するための文字列を獲得する
 		if (ModchuModel_HelperReplacePoint.isClient) {
 			getArmorPrefix();
@@ -205,16 +205,16 @@ public class ModchuModel_TextureManagerBase {
 		// ファイルを解析してテクスチャを追加
 		// jar内のテクスチャを追加
 		if (ModchuModel_FileManagerReplacePoint.minecraftJar == null) {
-			Modchu_Debug.Debug("getTexture-append-jar-file not founded.");
+			Modchu_Debug.tDebug("getTexture-append-jar-file not founded.");
 		} else {
 			for (String[] lss : searchPrefix) {
-				Modchu_Debug.Debug("getTexture[%s:%s].", lss[0], lss[1]);
+				Modchu_Debug.tDebug("getTexture[%s:%s].", lss[0], lss[1]);
 				addTexturesJar(ModchuModel_FileManagerReplacePoint.minecraftJar, lss);
 			}
 		}
 
 		for (String[] lss : searchPrefix) {
-			Modchu_Debug.Debug("getTexture[%s:%s].", lss[0], lss[1]);
+			Modchu_Debug.tDebug("getTexture[%s:%s].", lss[0], lss[1]);
 			// mods
 			for (File lf : ModchuModel_FileManagerReplacePoint.getFileList(lss[0])) {
 				for (String[] lst : searchPrefix) {
@@ -226,7 +226,7 @@ public class ModchuModel_TextureManagerBase {
 						// zip
 						lflag = addTexturesZip(lf, lst);
 					}
-					Modchu_Debug.Debug("getTexture-append-%s-%s.", lf.getName(), lflag ? "done" : "fail");
+					Modchu_Debug.tDebug("getTexture-append-%s-%s.", lf.getName(), lflag ? "done" : "fail");
 				}
 			}
 		}
@@ -267,18 +267,18 @@ public class ModchuModel_TextureManagerBase {
 				}
 			}
 		}
-		Modchu_Debug.Debug("Loaded Texture Lists.(%d)", textures.size());
+		Modchu_Debug.tDebug("Loaded Texture Lists.(%d)", textures.size());
 		for (ModchuModel_TextureBoxReplacePoint lbox : textures) {
-			Modchu_Debug.Debug("texture: %s(%s) - hasModel:%b", lbox.textureName, lbox.fileName, lbox.models != null);
+			Modchu_Debug.tDebug("texture: %s(%s) - hasModel:%b", lbox.textureName, lbox.fileName, lbox.models != null);
 		}
 		for (int li = textures.size() - 1; li >= 0; li--) {
 			if (textures.get(li).models == null) {
 				textures.remove(li);
 			}
 		}
-		Modchu_Debug.Debug("Rebuild Texture Lists.(%d)", textures.size());
+		Modchu_Debug.tDebug("Rebuild Texture Lists.(%d)", textures.size());
 		for (ModchuModel_TextureBoxReplacePoint lbox : textures) {
-			Modchu_Debug.Debug("texture: %s(%s) - hasModel:%b", lbox.textureName, lbox.fileName, lbox.models != null);
+			Modchu_Debug.tDebug("texture: %s(%s) - hasModel:%b", lbox.textureName, lbox.fileName, lbox.models != null);
 		}
 
 
@@ -347,10 +347,10 @@ public class ModchuModel_TextureManagerBase {
 				e.printStackTrace();
 			}
 
-			Modchu_Debug.Debug("Loaded ServerBoxList.(%d)", textureServer.size());
+			Modchu_Debug.tDebug("Loaded ServerBoxList.(%d)", textureServer.size());
 			for (int li = 0; li < textureServer.size(); li++) {
 				ModchuModel_TextureBoxServer lbox = textureServer.get(li);
-				Modchu_Debug.Debug("%04d=%s:%04x:%04x", li, lbox.textureName, lbox.contractColor, lbox.wildColor);
+				Modchu_Debug.tDebug("%04d=%s:%04x:%04x", li, lbox.textureName, lbox.contractColor, lbox.wildColor);
 			}
 			return true;
 		} else {
@@ -390,7 +390,7 @@ public class ModchuModel_TextureManagerBase {
 	 * テクスチャインデックスを構築。
 	 */
 	public void initTextureList(boolean pFlag) {
-		Modchu_Debug.Debug("Clear TextureBoxServer.");
+		Modchu_Debug.tDebug("Clear TextureBoxServer.");
 		textureServerIndex.clear();
 		textureServer.clear();
 		if (pFlag) {
@@ -400,7 +400,7 @@ public class ModchuModel_TextureManagerBase {
 				textureServer.add(lbs);
 				textureServerIndex.put(lbc, li++);
 			}
-			Modchu_Debug.Debug("Rebuild TextureBoxServer(%d).", textureServer.size());
+			Modchu_Debug.tDebug("Rebuild TextureBoxServer(%d).", textureServer.size());
 		}
 	}
 
@@ -418,7 +418,7 @@ public class ModchuModel_TextureManagerBase {
 				lclass = Modchu_Reflect.loadClass(cn);
 				if (lclass != null) {
 					if (!(MultiModelBaseBiped.class).isAssignableFrom(lclass) || Modifier.isAbstract(lclass.getModifiers())) {
-						Modchu_Debug.Debug("getModelClass-fail.");
+						Modchu_Debug.tDebug("getModelClass-fail.");
 						return;
 					}
 					MultiModelBaseBiped mlm[] = new MultiModelBaseBiped[3];
@@ -428,17 +428,17 @@ public class ModchuModel_TextureManagerBase {
 					mlm[1] = cm.newInstance(lsize[0]);
 					mlm[2] = cm.newInstance(lsize[1]);
 					modelMap.put(pn, mlm);
-					Modchu_Debug.Debug("getModelClass-%s:%s", pn, cn);
+					Modchu_Debug.tDebug("getModelClass-%s:%s", pn, cn);
 				} else {
-					Modchu_Debug.Debug("getModelClass-class == null !!: %s", cn);
+					Modchu_Debug.tDebug("getModelClass-class == null !!: %s", cn);
 				}
 			}
 			catch (Exception exception) {
-				Modchu_Debug.Debug("getModelClass-Exception: %s", fname);
+				Modchu_Debug.tDebug("getModelClass-Exception: %s", fname);
 				exception.printStackTrace();
 			}
 			catch (Error error) {
-				Modchu_Debug.Debug("getModelClass-Error: %s", fname);
+				Modchu_Debug.tDebug("getModelClass-Error: %s", fname);
 			}
 		}
 	}
@@ -475,7 +475,7 @@ public class ModchuModel_TextureManagerBase {
 					if (lts == null) {
 						lts = new ModchuModel_TextureBoxReplacePoint(pn, pSearch);
 						textures.add(lts);
-						Modchu_Debug.Debug("getTextureName-append-texturePack-%s", pn);
+						Modchu_Debug.tDebug("getTextureName-append-texturePack-%s", pn);
 					}
 					lts.addTexture(lindex, fname);
 				}
@@ -512,7 +512,7 @@ public class ModchuModel_TextureManagerBase {
 
 			return true;
 		} catch (Exception exception) {
-			Modchu_Debug.Debug("addTextureZip-Exception.");
+			Modchu_Debug.tDebug("addTextureZip-Exception.");
 			return false;
 		}
 	}
@@ -520,17 +520,17 @@ public class ModchuModel_TextureManagerBase {
 	public void addTexturesJar(File file, String[] pSearch) {
 		//
 		if (file.isFile()) {
-			Modchu_Debug.Debug("addTextureJar-zip.");
+			Modchu_Debug.tDebug("addTextureJar-zip.");
 			if (addTexturesZip(file, pSearch)) {
-				Modchu_Debug.Debug("getTexture-append-jar-done.");
+				Modchu_Debug.tDebug("getTexture-append-jar-done.");
 			} else {
-				Modchu_Debug.Debug("getTexture-append-jar-fail.");
+				Modchu_Debug.tDebug("getTexture-append-jar-fail.");
 			}
 		}
 
 		// 意味なし？
 		if (file.isDirectory()) {
-			Modchu_Debug.Debug("addTextureJar-file.");
+			Modchu_Debug.tDebug("addTextureJar-file.");
 			boolean lflag = false;
 
 			for (File t : file.listFiles()) {
@@ -539,9 +539,9 @@ public class ModchuModel_TextureManagerBase {
 				}
 			}
 			if (lflag) {
-				Modchu_Debug.Debug("getTexture-append-jar-done.");
+				Modchu_Debug.tDebug("getTexture-append-jar-done.");
 			} else {
-				Modchu_Debug.Debug("getTexture-append-jar-fail.");
+				Modchu_Debug.tDebug("getTexture-append-jar-fail.");
 			}
 
 			Package package1 = null;
@@ -550,15 +550,15 @@ public class ModchuModel_TextureManagerBase {
 			{
 				String s = package1.getName().replace('.', File.separatorChar);
 				file = new File(file, s);
-				Modchu_Debug.Debug("addTextureJar-file-Packege:%s", s);
+				Modchu_Debug.tDebug("addTextureJar-file-Packege:%s", s);
 			} else {
-				Modchu_Debug.Debug("addTextureJar-file-null.");
+				Modchu_Debug.tDebug("addTextureJar-file-null.");
 			}
 			*/
 			if (addTexturesDir(file, pSearch)) {
-				Modchu_Debug.Debug("getTexture-append-jar-done.");
+				Modchu_Debug.tDebug("getTexture-append-jar-done.");
 			} else {
-				Modchu_Debug.Debug("getTexture-append-jar-fail.");
+				Modchu_Debug.tDebug("getTexture-append-jar-fail.");
 			}
 
 		}
@@ -590,7 +590,7 @@ public class ModchuModel_TextureManagerBase {
 			}
 			return true;
 		} catch (Exception e) {
-			Modchu_Debug.Debug("addTextureDebug-Exception.");
+			Modchu_Debug.tDebug("addTextureDebug-Exception.");
 			return false;
 		}
 	}
@@ -754,7 +754,7 @@ public class ModchuModel_TextureManagerBase {
 	}
 	public void setDefaultTexture(Class pEntityClass, ModchuModel_TextureBoxReplacePoint pBox) {
 		defaultTextures.put(pEntityClass, pBox);
-		Modchu_Debug.Debug("appendDefaultTexture:%s(%s)",
+		Modchu_Debug.tDebug("appendDefaultTexture:%s(%s)",
 				pEntityClass.getSimpleName(), pBox == null ? "NULL" : pBox.textureName);
 	}
 
@@ -801,7 +801,7 @@ public class ModchuModel_TextureManagerBase {
 		if (lblank >= 0) {
 			requestString[lblank] = pVal;
 		} else {
-			Modchu_Debug.Debug("requestString Overflow!");
+			Modchu_Debug.tDebug("requestString Overflow!");
 		}
 		return lblank;
 	}
@@ -826,7 +826,7 @@ public class ModchuModel_TextureManagerBase {
 		if (lblank >= 0) {
 			requestIndex[lblank] = pTextureServerBoxIndex;
 		} else {
-			Modchu_Debug.Debug("requestIndex Overflow!");
+			Modchu_Debug.tDebug("requestIndex Overflow!");
 		}
 		return lblank;
 	}
@@ -937,7 +937,7 @@ public class ModchuModel_TextureManagerBase {
 			for (int li = 0; li < lcount; li++) {
 				lindex[li] = ModchuModel_Helper.getShort(pData, 6 + li * 2);
 			}
-			Modchu_Debug.Debug("reciveFromClientSetTexturePackIndex: %d, %4x", pData[5], lindex[0]);
+			Modchu_Debug.tDebug("reciveFromClientSetTexturePackIndex: %d, %4x", pData[5], lindex[0]);
 			((ModchuModel_ITextureEntityReplacePoint)pEntity).setTexturePackIndex(pData[5], lindex);
 		}
 	}
@@ -958,7 +958,7 @@ public class ModchuModel_TextureManagerBase {
 		ModchuModel_Helper.setFloat(ldata, 18, pBox.getMountedYOffset(null));
 		ModchuModel_Helper.setStr(ldata, 22, pBox.textureName);
 		ModchuModel_Client.sendToServer(ldata);
-		Modchu_Debug.Debug("Server_GetTextureIndex: %s", pBox.textureName);
+		Modchu_Debug.tDebug("Server_GetTextureIndex: %s", pBox.textureName);
 	}
 
 	public void reciveFromClientGetTexturePackIndex(NetServerHandler pHandler, byte[] pData) {
@@ -980,7 +980,7 @@ public class ModchuModel_TextureManagerBase {
 		ldata[0] = ModchuModel_Statics.Client_SetTextureIndex;
 		ldata[1] = pData[1];
 		ModchuModel_Helper.setShort(ldata, 2, li);
-		Modchu_Debug.Debug("reciveFromClientGetTexturePackIndex: %s, %04x", lpackname, li);
+		Modchu_Debug.tDebug("reciveFromClientGetTexturePackIndex: %s, %04x", lpackname, li);
 		Modchu_Debug.sendToClient(pHandler, ldata);
 	}
 
@@ -989,7 +989,7 @@ public class ModchuModel_TextureManagerBase {
 		// サーバー側からテクスチャパックのインデックスを受け取ったので値を登録する。
 		ModchuModel_TextureBox lbox = getTextureBox(getRequestString(pData[1]));
 		textureServerIndex.put(lbox, (int)ModchuModel_Helper.getShort(pData, 2));
-		Modchu_Debug.Debug("reciveFormServerSetTexturePackIndex: %s, %04x", lbox.textureName, (int)ModchuModel_Helper.getShort(pData, 2));
+		Modchu_Debug.tDebug("reciveFormServerSetTexturePackIndex: %s, %04x", lbox.textureName, (int)ModchuModel_Helper.getShort(pData, 2));
 
 		// スタックされたジョブから処理可能な物があれば実行する。
 		Map<ModchuModel_ITextureEntityReplacePoint, Object[]> lmap = new HashMap<ModchuModel_ITextureEntityReplacePoint, Object[]>(stackSetTexturePack);
@@ -1043,7 +1043,7 @@ public class ModchuModel_TextureManagerBase {
 		// Client
 		// サーバー側へテクスチャパックの名称を問い合わせる
 		if (pIndex < 0) {
-			Modchu_Debug.Debug("request range out.");
+			Modchu_Debug.tDebug("request range out.");
 			return;
 		}
 		byte ldata[] = new byte[3];
@@ -1070,7 +1070,7 @@ public class ModchuModel_TextureManagerBase {
 		ModchuModel_Helper.setFloat(ldata, 19, lboxserver.getMountedYOffset(null));
 		ModchuModel_Helper.setStr(ldata, 23, lboxserver.textureName);
 		Modchu_Debug.sendToClient(pHandler, ldata);
-		Modchu_Debug.Debug("SetTexturePackName:%04x - %s", lindex, lboxserver.textureName);
+		Modchu_Debug.tDebug("SetTexturePackName:%04x - %s", lindex, lboxserver.textureName);
 	}
 
 	public void reciveFromServerSetTexturePackName(byte[] pData) {
