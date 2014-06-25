@@ -21,7 +21,7 @@ public class ModchuModel_RenderEngine {
 	private static final int displayListsNumber = 2;
 	private HashMap<String, Integer> textureMap = new HashMap();
 	private BufferedImage missingTextureImage = new BufferedImage(64, 64, 2);
-	private IntBuffer imageData = Modchu_AS.getIntBuffer(Modchu_AS.glAllocationCreateDirectIntBuffer, 4194304);
+	private IntBuffer imageData = Modchu_AS.getIntBuffer(Modchu_AS.gLAllocationCreateDirectIntBuffer, 4194304);
 	//private int boundTexture;
 	public boolean anaglyph = false;
 
@@ -44,7 +44,7 @@ public class ModchuModel_RenderEngine {
 	public void bindBufferedImage(String s, BufferedImage image) {
 		if (s != null
 				&& image != null) ;else return;
-		int generateDisplayList = Modchu_AS.getInt(Modchu_AS.glAllocationGenerateDisplayLists, displayListsNumber);
+		int generateDisplayList = Modchu_AS.getInt(Modchu_AS.gLAllocationGenerateDisplayLists, displayListsNumber);
 		setupTextureExt(image, generateDisplayList, false, false);
 		textureMap.put(s, generateDisplayList);
 		bindTexture(generateDisplayList);
@@ -64,7 +64,7 @@ public class ModchuModel_RenderEngine {
 			return i;
 		} else {
 			String s0 = s;
-			int generateDisplayList = Modchu_AS.getInt(Modchu_AS.glAllocationGenerateDisplayLists, displayListsNumber);
+			int generateDisplayList = Modchu_AS.getInt(Modchu_AS.gLAllocationGenerateDisplayLists, displayListsNumber);
 			try {
 				boolean var9 = s0.startsWith("%blur%");
 				if (var9) s0 = s0.substring(6);

@@ -3,7 +3,7 @@ package modchu.model;
 import modchu.lib.Modchu_ITexturedTriangle;
 import modchu.lib.Modchu_Reflect;
 import modchu.lib.characteristic.Modchu_AS;
-import modchu.lib.characteristic.Modchu_TexturedTriangle;
+import modchu.lib.characteristic.recompileonly.Modchu_TexturedTriangle;
 
 import org.lwjgl.opengl.GL11;
 

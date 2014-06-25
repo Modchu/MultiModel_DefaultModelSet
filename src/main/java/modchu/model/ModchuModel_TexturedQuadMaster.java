@@ -2,7 +2,7 @@ package modchu.model;
 
 import modchu.lib.Modchu_ITexturedQuad;
 import modchu.lib.characteristic.Modchu_AS;
-import modchu.lib.characteristic.Modchu_TexturedQuad;
+import modchu.lib.characteristic.recompileonly.Modchu_TexturedQuad;
 
 public class ModchuModel_TexturedQuadMaster implements Modchu_ITexturedQuad {
 	public Modchu_TexturedQuad base;

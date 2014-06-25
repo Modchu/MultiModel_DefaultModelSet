@@ -3,16 +3,14 @@ package modchu.model;
 import modchu.lib.Modchu_IModelPlateFreeShape;
 import modchu.lib.Modchu_Reflect;
 import modchu.lib.characteristic.Modchu_AS;
-import modchu.lib.characteristic.Modchu_ModelPlateFreeShape;
-import modchu.lib.characteristic.Modchu_TexturedTriangle;
+import modchu.lib.characteristic.recompileonly.Modchu_ModelPlateFreeShape;
+import modchu.lib.characteristic.recompileonly.Modchu_TexturedTriangle;
 import modchu.lib.replacepoint.Modchu_ModelRendererReplacePoint;
-import net.minecraft.client.model.ModelBox;
-import net.minecraft.client.model.PositionTextureVertex;
 
 public class ModchuModel_ModelPlateFreeShape implements Modchu_IModelPlateFreeShape {
 	public Modchu_ModelPlateFreeShape base;
 
-	private PositionTextureVertex[] vertexPositions;
+	private Object[] positionTextureVertex;
 	private Modchu_TexturedTriangle[] triList;
 	public final float posX1;
 	public final float posY1;
@@ -47,11 +45,13 @@ public class ModchuModel_ModelPlateFreeShape implements Modchu_IModelPlateFreeSh
 		vn = var6;
 		float var22 = 8.0F;
 		float var23 = 8.0F;
-		vertexPositions = new PositionTextureVertex[var21];
+		positionTextureVertex = Modchu_Reflect.newInstanceArray("PositionTextureVertex", var21);
+		//Modchu_Debug.mDebug("ModchuModel_ModelPlateFreeShape positionTextureVertex="+positionTextureVertex);
 		triList = new Modchu_TexturedTriangle[1];
 
 		for (int var24 = 0; var24 < var21; ++var24) {
-			vertexPositions[var24] = new PositionTextureVertex(var4[var24][0], var4[var24][1], var4[var24][2], 0.0F, 0.0F);
+			positionTextureVertex[var24] = Modchu_Reflect.newInstance("PositionTextureVertex", new Class[]{ float.class, float.class, float.class, float.class, float.class }, new Object[]{ var4[var24][0], var4[var24][1], var4[var24][2], 0.0F, 0.0F });
+			//Modchu_Debug.mDebug("ModchuModel_ModelPlateFreeShape positionTextureVertex["+var24+"]="+positionTextureVertex[var24]);
 		}
 
 		float[][] var27 = new float[3][2];
@@ -61,24 +61,19 @@ public class ModchuModel_ModelPlateFreeShape implements Modchu_IModelPlateFreeSh
 		var27[1][1] = (float)var3;
 		var27[2][0] = (float)var2;
 		var27[2][1] = (float)var3 + var23;
-		triList[0] = new Modchu_TexturedTriangle(vertexPositions, var5, vn, var7, 0.0F, 0.0F);
+		triList[0] = (Modchu_TexturedTriangle) Modchu_Reflect.newInstance("modchu.lib.characteristic.recompileonly.Modchu_TexturedTriangle", new Class[]{ Modchu_Reflect.loadClassArray("PositionTextureVertex"), float[][].class, float[][].class, float[].class, float.class, float.class }, new Object[]{ positionTextureVertex, var5, vn, var7, 0.0F, 0.0F });
+		//Modchu_Debug.mDebug("ModchuModel_ModelPlateFreeShape triList[0]="+triList[0]);
 
 		if (var1.mirror) {
 			for (var2 = 0; var2 < triList.length; ++var2) {
 				triList[var2].flipFace();
+				//Modchu_Debug.mDebug("ModchuModel_ModelPlateFreeShape triList["+var2+"]="+triList[var2]);
 			}
 		}
-
-		try {
-			Modchu_Reflect.setPrivateValue(ModelBox.class, this, 0, vertexPositions);
-			Modchu_Reflect.setPrivateValue(ModelBox.class, this, 1, triList);
-		} catch (Exception e) {
-		}
+		Modchu_AS.set(Modchu_AS.modelBoxVertexPositions, base, positionTextureVertex);
+		Modchu_AS.set(Modchu_AS.modelBoxQuadList, base, triList);
 	}
 
-	/**
-	 * Draw the six sided box defined by this ModelBox
-	 */
 	public void render(Object o, float f) {
 		for (int var3 = 0; var3 < triList.length; ++var3) {
 			Modchu_AS.set(Modchu_AS.texturedQuadDraw, triList[var3], o, f);
