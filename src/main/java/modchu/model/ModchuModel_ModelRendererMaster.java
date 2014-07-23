@@ -3,6 +3,7 @@ package modchu.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import modchu.lib.Modchu_Debug;
@@ -468,11 +469,25 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 		if (pRealBlock
 				&& skullFlag) {
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			String var6 = "";
+			Object var6 = null;
 			Object tagCompound = Modchu_AS.get(Modchu_AS.itemStackGetTagCompound, itemstack);
-			if (Modchu_AS.getBoolean(Modchu_AS.itemStackHasTagCompound, itemstack)
-					&& Modchu_AS.getBoolean(Modchu_AS.nbtTagCompoundHasKey, tagCompound, "SkullOwner")) {
-				var6 = Modchu_AS.getString(Modchu_AS.nbtTagCompoundGetString, tagCompound, "SkullOwner");
+			if (version > 172) {
+				if (Modchu_AS.getBoolean(Modchu_AS.itemStackHasTagCompound, itemstack)) {
+					if (Modchu_AS.getBoolean(Modchu_AS.nbtTagCompoundHasKey, tagCompound, "SkullOwner", 10)) {
+						var6 = Modchu_AS.get(Modchu_AS.nbtUtilFunc_152459_a, Modchu_AS.get(Modchu_AS.nbtTagCompoundGetCompoundTag, "SkullOwner"));
+					} else {
+						String s1 = Modchu_AS.getString(Modchu_AS.nbtTagCompoundGetString, tagCompound, "SkullOwner");
+						if (Modchu_AS.getBoolean(Modchu_AS.nbtTagCompoundHasKey, tagCompound, "SkullOwner", 8)
+							&& !Modchu_AS.getBoolean(Modchu_AS.stringUtilsIsNullOrEmpty, s1)) {
+							var6 = Modchu_Reflect.newInstance("com.mojang.authlib.GameProfile", new Class[]{ UUID.class, String.class }, new Object[]{ (UUID)null, s1 });
+						}
+					}
+				}
+			} else {
+				if (Modchu_AS.getBoolean(Modchu_AS.itemStackHasTagCompound, itemstack)
+						&& Modchu_AS.getBoolean(Modchu_AS.nbtTagCompoundHasKey, tagCompound, "SkullOwner")) {
+					var6 = Modchu_AS.getString(Modchu_AS.nbtTagCompoundGetString, tagCompound, "SkullOwner");
+				}
 			}
 			Modchu_AS.set(Modchu_AS.tileEntitySkullRendererSkullRendererRender, -0.5F, 0.0F, -0.5F, 1, 180.0F, itemDamage, var6);
 		} else
@@ -542,6 +557,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 
 	@Override
 	public boolean renderBlockDoublePlant(Object renderBlocks, Object blockDoublePlant, int i, double d, int x, int y, int z) {
+		//RenderBlocks.renderBlockDoublePlant
 		if (Modchu_Main.getMinecraftVersion() < 170) return false;
 		Object tessellator = Modchu_AS.get(Modchu_AS.tessellatorInstance);
 		Modchu_AS.set(Modchu_AS.tessellatorStartDrawingQuads, tessellator);
@@ -576,16 +592,18 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 			k1 = Modchu_AS.getInt(Modchu_AS.blockDoublePlantFunc_149890_d, i);
 		}
 
-		Object iicon;
+		Object iicon = null;
 		boolean flag = false;
 		for (int i1 = 0; i1 < 3; i1++) {
 			flag = i == 0 ? true : i1 > 1;
 			iicon = Modchu_AS.get(Modchu_AS.blockDoublePlantFunc_149888_a, blockDoublePlant, flag, i);
+			//Modchu_Debug.mDebug("2 iicon="+iicon);
 			Modchu_AS.set(Modchu_AS.renderBlocksDrawCrossedSquares, renderBlocks, iicon, -0.5D + (0.001D * i1), -0.25D + (0.5D * i1), -0.5D, 1.0F);
 		}
 		//Modchu_Debug.mDebug("iicon="+iicon);
 		//Modchu_Debug.mDebug("flag1="+flag1+" k1="+k1);
-		if (flag1 && k1 == 0) {
+		if (flag1 &&
+				k1 == 0) {
 			double x2 = -0.5D;
 			double y2 = 0.85D;
 			double z2 = -0.5D;
@@ -623,9 +641,94 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 			Modchu_AS.set(Modchu_AS.tessellatorAddVertexWithUV, tessellator, x2 + d11, y2 + 0.0D, z2 + d12, d5, d6);
 		}
 		Modchu_AS.set(Modchu_AS.tessellatorDraw, tessellator);
+
 		return true;
 	}
+/*
+	public boolean renderBlockDoublePlant(Object renderBlocks, Object blockDoublePlant, int i, double d, int x, int y, int z) {
+		Tessellator tessellator = Tessellator.instance;
+		tessellator.startDrawingQuads();
+		tessellator.setNormal(0.0F, -1.0F, 0.0F);
+		World theWorld = ((World) Modchu_AS.get(Modchu_AS.minecraftTheWorld));
+		int brightness = ((BlockDoublePlant) blockDoublePlant).getMixedBrightnessForBlock(theWorld, x, y + 2, z);
+		//Modchu_Debug.dDebug("brightness="+brightness);
+		tessellator.setBrightness(brightness);
 
+		int l = i != 2 && i != 3 ? ((BlockDoublePlant) blockDoublePlant).colorMultiplier(theWorld, x, y, z) : theWorld.getBiomeGenForCoords(x, z).getBiomeGrassColor(x, y, z);
+		//Modchu_Debug.dDebug("l="+l+" x="+x+" y="+y+" z="+z+" i="+i);
+		float f = (l >> 16 & 255) / 255.0F;
+		float f1 = (l >> 8 & 255) / 255.0F;
+		float f2 = (l & 255) / 255.0F;
+
+		if (EntityRenderer.anaglyphEnable) {
+			float f3 = (f * 30.0F + f1 * 59.0F + f2 * 11.0F) / 100.0F;
+			float f4 = (f * 30.0F + f1 * 70.0F) / 100.0F;
+			float f5 = (f * 30.0F + f2 * 70.0F) / 100.0F;
+			f = f3;
+			f1 = f4;
+			f2 = f5;
+		}
+		tessellator.setColorOpaque_F(f, f1, f2);
+
+		boolean flag1 = BlockDoublePlant.func_149887_c(i == 0 ? 8 : i);
+		int k1;
+
+		if (flag1) {
+			k1 = 0;
+		} else {
+			k1 = BlockDoublePlant.func_149890_d(i);
+		}
+
+		IIcon iicon;
+		boolean flag = false;
+		for (int i1 = 0; i1 < 3; i1++) {
+			flag = i == 0 ? true : i1 > 1;
+			iicon = ((BlockDoublePlant) blockDoublePlant).func_149888_a(flag, i);
+			((RenderBlocks) renderBlocks).drawCrossedSquares(iicon, -0.5D + (0.001D * i1), -0.25D + (0.5D * i1), -0.5D, 1.0F);
+		}
+		//Modchu_Debug.mDebug("iicon="+iicon);
+		//Modchu_Debug.mDebug("flag1="+flag1+" k1="+k1);
+		if (flag1 && k1 == 0) {
+			double x2 = -0.5D;
+			double y2 = 0.85D;
+			double z2 = -0.5D;
+			IIcon iicon1 = ((BlockDoublePlant) blockDoublePlant).sunflowerIcons[0];
+			double d2 = Math.cos(d * 0.8D) * Math.PI * 0.1D;
+			d2 = 1.5D;
+			double d3 = Math.cos(d2);
+			double d4 = Math.sin(d2);
+			double d5 = iicon1.getMinU();
+			double d6 = iicon1.getMinV();
+			double d7 = iicon1.getMaxU();
+			double d8 = iicon1.getMaxV();
+			double d9 = 0.3D;
+			double d10 = -0.05D;
+			double d11 = 0.5D + 0.3D * d3 - 0.5D * d4;
+			double d12 = 0.5D + 0.5D * d3 + 0.3D * d4;
+			double d13 = 0.5D + 0.3D * d3 + 0.5D * d4;
+			double d14 = 0.5D + -0.5D * d3 + 0.3D * d4;
+			double d15 = 0.5D + -0.05D * d3 + 0.5D * d4;
+			double d16 = 0.5D + -0.5D * d3 + -0.05D * d4;
+			double d17 = 0.5D + -0.05D * d3 - 0.5D * d4;
+			double d18 = 0.5D + 0.5D * d3 + -0.05D * d4;
+			tessellator.addVertexWithUV(x2 + d15, y2 + 1.0D, z2 + d16, d5, d8);
+			tessellator.addVertexWithUV(x2 + d17, y2 + 1.0D, z2 + d18, d7, d8);
+			tessellator.addVertexWithUV(x2 + d11, y2 + 0.0D, z2 + d12, d7, d6);
+			tessellator.addVertexWithUV(x2 + d13, y2 + 0.0D, z2 + d14, d5, d6);
+			IIcon iicon2 = ((BlockDoublePlant) blockDoublePlant).sunflowerIcons[1];
+			d5 = iicon2.getMinU();
+			d6 = iicon2.getMinV();
+			d7 = iicon2.getMaxU();
+			d8 = iicon2.getMaxV();
+			tessellator.addVertexWithUV(x2 + d17, y2 + 1.0D, z2 + d18, d5, d8);
+			tessellator.addVertexWithUV(x2 + d15, y2 + 1.0D, z2 + d16, d7, d8);
+			tessellator.addVertexWithUV(x2 + d13, y2 + 0.0D, z2 + d14, d7, d6);
+			tessellator.addVertexWithUV(x2 + d11, y2 + 0.0D, z2 + d12, d5, d6);
+		}
+		tessellator.draw();
+		return true;
+	}
+*/
 	@Override
 	public boolean renderDecoBlock(Object entityLiving, Object render, boolean pRealBlock, Object enumAction, float scale, int addSupport) {
 		//DecoBlock, FavBlock用描画

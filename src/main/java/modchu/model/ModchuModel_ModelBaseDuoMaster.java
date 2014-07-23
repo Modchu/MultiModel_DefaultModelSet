@@ -131,7 +131,7 @@ public class ModchuModel_ModelBaseDuoMaster implements Modchu_IModelBaseDuo {
 		//Modchu_Debug.mdDebug("transparency="+ModchuModel_ConfigData.transparency);
 		float f10 = ModchuModel_ConfigData.transparency;
 		//if (f10 <= 0.5F) f10 = 0.501F;
-/*
+
 		Object o = entityCaps.getCapsValue(entityCaps.caps_freeVariable, "itemArmorColorFloat"+base.renderParts);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		if (o != null) {
@@ -144,7 +144,7 @@ public class ModchuModel_ModelBaseDuoMaster implements Modchu_IModelBaseDuo {
 				return;
 			}
 		}
-*/
+
 		if (f10 != 1.0F)
 			GL11.glColor4f(f9, f9, f9, f10);
 		//GL11.glEnable(GL11.GL_ALPHA_TEST);
@@ -183,7 +183,7 @@ public class ModchuModel_ModelBaseDuoMaster implements Modchu_IModelBaseDuo {
 		}
 		float f10 = ModchuModel_ConfigData.transparency;
 		//if (f10 <= 0.5F) f10 = 0.501F;
-/*
+
 		Object o = entityCaps.getCapsValue(entityCaps.caps_freeVariable, "itemArmorColorFloat"+base.renderParts);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		if (o != null) {
@@ -196,7 +196,7 @@ public class ModchuModel_ModelBaseDuoMaster implements Modchu_IModelBaseDuo {
 				return;
 			}
 		}
-*/
+
 		if (f10 != 1.0F)
 			GL11.glColor4f(f9, f9, f9, f10);
 	}
@@ -204,6 +204,7 @@ public class ModchuModel_ModelBaseDuoMaster implements Modchu_IModelBaseDuo {
 	private void renderAfter(Object entity, float par2, float par3, float par4, float par5, float par6, float par7, ModchuModel_IModelCaps entityCaps, boolean isRendering) {
 		if (ModchuModel_ConfigData.transparency != 1.0F)
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		else GL11.glColor3f(1.0F, 1.0F, 1.0F);
 		//GL11.glColor4f(1.0F, 1.0F, 1.0F, ModchuModel_ConfigData.transparency);
 		//GL11.glDepthMask(true);
 		//GL11.glDepthMask(false);

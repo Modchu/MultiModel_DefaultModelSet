@@ -1,9 +1,13 @@
 package modchu.model;
 
+import java.util.ArrayList;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+
 import modchu.lib.Modchu_Debug;
 import modchu.lib.Modchu_Main;
-import modchu.lib.Modchu_Reflect;
-import modchu.model.ModchuModel_Main;
+import modchu.lib.characteristic.Modchu_Packet;
+import modchu.lib.characteristic.Modchu_PacketBasis;
 
 public class modc_ModchuModel {
 
@@ -34,14 +38,14 @@ public class modc_ModchuModel {
 	public boolean modEnabled() {
 		return true;
 	}
-/*
-	public boolean onTickInGame(float f, Object minecraft, byte by, Object... tickData) {
-		if (Modchu_Main.isServer) return false;
-		return ModchuModel_Main.onTickInGame(f, (Object) minecraft, by, tickData);
-	}
-*/
+
 	public void modsLoaded() {
 		ModchuModel_Main.modsLoaded();
+	}
+
+	public void worldEventLoad(Object event) {
+		Modchu_Debug.mDebug("modc_ModchuModel worldEventLoad");
+		ModchuModel_Main.worldEventLoad(event);
 	}
 
 	public String getPriorities() {
