@@ -17,7 +17,7 @@ public class ModchuModel_ModelBaseDuoMaster implements Modchu_IModelBaseDuo {
 
 	@Override
 	public boolean render(Object entity, float par2, float par3, float par4, float par5, float par6, float par7, ModchuModel_IModelCaps entityCaps, boolean isRendering) {
-		//GL11.glPushMatrix();
+		GL11.glPushMatrix();
 		renderBefore(entity, par2, par3, par4, par5, par6, par7, entityCaps, isRendering);
 		//boolean lri = (renderCount & 0x0f) == 0;
 		if (base.modelInner != null) {
@@ -26,6 +26,7 @@ public class ModchuModel_ModelBaseDuoMaster implements Modchu_IModelBaseDuo {
 					// 通常パーツ
 					if (base.isAlphablend) {
 						if (base.isModelAlphablend) {
+							GL11.glAlphaFunc(GL11.GL_GREATER, 0.0f);
 							GL11.glEnable(GL11.GL_ALPHA_TEST);
 							GL11.glEnable(GL11.GL_BLEND);
 							GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -35,11 +36,6 @@ public class ModchuModel_ModelBaseDuoMaster implements Modchu_IModelBaseDuo {
 					}
 					ModchuModel_Client.setTexture(base.textureInner[base.renderParts]);
 					base.modelInner.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
-					if (base.isAlphablend) {
-						if (base.isModelAlphablend) {
-							GL11.glDisable(GL11.GL_ALPHA_TEST);
-						}
-					}
 				}
 			} else {
 				// ほぼエンチャントエフェクト用
@@ -117,7 +113,7 @@ public class ModchuModel_ModelBaseDuoMaster implements Modchu_IModelBaseDuo {
 //		isAlphablend = false;
 		renderCount++;
 		renderAfter(entity, par2, par3, par4, par5, par6, par7, entityCaps, isRendering);
-		//GL11.glPopMatrix();
+		GL11.glPopMatrix();
 		return false;
 	}
 
@@ -133,7 +129,7 @@ public class ModchuModel_ModelBaseDuoMaster implements Modchu_IModelBaseDuo {
 		//if (f10 <= 0.5F) f10 = 0.501F;
 
 		Object o = entityCaps.getCapsValue(entityCaps.caps_freeVariable, "itemArmorColorFloat"+base.renderParts);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		//GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		if (o != null) {
 			float[] f0 = (float[]) o;
 			if (f0[0] > 0.0F
@@ -185,7 +181,7 @@ public class ModchuModel_ModelBaseDuoMaster implements Modchu_IModelBaseDuo {
 		//if (f10 <= 0.5F) f10 = 0.501F;
 
 		Object o = entityCaps.getCapsValue(entityCaps.caps_freeVariable, "itemArmorColorFloat"+base.renderParts);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		//GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		if (o != null) {
 			float[] f0 = (float[]) o;
 			if (f0[0] > 0.0F
