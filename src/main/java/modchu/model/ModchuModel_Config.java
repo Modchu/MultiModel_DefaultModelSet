@@ -16,8 +16,9 @@ import modchu.lib.Modchu_Config;
 import modchu.lib.Modchu_Debug;
 import modchu.lib.Modchu_Reflect;
 import modchu.lib.characteristic.Modchu_AS;
-import modchu.lib.characteristic.recompileonly.Modchu_CastHelper;
-import modchu.lib.characteristic.recompileonly.Modchu_ModelRenderer;
+import modchu.lib.characteristic.Modchu_CastHelper;
+import modchu.lib.characteristic.Modchu_ModelBase;
+import modchu.lib.characteristic.Modchu_ModelRenderer;
 import modchu.model.multimodel.base.MultiModelBaseBiped;
 import modchu.model.multimodel.base.MultiModelCustom;
 
@@ -77,7 +78,7 @@ public class ModchuModel_Config extends Modchu_Config {
 					}
 				}
 			} catch (Exception er) {
-				Modchu_Debug.lDebug("ModchuModel_Config", "saveParamater file="+ file.toString(), 2, er);
+				Modchu_Debug.lDebug("ModchuModel_Config saveParamater file="+ file.toString(), 2, er);
 				er.printStackTrace();
 			} finally {
 				try {
@@ -234,9 +235,32 @@ public class ModchuModel_Config extends Modchu_Config {
 				}
 			}
 		} catch (Exception ee) {
-			Modchu_Debug.lDebug("PFLM_Config", "loadShowModelList fail.", 2, ee);
+			Modchu_Debug.lDebug("PFLM_Config loadShowModelList fail.", 2, ee);
 			ee.printStackTrace();
 		}
+	}
+
+	public static ArrayList<String> loadConfigList(File file) {
+		// file読み込みArrayListで返す
+		BufferedReader breader = null;
+		ArrayList<String> list = new ArrayList();
+		try {
+			breader = new BufferedReader(new FileReader(file));
+			String rl;
+			for (int i = 0; (rl = breader.readLine()) != null && i < file.length(); i++) {
+				list.add(rl.toString());
+			}
+			return list;
+		} catch (Exception e) {
+			Modchu_Debug.lDebug("ModchuModel_Config loadConfigList"+ file.toString() +" load fail.", 2, e);
+			e.printStackTrace();
+		} finally {
+			try {
+				if (breader != null) breader.close();
+			} catch (Exception e) {
+			}
+		}
+		return null;
 	}
 
 	private static void addFailureShowModelList(String s) {
@@ -285,10 +309,12 @@ public class ModchuModel_Config extends Modchu_Config {
 		if (flag
 				| (getConfigShowPartsRenemeMapFlagString != null
 				&& !getConfigShowPartsRenemeMapFlagString.equals(s))) {
-			if (model instanceof MultiModelBaseBiped) {
+			Object o = ModchuModel_Main.getModelMaster(model);
+			MultiModelBaseBiped multiModelBaseBiped = o instanceof MultiModelBaseBiped ? (MultiModelBaseBiped) o : null;
+			if (multiModelBaseBiped != null) {
 				ModchuModel_ModelDataBase data = ModchuModel_ModelDataMaster.instance.getPlayerData(Modchu_AS.get(Modchu_AS.minecraftThePlayer));
-				((MultiModelBaseBiped) model).defaultPartsSettingBefore(data);
-				renemeMap = (ConcurrentHashMap<String, String>) data.getCapsValue(((MultiModelBaseBiped) model).caps_showPartsRenemeMap);
+				multiModelBaseBiped.defaultPartsSettingBefore(data);
+				renemeMap = (ConcurrentHashMap<String, String>) data.getCapsValue(multiModelBaseBiped.caps_showPartsRenemeMap);
 				if (renemeMap != null) {
 					setConfigShowPartsRenemeMap(model, s, i, renemeMap);
 					getConfigShowPartsRenemeMapFlagString = null;
@@ -341,12 +367,14 @@ public class ModchuModel_Config extends Modchu_Config {
 				| (getConfigShowPartsHideMapFlagString != null
 				&& !getConfigShowPartsHideMapFlagString.equals(s3))) {
 			Modchu_Debug.mDebug("getConfigShowPartsHideMap flag通過.");
-			if (model instanceof MultiModelBaseBiped) {
-				Modchu_Debug.mDebug("getConfigShowPartsHideMap MultiModelBaseBiped ok.");
+			Object o = ModchuModel_Main.getModelMaster(model);
+			MultiModelBaseBiped multiModelBaseBiped = o instanceof MultiModelBaseBiped ? (MultiModelBaseBiped) o : null;
+			if (multiModelBaseBiped != null) {
+				Modchu_Debug.mDebug("getConfigShowPartsHideMap multiModelBaseBiped ok.");
 				ModchuModel_ModelDataBase data = ModchuModel_ModelDataMaster.instance.getPlayerData(Modchu_AS.get(Modchu_AS.minecraftThePlayer));
-				((MultiModelBaseBiped) model).defaultPartsSettingBefore(data);
+				multiModelBaseBiped.defaultPartsSettingBefore(data);
 				List<String> hideList = null;
-				if (data != null) hideList = (List<String>) data.getCapsValue(((MultiModelBaseBiped) model).caps_showPartsHideList);
+				if (data != null) hideList = (List<String>) data.getCapsValue(multiModelBaseBiped.caps_showPartsHideList);
 				if (hideList != null) {
 					hideMap = new ConcurrentHashMap();
 					for(int i1 = 0; i1 < hideList.size(); i1++) {
@@ -360,7 +388,7 @@ public class ModchuModel_Config extends Modchu_Config {
 					Modchu_Debug.mDebug("getConfigShowPartsHideMap hideList == null !!");
 				}
 			} else {
-				Modchu_Debug.mDebug("getConfigShowPartsHideMap MultiModelBaseBiped false!!");
+				Modchu_Debug.mDebug("getConfigShowPartsHideMap Modchu_ModelBase false!!");
 			}
 			getConfigShowPartsHideMapFlagString = s3;
 		}
@@ -403,7 +431,8 @@ public class ModchuModel_Config extends Modchu_Config {
 			//Modchu_Debug.mDebug("getConfigShowPartsNemeMap containsKey ok. configShowPartsNemeMap.get(s1)="+configShowPartsNemeMap.get(s1));
 			return configShowPartsNemeMap.get(s1);
 		}
-		Object[] textureModel = ModchuModel_Main.modelNewInstance(null, s, true, false);
+		Object[] option = null;
+		Object[] textureModel = ModchuModel_Main.modelNewInstance(null, s, true, false, option);
 		if (textureModel != null) {
 			int i1 = 0;
 			switch(i) {

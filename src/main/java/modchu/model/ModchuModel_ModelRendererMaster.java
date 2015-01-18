@@ -7,19 +7,19 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import modchu.lib.Modchu_Debug;
+import modchu.lib.Modchu_EntityCapsHelper;
 import modchu.lib.Modchu_IModelRenderer;
 import modchu.lib.Modchu_Main;
 import modchu.lib.Modchu_ModelBox;
+import modchu.lib.Modchu_ModelRendererBase;
 import modchu.lib.Modchu_Reflect;
 import modchu.lib.characteristic.Modchu_AS;
-import modchu.lib.characteristic.recompileonly.Modchu_CastHelper;
-import modchu.lib.characteristic.recompileonly.Modchu_ModelPlateFreeShape;
-import modchu.lib.characteristic.recompileonly.Modchu_ModelRenderer;
-import modchu.lib.replace.Modchu_IModelCapsBase;
-import modchu.lib.replace.Modchu_ModelBoxBaseBase;
-import modchu.lib.replace.Modchu_ModelRendererBase;
-import modchu.lib.replacepoint.Modchu_ModelMultiReplacePoint;
-import modchu.lib.replacepoint.Modchu_ModelRendererReplacePoint;
+import modchu.lib.characteristic.Modchu_CastHelper;
+import modchu.lib.characteristic.Modchu_GlStateManager;
+import modchu.lib.characteristic.Modchu_IEntityCapsBase;
+import modchu.lib.characteristic.Modchu_ModelBoxBase;
+import modchu.lib.characteristic.Modchu_ModelPlateFreeShape;
+import modchu.lib.characteristic.Modchu_ModelRenderer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -49,7 +49,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 	private int textureOffsetY;
 	private boolean compiled = false;
 	private int displayList;
-	private Modchu_ModelMultiReplacePoint baseModel;
+	private Object baseModel;
 	public Modchu_ModelRenderer pearent;
 
 	//SmartMoving共通
@@ -89,7 +89,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 	public static float textureHeight;
 *///b173delete
 
-	public ModchuModel_ModelRendererMaster(Modchu_ModelRenderer renderBase, Modchu_ModelMultiReplacePoint modelBase, int i, int j, String s, Modchu_ModelRenderer modelRenderer) {
+	public ModchuModel_ModelRendererMaster(Modchu_ModelRenderer renderBase, Object modelBase, int i, int j, String s, Modchu_ModelRenderer modelRenderer) {
 		base = renderBase;
 		pearentBase = modelRenderer;
 		if (pearentBase != null) pearentBase.addChild(base);
@@ -153,14 +153,17 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 	}
 
 	@Override
-	public Modchu_ModelRenderer addCubeList(Object object) {
+	public Modchu_ModelRenderer addCubeList(Object o) {
 		if (upsideDownRotation) {
-			Modchu_ModelRenderer container = new Modchu_ModelRenderer(baseModel, textureOffsetX, textureOffsetY);
-			Modchu_Reflect.invokeMethod(container.cubeList.getClass(), "add", new Class[]{ Modchu_Reflect.getTopSuperClass(object) }, container.cubeList, new Object[]{ object });
-			//container.cubeList.add((ModchuModel_ModelBoxBaseBase) object);
-			addChild(container);
-		} else Modchu_Reflect.invokeMethod(base.cubeList.getClass(), "add", new Class[]{ Modchu_Reflect.getTopSuperClass(object) }, base.cubeList, new Object[]{ object });
-		//cubeList.add((ModchuModel_ModelBoxBaseBase) object);
+			Modchu_ModelRenderer modchu_ModelRenderer = new Modchu_ModelRenderer(baseModel, textureOffsetX, textureOffsetY);
+			Modchu_Reflect.invokeMethod(modchu_ModelRenderer.cubeList.getClass(), "add", new Class[]{ Modchu_Reflect.getTopSuperClass(o) }, modchu_ModelRenderer.cubeList, new Object[]{ o });
+			//container.cubeList.add((Modchu_ModelBoxBase) object);
+			addChild(modchu_ModelRenderer);
+		} else {
+			base.cubeList.add((Modchu_ModelBoxBase) o);
+			//Modchu_Debug.mDebug("ModchuModel_ModelRendererMaster addCubeList add o.getClass()="+o.getClass());
+			//Modchu_Reflect.invokeMethod(base.cubeList.getClass(), "add", new Class[]{ Modchu_Reflect.getTopSuperClass(o) }, base.cubeList, new Object[]{ o });
+		}
 		return base;
 	}
 
@@ -205,7 +208,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 		int tempTextureOffsetX = textureOffsetX;
 		int tempTextureOffsetY = textureOffsetY;
 		setTextureOffset(Modchu_AS.getInt(Modchu_AS.textureOffsetTextureOffsetX, textureOffset), Modchu_AS.getInt(Modchu_AS.textureOffsetTextureOffsetY, textureOffset));
-		addCubeList(((Modchu_ModelBoxBaseBase) base.superGetModelBoxBase(pModelBoxBase, getArg(pArg))).setBoxName(pName));
+		addCubeList(((Modchu_ModelBoxBase) base.superGetModelBoxBase(pModelBoxBase, getArg(pArg))).setBoxName(pName));
 		setTextureOffset(tempTextureOffsetX, tempTextureOffsetY);
 		return base;
 	}
@@ -238,14 +241,12 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 
 	@Override
 	public Object getModelBoxBaseObject(Class pModelBoxBase, Object... pArg) {
-		Object o = Modchu_Reflect.newInstance(pModelBoxBase, new Class[]{ Modchu_ModelRendererReplacePoint.class, Object[].class }, new Object[]{ base, pArg });
-/*
+		Object o = Modchu_Reflect.newInstance(pModelBoxBase, new Class[]{ Modchu_ModelRendererBase.class, Object[].class }, new Object[]{ base, pArg });
 		if (o != null) ;else {
-			Modchu_Debug.mDebug("getModelBoxBaseObject null !! pModelBoxBase="+pModelBoxBase);
+			Modchu_Debug.mDebug1("getModelBoxBaseObject null !! pModelBoxBase="+pModelBoxBase);
 		}
-*/
 		return o;
-		//return Modchu_Reflect.newInstance(pModelBoxBase, new Class[]{ Modchu_ModelRendererReplacePoint.class, Object[].class }, new Object[]{ base, pArg });
+		//return Modchu_Reflect.newInstance(pModelBoxBase, new Class[]{ Modchu_ModelRendererBase.class, Object[].class }, new Object[]{ base, pArg });
 	}
 
 	@Override
@@ -305,54 +306,59 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 	}
 
 	@Override
-	public void renderItemsHead(Modchu_ModelMultiReplacePoint pModelMulti, ModchuModel_IModelCaps entityCaps, float scale, int addSupport) {
-		Object itemStack = entityCaps.getCapsValue(Modchu_IModelCapsBase.caps_HeadMount);
-		Object entity = entityCaps.getCapsValue(Modchu_IModelCapsBase.caps_Entity);
+	public void renderItemsHead(Object pModelMulti, Modchu_IEntityCapsBase entityCaps, float scale, int addSupport) {
+		Object itemStack = entityCaps.getCapsValue(Modchu_IEntityCapsBase.caps_HeadMount);
+		Object entity = entityCaps.getCapsValue(Modchu_IEntityCapsBase.caps_Entity);
 
-		renderItems(entity, pModelMulti.render, true, null, itemStack, scale, addSupport);
+		renderItems(entity, true, null, itemStack, scale, addSupport, Modchu_Main.getMinecraftVersion() > 179 ? Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeHEAD) : null);
 	}
 
 	@Override
-	public void renderItemsHead(Modchu_ModelMultiReplacePoint pModelMulti, ModchuModel_IModelCaps entityCaps, Object itemStack, float scale, int addSupport) {
-		Object entity = entityCaps.getCapsValue(Modchu_IModelCapsBase.caps_Entity);
+	public void renderItemsHead(Object pModelMulti, Modchu_IEntityCapsBase entityCaps, Object itemStack, float scale, int addSupport) {
+		Object entity = entityCaps.getCapsValue(Modchu_IEntityCapsBase.caps_Entity);
 
-		renderItems(entity, pModelMulti.render, true, null, itemStack, scale, addSupport);
+		renderItems(entity, true, null, itemStack, scale, addSupport, Modchu_Main.getMinecraftVersion() > 179 ? Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeHEAD) : null);
 	}
 
 	@Override
-	public boolean renderItems(Modchu_ModelMultiReplacePoint pModelMulti, ModchuModel_IModelCaps entityCaps, boolean pRealBlock, int pIndex) {
-		Object[] itemstacks = Modchu_CastHelper.ObjectArray(ModchuModel_ModelCapsHelper.getCapsValue(entityCaps, Modchu_IModelCapsBase.caps_Items));
+	public boolean renderItems(Object pModelMulti, Modchu_IEntityCapsBase entityCaps, boolean pRealBlock, int pIndex) {
+		Object[] itemstacks = Modchu_CastHelper.ObjectArray(Modchu_EntityCapsHelper.getCapsValue(entityCaps, Modchu_IEntityCapsBase.caps_Items));
 		if (itemstacks == null) return false;
-		Object[] enumActions = Modchu_CastHelper.ObjectArray(ModchuModel_ModelCapsHelper.getCapsValue(entityCaps, Modchu_IModelCapsBase.caps_Actions));
-		Object entity = entityCaps.getCapsValue(Modchu_IModelCapsBase.caps_Entity);
+		Object[] enumActions = Modchu_CastHelper.ObjectArray(Modchu_EntityCapsHelper.getCapsValue(entityCaps, Modchu_IEntityCapsBase.caps_Actions));
+		Object entity = entityCaps.getCapsValue(Modchu_IEntityCapsBase.caps_Entity);
 
-		renderItems(entity, pModelMulti.render, pRealBlock, enumActions[pIndex], itemstacks[pIndex]);
+		renderItems(entity, pRealBlock, enumActions[pIndex], itemstacks[pIndex]);
 		return true;
 	}
 
 	@Override
-	public void renderItems(Object entityLiving, Object render, boolean pRealBlock, Object enumAction, Object itemStack, float scale, int addSupport) {
+	public void renderItems(Object entityLiving, boolean pRealBlock, Object enumAction, Object itemStack, float scale, int addSupport, Enum type) {
 		if (entityLiving != null) ;else return;
 		itemstack = itemStack;
 		switch (addSupport) {
 		case 0:
 		case 1:
 		case 2:
-			renderDecoBlock(entityLiving, render, pRealBlock, enumAction, scale, addSupport);
+			renderDecoBlock(entityLiving, pRealBlock, enumAction, scale, addSupport);
 			return;
 		}
-		renderItems(entityLiving, render, pRealBlock, enumAction, itemStack, scale);
+		renderItems(entityLiving, pRealBlock, enumAction, itemStack, scale, type);
 	}
 
 	@Override
-	public void renderItems(Object entityLiving, Object render, boolean pRealBlock, Object enumAction, Object itemStack) {
+	public void renderItems(Object entityLiving, boolean pRealBlock, Object enumAction, Object itemStack) {
 		if (entityLiving != null) ;else return;
 		itemstack = itemStack;
-		renderItems(entityLiving, render, pRealBlock, enumAction, itemStack, 1.0F);
+		renderItems(entityLiving, pRealBlock, enumAction, itemStack, 1.0F);
 	}
 
 	@Override
-	public void renderItems(Object entityLiving, Object render, boolean pRealBlock, Object enumAction, Object itemstack, float scale) {
+	public void renderItems(Object entityLiving, boolean pRealBlock, Object enumAction, Object itemstack, float scale) {
+		renderItems(entityLiving, pRealBlock, enumAction, itemstack, scale, Modchu_Main.getMinecraftVersion() > 179 ? Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeTHIRD_PERSON) : null);
+	}
+
+	@Override
+	public void renderItems(Object entityLiving, boolean pRealBlock, Object enumAction, Object itemstack, float scale, Enum type) {
 		if (itemstack != null
 				&& entityLiving != null) ;else {
 			//if (itemstack != null) ;else Modchu_Debug.mDebug("renderItems itemstack == null.");
@@ -360,22 +366,211 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 			//if (render != null) ;else Modchu_Debug.mDebug("renderItems render == null.");
 			return;
 		}
-		if (render != null) ;else {
-			render = Modchu_AS.get(Modchu_AS.render, baseModel);
-			if (render != null) ;else render = entityLiving != null ? Modchu_AS.get(Modchu_AS.renderManagerGetEntityRenderObject, entityLiving) : null;
-			//if (render != null) Modchu_AS.set(Modchu_AS.setRender, baseModel, render);
-			if (render != null) ;else return;
+		int version = Modchu_Main.getMinecraftVersion();
+		if (version < 180) {
+			oldRenderItems(entityLiving, pRealBlock, enumAction, itemstack, scale);
+			return;
 		}
+		Object render = Modchu_Main.getRender(entityLiving);
+		if (render != null) ;else return;
 		// アイテムのレンダリング
-		GL11.glPushMatrix();
+		Modchu_GlStateManager.pushMatrix();
+		Object item = Modchu_AS.get(Modchu_AS.itemStackGetItem, itemstack);
+		Object block = Modchu_AS.get(Modchu_AS.getBlockItemStack, itemstack);
+		boolean skullFlag = Modchu_AS.getBoolean(Modchu_AS.isSkull, item);
+		// アイテムの種類による表示位置の補正
+		boolean isChild = Modchu_AS.getBoolean(Modchu_AS.entityLivingBaseIsChild, entityLiving);
+		if (type == Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeHEAD)) {
+			boolean flag = Modchu_Reflect.loadClass("EntityVillager").isInstance(entityLiving)
+					| Modchu_Reflect.loadClass("EntityZombie").isInstance(entityLiving)
+					&& Modchu_AS.getBoolean(Modchu_AS.entityZombieIsVillager, entityLiving);
+			float f7;
+			if (!flag
+					&& isChild) {
+				f7 = 2.0F;
+				float f8 = 1.4F;
+				Modchu_GlStateManager.scale(f8 / f7, f8 / f7, f8 / f7);
+				if (base.adjust) Modchu_GlStateManager.translate(0.0F, 16.0F * 0.0625F, 0.0F);
+			}
+			Modchu_GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+
+			if (Modchu_Reflect.loadClass("ItemBlock").isInstance(item)) {
+				Modchu_GlStateManager.enableCull();
+				if (Modchu_AS.getBoolean(Modchu_AS.isCamouflage, block)) Modchu_GlStateManager.disableAlpha();
+				//Modchu_AS.set(Modchu_AS.renderManagerItemRendererRenderItem, entityLiving, itemstack, type);
+				Object blockRendererDispatcher = Modchu_AS.get(Modchu_AS.minecraftGetBlockRendererDispatcher);
+				Modchu_AS.set(Modchu_AS.renderBindTexture, render, Modchu_AS.get(Modchu_AS.textureMapLocationBlocksTexture));
+				int metadata = Modchu_AS.getInt(Modchu_AS.itemGetMetadata, item, Modchu_AS.getInt(Modchu_AS.itemStackGetMetadata, itemstack));
+				//Modchu_Debug.mDebug("renderItems metadata="+metadata);
+				//Modchu_Debug.mDebug("renderItems block.getClass()="+block.getClass());
+
+				Object theWorld = Modchu_AS.get(Modchu_AS.minecraftTheWorld);
+				double posX = Modchu_AS.getDouble(Modchu_AS.entityPosX);
+				double posY = Modchu_AS.getDouble(Modchu_AS.entityPosY);
+				double posZ = Modchu_AS.getDouble(Modchu_AS.entityPosZ);
+				int i1 = Modchu_AS.getInt(Modchu_AS.blockColorMultiplier, block, theWorld, Modchu_AS.get(Modchu_AS.newBlockPos, posX, posY, posZ), 0);
+				//Modchu_Debug.mDebug("renderItems i1="+i1);
+				if (Modchu_AS.getBoolean(Modchu_AS.entityRendererAnaglyphEnable)) i1 = Modchu_AS.getInt(Modchu_AS.textureUtilAnaglyphColor, i1);
+				float r = (float)(i1 >> 16 & 255) / 255.0F;
+				float g = (float)(i1 >> 8 & 255) / 255.0F;
+				float b = (float)(i1 & 255) / 255.0F;
+				Modchu_GlStateManager.color(r, g, b, 1.0F);
+				//Modchu_Debug.mDebug("renderItems r="+r+" g="+g+" b="+b);
+
+				if (Modchu_Reflect.loadClass("ItemDoublePlant").isInstance(item)) {
+					scale = scale * 1.1875F * 1.3F;
+					Modchu_GlStateManager.scale(scale, scale, scale);
+					f7 = 0.625F;
+					Modchu_GlStateManager.scale(f7, -f7, -f7);
+					if (flag) {
+						if (base.adjust) Modchu_GlStateManager.translate(0.0F, 0.1875F, 0.0F);
+					}
+					if (metadata == 0) {
+						try {
+							Object iBlockState = Modchu_AS.get(Modchu_AS.iBlockStateWithProperty, block, Modchu_AS.get(Modchu_AS.blockDoublePlantHALF), Modchu_Reflect.getEnum("net.minecraft.block.BlockDoublePlant$EnumBlockHalf", "LOWER"));
+							iBlockState = Modchu_AS.get(Modchu_AS.iBlockStateWithProperty, iBlockState, Modchu_AS.get(Modchu_AS.blockDoublePlantVARIANT), Modchu_Reflect.getEnum("net.minecraft.block.BlockDoublePlant$EnumPlantType", "SUNFLOWER"));
+							Modchu_GlStateManager.rotate(90F, 0.0F, 1.0F, 0.0F);
+							if (base.adjust) Modchu_GlStateManager.translate(-0.5F, 0.0F, 0.5F);
+							blockRender(block, iBlockState, 1.0F, true);
+							if (base.adjust) Modchu_GlStateManager.translate(0.0F, 0.8F, 1.0F);
+							//Modchu_GlStateManager.rotate(-180.0F, 0.0F, 1.0F, 0.0F);
+							iBlockState = Modchu_AS.get(Modchu_AS.iBlockStateWithProperty, block, Modchu_AS.get(Modchu_AS.blockDoublePlantHALF), (Comparable) Modchu_Reflect.getEnum("net.minecraft.block.BlockDoublePlant$EnumBlockHalf", "UPPER"));
+							blockRender(block, iBlockState, 1.0F, true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					} else {
+						Object iBlockState = Modchu_AS.get(Modchu_AS.iBlockStateWithProperty, block, Modchu_AS.get(Modchu_AS.blockDoublePlantHALF), Modchu_Reflect.getEnum("net.minecraft.block.BlockDoublePlant$EnumBlockHalf", "LOWER"));
+						iBlockState = Modchu_AS.get(Modchu_AS.iBlockStateWithProperty, iBlockState, Modchu_AS.get(Modchu_AS.blockDoublePlantVARIANT), Modchu_Reflect.getEnum("net.minecraft.block.BlockDoublePlant$EnumPlantType", metadata, 1));
+						if (base.adjust) Modchu_GlStateManager.translate(-0.55F, 0.0F, 0.5F);
+						blockRender(block, iBlockState, 1.0F, true);
+						//Modchu_GlStateManager.rotate(90F, 0.0F, 1.0F, 0.0F);
+						if (base.adjust) Modchu_GlStateManager.translate(0.0F, 0.8F, 1.0F);
+						//Modchu_GlStateManager.rotate(-180.0F, 0.0F, 1.0F, 0.0F);
+						blockRender(block, iBlockState, 1.0F, true);
+					}
+				} else {
+					scale = scale * 1.1875F;
+					Modchu_GlStateManager.scale(scale, scale, scale);
+					if (base.adjust) {
+						if (Modchu_AS.getBoolean(Modchu_AS.isPlanter, block)) {
+							Modchu_GlStateManager.translate(-0.26F, 0.0F, 0.4F);
+							Modchu_GlStateManager.rotate(12F, 0F, 1F, 0);
+						} else {
+							Modchu_GlStateManager.translate(-0.32F, 0F, 0.3F);
+						}
+					}
+					Modchu_GlStateManager.rotate(90.0F, 0.0F, 1.0F, 0.0F);
+					f7 = 0.625F;
+					Modchu_GlStateManager.scale(f7, -f7, -f7);
+					if (flag) {
+						if (base.adjust) Modchu_GlStateManager.translate(0.0F, 0.1875F, 0.0F);
+					}
+
+					Object iBlockState = Modchu_AS.get(Modchu_AS.blockGetStateFromMeta, block, metadata);
+					if (iBlockState != null) ;else iBlockState = Modchu_AS.get(Modchu_AS.blockGetDefaultState, block);
+					//Modchu_Debug.mDebug("renderItems iBlockState="+iBlockState);
+					blockRender(block, iBlockState, 1.0F, true);
+				}
+			} else if (Modchu_AS.get(Modchu_AS.getItem, "skull").getClass().isInstance(item)) {
+				f7 = 1.1875F;
+				Modchu_GlStateManager.scale(f7, -f7, -f7);
+				if (flag) {
+					if (base.adjust) Modchu_GlStateManager.translate(0.0F, 0.0625F, 0.0F);
+				}
+				Object gameprofile = null;
+				if (Modchu_AS.getBoolean(Modchu_AS.itemStackHasTagCompound, itemstack)) {
+					Object nbttagcompound = Modchu_AS.get(Modchu_AS.itemStackGetTagCompound, itemstack);
+					if (Modchu_AS.getBoolean(Modchu_AS.nbtTagCompoundHasKey, "SkullOwner", 10)) {
+						gameprofile = Modchu_AS.get(Modchu_AS.nbtUtilReadGameProfileFromNBT, Modchu_AS.get(Modchu_AS.nbtTagCompoundGetCompoundTag, nbttagcompound, "SkullOwner"));
+					} else if (Modchu_AS.getBoolean(Modchu_AS.nbtTagCompoundHasKey, nbttagcompound, "SkullOwner", 8)) {
+						gameprofile = Modchu_AS.get(Modchu_AS.tileEntitySkullUpdateGameprofile, Modchu_Reflect.newInstance("GameProfile", new Class[]{ UUID.class, String.class }, new Object[]{ (UUID)null, Modchu_AS.get(Modchu_AS.nbtTagCompoundGetString, nbttagcompound, "SkullOwner") }));
+						Modchu_AS.set(Modchu_AS.nbtTagCompoundSetTag, nbttagcompound, "SkullOwner", Modchu_AS.get(Modchu_AS.nBTUtilWriteGameProfile, Modchu_Reflect.newInstance("NBTTagCompound"), gameprofile));
+					}
+				}
+				Modchu_GlStateManager.scale(scale, scale, scale);
+				Modchu_AS.set(Modchu_AS.tileEntitySkullRendererRenderSkull, -0.5F, 0.0F, -0.5F, Modchu_AS.getEnum(Modchu_AS.enumFacingUP), 180.0F, Modchu_AS.get(Modchu_AS.itemStackGetMetadata, itemstack), gameprofile, -1);
+			}
+			renderItemsEndSetting();
+			return;
+		} else {
+			if (base.adjust) Modchu_GlStateManager.translate(0.075F, -0.5F, 0.2F);
+			if (isChild) {
+				float f7 = 0.5F;
+				if (base.adjust) Modchu_GlStateManager.translate(0.0F, 0.625F, 0.0F);
+				Modchu_GlStateManager.rotate(-20.0F, -1.0F, 0.0F, 0.0F);
+				Modchu_GlStateManager.scale(f7, f7, f7);
+			}
+			if (base.adjust) Modchu_GlStateManager.translate(-0.0625F, 0.4375F, 0.0625F);
+			if (Modchu_Reflect.loadClass("EntityPlayer").isInstance(entityLiving)
+					&& Modchu_AS.get(Modchu_AS.entityPlayerFishEntity, entityLiving) != null) itemstack = Modchu_Reflect.newInstance("ItemStack", new Class[]{}, new Object[]{ Modchu_AS.get(Modchu_AS.getItem, "fishing_rod"), 0 });
+			if (Modchu_Reflect.loadClass("ItemBlock").isInstance(item)) {
+				int renderType = Modchu_AS.getInt(Modchu_AS.blockGetRenderType, Modchu_AS.get(Modchu_AS.blockGetBlockFromItem, item));
+				//Modchu_Debug.mDebug("renderItems renderType="+renderType);
+				if (renderType == 2) {
+					if (base.adjust) Modchu_GlStateManager.translate(0.0F, 0.1875F, -0.3125F);
+					Modchu_GlStateManager.rotate(20.0F, 1.0F, 0.0F, 0.0F);
+					Modchu_GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
+					float f8 = 0.375F;
+					Modchu_GlStateManager.scale(-f8, -f8, f8);
+				} else {
+					if (base.adjust) Modchu_GlStateManager.translate(0.0F, 0.1F, 0.0F);
+				}
+			}
+			if (skullFlag) {
+				if (base.adjust) Modchu_GlStateManager.translate(0.0F, 0.1F, 0.0F);
+			}
+		}
+		int itemDamage = Modchu_AS.getInt(Modchu_AS.itemStackGetItemDamage, itemstack);
+		// アイテムに色付け
+		int renderPasses = Modchu_AS.getBoolean(Modchu_AS.itemRequiresMultipleRenderPasses, item) ? 1 : 0;
+		type = Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeTHIRD_PERSON);
+		Modchu_GlStateManager.scale(scale, scale, scale);
+		for (int j = 0; j <= renderPasses; j++) {
+			if (!ModchuModel_Main.isSSP
+					| renderPasses > 0) {
+				int k = Modchu_AS.getInt(Modchu_AS.itemGetColorFromItemStack, item, itemstack, j);
+				float f15 = (k >> 16 & 0xff) / 255F;
+				float f17 = (k >> 8 & 0xff) / 255F;
+				float f19 = (k & 0xff) / 255F;
+				Modchu_GlStateManager.color(f15, f17, f19, 1.0F);
+			}
+			Modchu_AS.set(Modchu_AS.renderManagerItemRendererRenderItem, entityLiving, itemstack, version > 179 ? type : j);
+			//render.renderManager.itemRenderer.renderItem(entityLiving, itemstack, j);
+		}
+		renderItemsEndSetting();
+	}
+
+	private void renderItemsEndSetting() {
+		Modchu_GlStateManager.disableCull();
+		Modchu_GlStateManager.enableAlpha();
+		Modchu_GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		Modchu_GlStateManager.popMatrix();
+	}
+
+	public void blockRender(Object block, Object iBlockState, float f, boolean b) {
+		if (Modchu_Main.getMinecraftVersion() < 180) return;
+		Object blockRendererDispatcher = Modchu_AS.get(Modchu_AS.minecraftGetBlockRendererDispatcher);
+		int i = Modchu_AS.getInt(Modchu_AS.blockGetRenderType, block);
+		if (i == 3) {
+			Object iBakedModel = Modchu_AS.get(Modchu_AS.blockRendererDispatcherGetBakedModel, blockRendererDispatcher, iBlockState, null);
+			Modchu_AS.set(Modchu_AS.blockModelRendererRenderModelBrightness, Modchu_AS.get(Modchu_AS.blockRendererDispatcherGetBlockModelRenderer, blockRendererDispatcher), iBakedModel, iBlockState, f, b);
+		} else {
+			Modchu_AS.set(Modchu_AS.blockRendererDispatcherRenderBlockBrightness, blockRendererDispatcher, iBlockState, f);
+		}
+	}
+
+	private void oldRenderItems(Object entityLiving, boolean pRealBlock, Object enumAction, Object itemstack, float scale) {
+		Object render = Modchu_Main.getRender(entityLiving);
+		if (render != null) ;else return;
+		// アイテムのレンダリング
+		Modchu_GlStateManager.pushMatrix();
 		int version = Modchu_Main.getMinecraftVersion();
 		Object item = Modchu_AS.get(Modchu_AS.itemStackGetItem, itemstack);
 		Object block = Modchu_AS.get(Modchu_AS.getBlockItemStack, itemstack);
 		boolean skullFlag = Modchu_AS.getBoolean(Modchu_AS.isSkull, item);
 		// アイテムの種類による表示位置の補正
 		if (base.adjust) {
-//			GL11.glTranslatef(-0.0625F, 0.4375F, 0.0625F);
-
 			float sx = scale;
 			float sy = scale;
 			float sz = scale;
@@ -386,20 +581,20 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 					sx = scale;
 					sy = -scale;
 					sz = -scale;
-					GL11.glScalef(sx, sy, sz);
+					Modchu_GlStateManager.scale(sx, sy, sz);
 				} else {
 					float f2 = 0.625F;
 					scale = f2 * scale;
-					GL11.glTranslatef(0F, -scale * 0.495F, 0F);
+					Modchu_GlStateManager.translate(0F, -scale * 0.495F, 0F);
 					if (Modchu_AS.getBoolean(Modchu_AS.isPlanter, block)) {
-						GL11.glRotatef(12F, 0F, 1F, 0);
+						Modchu_GlStateManager.rotate(12F, 0F, 1F, 0);
 					} else {
 //-@-125
-						GL11.glRotatef(90F, 0.0F, 1.0F, 0.0F);
+						Modchu_GlStateManager.rotate(90F, 0.0F, 1.0F, 0.0F);
 //@-@125
-						// 125deleteGL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
+						// 125deleteModchu_GlStateManager.rotate(180F, 0.0F, 1.0F, 0.0F);
 					}
-					GL11.glScalef(scale, -scale, -scale);
+					Modchu_GlStateManager.scale(scale, -scale, -scale);
 				}
 			} else {
 				float var6;
@@ -419,48 +614,48 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 						&& block != null
 						&& Modchu_AS.getBoolean(Modchu_AS.renderBlocksRenderItemIn3d, Modchu_AS.get(Modchu_AS.blockGetRenderType, block))) {
 					var6 = 0.5F;
-//					GL11.glTranslatef(0.0F, 0.1875F, -0.3125F);
-					GL11.glTranslatef(0.0F, 0.1875F, -0.2125F);
+//					Modchu_GlStateManager.translate(0.0F, 0.1875F, -0.3125F);
+					Modchu_GlStateManager.translate(0.0F, 0.1875F, -0.2125F);
 					var6 *= 0.75F;
-					GL11.glRotatef(20.0F, 1.0F, 0.0F, 0.0F);
-					GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
-					GL11.glScalef(var6, -var6, var6);
+					Modchu_GlStateManager.rotate(20.0F, 1.0F, 0.0F, 0.0F);
+					Modchu_GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
+					Modchu_GlStateManager.scale(var6, -var6, var6);
 				} else if (Modchu_Reflect.loadClass("ItemBow").isInstance(item)) {
 					var6 = 0.625F;
-					GL11.glTranslatef(-0.05F, 0.125F, 0.3125F);
-					GL11.glRotatef(-20.0F, 0.0F, 1.0F, 0.0F);
-					GL11.glScalef(var6, -var6, var6);
-					GL11.glRotatef(-100.0F, 1.0F, 0.0F, 0.0F);
-					GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
+					Modchu_GlStateManager.translate(-0.05F, 0.125F, 0.3125F);
+					Modchu_GlStateManager.rotate(-20.0F, 0.0F, 1.0F, 0.0F);
+					Modchu_GlStateManager.scale(var6, -var6, var6);
+					Modchu_GlStateManager.rotate(-100.0F, 1.0F, 0.0F, 0.0F);
+					Modchu_GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
 				} else if (Modchu_AS.getBoolean(Modchu_AS.itemIsFull3D, item)) {
 					var6 = 0.625F;
 
 					if (Modchu_AS.getBoolean(Modchu_AS.itemShouldRotateAroundWhenRendering, item)) {
-						GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
-						GL11.glTranslatef(0.0F, -0.125F, 0.0F);
+						Modchu_GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
+						Modchu_GlStateManager.translate(0.0F, -0.125F, 0.0F);
 					}
 
 					if (enumAction == Modchu_AS.getEnum(Modchu_AS.enumActionBlock)) {
-						GL11.glTranslatef(0.05F, 0.0F, -0.1F);
-						GL11.glRotatef(-50.0F, 0.0F, 1.0F, 0.0F);
-						GL11.glRotatef(-10.0F, 1.0F, 0.0F, 0.0F);
-						GL11.glRotatef(-60.0F, 0.0F, 0.0F, 1.0F);
+						Modchu_GlStateManager.translate(0.05F, 0.0F, -0.1F);
+						Modchu_GlStateManager.rotate(-50.0F, 0.0F, 1.0F, 0.0F);
+						Modchu_GlStateManager.rotate(-10.0F, 1.0F, 0.0F, 0.0F);
+						Modchu_GlStateManager.rotate(-60.0F, 0.0F, 0.0F, 1.0F);
 					}
 
-					GL11.glTranslatef(0.0F, 0.1875F, 0.1F);
-					GL11.glScalef(var6, -var6, var6);
-					GL11.glRotatef(-100.0F, 1.0F, 0.0F, 0.0F);
-					GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
+					Modchu_GlStateManager.translate(0.0F, 0.1875F, 0.1F);
+					Modchu_GlStateManager.scale(var6, -var6, var6);
+					Modchu_GlStateManager.rotate(-100.0F, 1.0F, 0.0F, 0.0F);
+					Modchu_GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
 				} else {
 					var6 = 0.375F;
-					GL11.glTranslatef(0.15F, 0.15F, -0.05F);
-					//	GL11.glTranslatef(0.25F, 0.1875F, -0.1875F);
-					GL11.glScalef(var6, var6, var6);
-					GL11.glRotatef(60.0F, 0.0F, 0.0F, 1.0F);
-					GL11.glRotatef(-90.0F, 1.0F, 0.0F, 0.0F);
-					GL11.glRotatef(20.0F, 0.0F, 0.0F, 1.0F);
+					Modchu_GlStateManager.translate(0.15F, 0.15F, -0.05F);
+					//	Modchu_GlStateManager.translate(0.25F, 0.1875F, -0.1875F);
+					Modchu_GlStateManager.scale(var6, var6, var6);
+					Modchu_GlStateManager.rotate(60.0F, 0.0F, 0.0F, 1.0F);
+					Modchu_GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
+					Modchu_GlStateManager.rotate(20.0F, 0.0F, 0.0F, 1.0F);
 				}
-				GL11.glScalef(sx, sy, sz);
+				Modchu_GlStateManager.scale(sx, sy, sz);
 			}
 		}
 //-@-132
@@ -468,13 +663,13 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 		//Modchu_Debug.mDebug("renderItems pRealBlock="+pRealBlock+" skullFlag="+skullFlag);
 		if (pRealBlock
 				&& skullFlag) {
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			Modchu_GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			Object var6 = null;
 			Object tagCompound = Modchu_AS.get(Modchu_AS.itemStackGetTagCompound, itemstack);
 			if (version > 172) {
 				if (Modchu_AS.getBoolean(Modchu_AS.itemStackHasTagCompound, itemstack)) {
 					if (Modchu_AS.getBoolean(Modchu_AS.nbtTagCompoundHasKey, tagCompound, "SkullOwner", 10)) {
-						var6 = Modchu_AS.get(Modchu_AS.nbtUtilFunc_152459_a, Modchu_AS.get(Modchu_AS.nbtTagCompoundGetCompoundTag, "SkullOwner"));
+						var6 = Modchu_AS.get(Modchu_AS.nbtUtilReadGameProfileFromNBT, Modchu_AS.get(Modchu_AS.nbtTagCompoundGetCompoundTag, "SkullOwner"));
 					} else {
 						String s1 = Modchu_AS.getString(Modchu_AS.nbtTagCompoundGetString, tagCompound, "SkullOwner");
 						if (Modchu_AS.getBoolean(Modchu_AS.nbtTagCompoundHasKey, tagCompound, "SkullOwner", 8)
@@ -489,7 +684,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 					var6 = Modchu_AS.getString(Modchu_AS.nbtTagCompoundGetString, tagCompound, "SkullOwner");
 				}
 			}
-			Modchu_AS.set(Modchu_AS.tileEntitySkullRendererSkullRendererRender, -0.5F, 0.0F, -0.5F, 1, 180.0F, itemDamage, var6);
+			Modchu_AS.set(Modchu_AS.tileEntitySkullRendererRenderSkull, -0.5F, 0.0F, -0.5F, 1, 180.0F, itemDamage, var6);
 		} else
 //@-@132
 		if (pRealBlock
@@ -509,7 +704,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 			if (BlockDoublePlant != null
 					&& BlockDoublePlant.isInstance(block)) {
 				float f1 = 1.8F;
-				GL11.glScalef(f1, f1, f1);
+				Modchu_GlStateManager.scale(f1, f1, f1);
 				int x = (int) Modchu_AS.getDouble(Modchu_AS.entityPosX, entityLiving);
 				int y = (int) Modchu_AS.getDouble(Modchu_AS.entityPosY, entityLiving);
 				int z = (int) Modchu_AS.getDouble(Modchu_AS.entityPosZ, entityLiving);
@@ -545,14 +740,14 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 					float f15 = (k >> 16 & 0xff) / 255F;
 					float f17 = (k >> 8 & 0xff) / 255F;
 					float f19 = (k & 0xff) / 255F;
-					GL11.glColor4f(f15, f17, f19, 1.0F);
+					Modchu_GlStateManager.color(f15, f17, f19, 1.0F);
 				}
 				Modchu_AS.set(Modchu_AS.renderManagerItemRendererRenderItem, entityLiving, itemstack, j);
 				//render.renderManager.itemRenderer.renderItem(entityLiving, itemstack, j);
 			}
 		}
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glPopMatrix();
+		Modchu_GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		Modchu_GlStateManager.popMatrix();
 	}
 
 	@Override
@@ -730,8 +925,10 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 	}
 */
 	@Override
-	public boolean renderDecoBlock(Object entityLiving, Object render, boolean pRealBlock, Object enumAction, float scale, int addSupport) {
+	public boolean renderDecoBlock(Object entityLiving, boolean pRealBlock, Object enumAction, float scale, int addSupport) {
 		//DecoBlock, FavBlock用描画
+		Object render = Modchu_Main.getRender(baseModel);
+		if (render != null) ;else return false;
 		Object block = Modchu_AS.get(Modchu_AS.getBlockItemStack, itemstack);
 		boolean flag = false;
 		boolean rotate = false;
@@ -765,25 +962,25 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 			particleString = "instantSpell";
 			particleFrequency = 80;
 		}
-		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
+		Modchu_GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
 
 		if (flag) {
 			// 152deleterender.func_110776_a("/terrain.png");
 			GL11.glEnable(GL11.GL_CULL_FACE);
-			if (rotate) GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
-			else GL11.glRotatef(12F, 0.0F, 1.0F, 0.0F);
+			if (rotate) Modchu_GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
+			else Modchu_GlStateManager.rotate(12F, 0.0F, 1.0F, 0.0F);
 //-@-b173
 /*
 			int k = itemstack.getItem().getColorFromItemStack(itemstack, 0);
 			float f9 = (float)(k >> 16 & 0xff) / 255F;
 			float f10 = (float)(k >> 8 & 0xff) / 255F;
 			float f12 = (float)(k & 0xff) / 255F;
-			GL11.glColor4f(f9, f10, f12, 1.0F);
+			Modchu_GlStateManager.color(f9, f10, f12, 1.0F);
 */
 //@-@b173
-			if (scale > 1.0F) GL11.glScalef(scale, scale, scale);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			if (translatef) GL11.glTranslatef(translatefX, translatefY, translatefZ);
+			if (scale > 1.0F) Modchu_GlStateManager.scale(scale, scale, scale);
+			Modchu_GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			if (translatef) Modchu_GlStateManager.translate(translatefX, translatefY, translatefZ);
 			loadBlockTexture();
 			Object renderBlocks = Modchu_AS.get(Modchu_AS.renderRenderBlocks, render);
 			int itemDamage = Modchu_AS.getInt(Modchu_AS.itemStackGetItemDamage, itemstack);
@@ -802,7 +999,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 				Modchu_AS.set(Modchu_AS.worldSpawnParticle, entityLiving, particleString, (posX + (rnd.nextFloat() * width * 2.0F)) - width, posY - 0.5D + (rnd.nextFloat() * height), (posZ + (rnd.nextFloat() * width * 2.0F)) - width, d, d1, d2);
 			}
 			GL11.glDisable(GL11.GL_CULL_FACE);
-			/*b173//*/GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			/*b173//*/Modchu_GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		}
 		return flag;
 	}
@@ -845,68 +1042,68 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 		switch (base.rotatePriority) {
 		case Modchu_ModelRenderer.RotXYZ:
 			if (base.rotateAngleZ != 0.0F) {
-				GL11.glRotatef(base.rotateAngleZ * base.radFactor, 0.0F, 0.0F, 1.0F);
+				Modchu_GlStateManager.rotate(base.rotateAngleZ * base.radFactor, 0.0F, 0.0F, 1.0F);
 			}
 			if (base.rotateAngleY != 0.0F) {
-				GL11.glRotatef(base.rotateAngleY * base.radFactor, 0.0F, 1.0F, 0.0F);
+				Modchu_GlStateManager.rotate(base.rotateAngleY * base.radFactor, 0.0F, 1.0F, 0.0F);
 			}
 			if (base.rotateAngleX != 0.0F) {
-				GL11.glRotatef(base.rotateAngleX * base.radFactor, 1.0F, 0.0F, 0.0F);
+				Modchu_GlStateManager.rotate(base.rotateAngleX * base.radFactor, 1.0F, 0.0F, 0.0F);
 			}
 			break;
 		case Modchu_ModelRenderer.RotXZY:
 			if (base.rotateAngleY != 0.0F) {
-				GL11.glRotatef(base.rotateAngleY * base.radFactor, 0.0F, 1.0F, 0.0F);
+				Modchu_GlStateManager.rotate(base.rotateAngleY * base.radFactor, 0.0F, 1.0F, 0.0F);
 			}
 			if (base.rotateAngleZ != 0.0F) {
-				GL11.glRotatef(base.rotateAngleZ * base.radFactor, 0.0F, 0.0F, 1.0F);
+				Modchu_GlStateManager.rotate(base.rotateAngleZ * base.radFactor, 0.0F, 0.0F, 1.0F);
 			}
 			if (base.rotateAngleX != 0.0F) {
-				GL11.glRotatef(base.rotateAngleX * base.radFactor, 1.0F, 0.0F, 0.0F);
+				Modchu_GlStateManager.rotate(base.rotateAngleX * base.radFactor, 1.0F, 0.0F, 0.0F);
 			}
 			break;
 		case Modchu_ModelRenderer.RotYXZ:
 			if (base.rotateAngleZ != 0.0F) {
-				GL11.glRotatef(base.rotateAngleZ * base.radFactor, 0.0F, 0.0F, 1.0F);
+				Modchu_GlStateManager.rotate(base.rotateAngleZ * base.radFactor, 0.0F, 0.0F, 1.0F);
 			}
 			if (base.rotateAngleX != 0.0F) {
-				GL11.glRotatef(base.rotateAngleX * base.radFactor, 1.0F, 0.0F, 0.0F);
+				Modchu_GlStateManager.rotate(base.rotateAngleX * base.radFactor, 1.0F, 0.0F, 0.0F);
 			}
 			if (base.rotateAngleY != 0.0F) {
-				GL11.glRotatef(base.rotateAngleY * base.radFactor, 0.0F, 1.0F, 0.0F);
+				Modchu_GlStateManager.rotate(base.rotateAngleY * base.radFactor, 0.0F, 1.0F, 0.0F);
 			}
 			break;
 		case Modchu_ModelRenderer.RotYZX:
 			if (base.rotateAngleX != 0.0F) {
-				GL11.glRotatef(base.rotateAngleX * base.radFactor, 1.0F, 0.0F, 0.0F);
+				Modchu_GlStateManager.rotate(base.rotateAngleX * base.radFactor, 1.0F, 0.0F, 0.0F);
 			}
 			if (base.rotateAngleZ != 0.0F) {
-				GL11.glRotatef(base.rotateAngleZ * base.radFactor, 0.0F, 0.0F, 1.0F);
+				Modchu_GlStateManager.rotate(base.rotateAngleZ * base.radFactor, 0.0F, 0.0F, 1.0F);
 			}
 			if (base.rotateAngleY != 0.0F) {
-				GL11.glRotatef(base.rotateAngleY * base.radFactor, 0.0F, 1.0F, 0.0F);
+				Modchu_GlStateManager.rotate(base.rotateAngleY * base.radFactor, 0.0F, 1.0F, 0.0F);
 			}
 			break;
 		case Modchu_ModelRenderer.RotZXY:
 			if (base.rotateAngleY != 0.0F) {
-				GL11.glRotatef(base.rotateAngleY * base.radFactor, 0.0F, 1.0F, 0.0F);
+				Modchu_GlStateManager.rotate(base.rotateAngleY * base.radFactor, 0.0F, 1.0F, 0.0F);
 			}
 			if (base.rotateAngleX != 0.0F) {
-				GL11.glRotatef(base.rotateAngleX * base.radFactor, 1.0F, 0.0F, 0.0F);
+				Modchu_GlStateManager.rotate(base.rotateAngleX * base.radFactor, 1.0F, 0.0F, 0.0F);
 			}
 			if (base.rotateAngleZ != 0.0F) {
-				GL11.glRotatef(base.rotateAngleZ * base.radFactor, 0.0F, 0.0F, 1.0F);
+				Modchu_GlStateManager.rotate(base.rotateAngleZ * base.radFactor, 0.0F, 0.0F, 1.0F);
 			}
 			break;
 		case Modchu_ModelRenderer.RotZYX:
 			if (base.rotateAngleX != 0.0F) {
-				GL11.glRotatef(base.rotateAngleX * base.radFactor, 1.0F, 0.0F, 0.0F);
+				Modchu_GlStateManager.rotate(base.rotateAngleX * base.radFactor, 1.0F, 0.0F, 0.0F);
 			}
 			if (base.rotateAngleY != 0.0F) {
-				GL11.glRotatef(base.rotateAngleY * base.radFactor, 0.0F, 1.0F, 0.0F);
+				Modchu_GlStateManager.rotate(base.rotateAngleY * base.radFactor, 0.0F, 1.0F, 0.0F);
 			}
 			if (base.rotateAngleZ != 0.0F) {
-				GL11.glRotatef(base.rotateAngleZ * base.radFactor, 0.0F, 0.0F, 1.0F);
+				Modchu_GlStateManager.rotate(base.rotateAngleZ * base.radFactor, 0.0F, 0.0F, 1.0F);
 			}
 			break;
 		}
@@ -917,9 +1114,9 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 		//Modchu_Debug.mDebug1("ModchuModel_ModelRendererMaster renderObject getBoxName()="+getBoxName());
 		// レンダリング、あと子供も
 		if (base.showModel) {
-			GL11.glScalef(base.scaleX, base.scaleY, base.scaleZ);
-			GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, base.matrix);
-			if (b) GL11.glCallList(displayList);
+			Modchu_GlStateManager.scale(base.scaleX, base.scaleY, base.scaleZ);
+			Modchu_GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX, base.matrix);
+			if (b) Modchu_GlStateManager.callList(displayList);
 		}
 		if (base.childModels != null) {
 			for (int i = 0; i < base.childModels.size(); i++) {
@@ -941,24 +1138,24 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 			compileDisplayList(par1);
 		}
 
-		GL11.glPushMatrix();
+		Modchu_GlStateManager.pushMatrix();
 		if (upsideDownRotation) upsideDownMove();
-		GL11.glTranslatef(offsetX, offsetY, offsetZ);
+		Modchu_GlStateManager.translate(offsetX, offsetY, offsetZ);
 
 		if (base.rotationPointX != 0.0F || base.rotationPointY != 0.0F || base.rotationPointZ != 0.0F) {
-			GL11.glTranslatef(base.rotationPointX * par1, base.rotationPointY * par1, base.rotationPointZ * par1);
+			Modchu_GlStateManager.translate(base.rotationPointX * par1, base.rotationPointY * par1, base.rotationPointZ * par1);
 		}
 		if (base.rotateAngleX != 0.0F || base.rotateAngleY != 0.0F || base.rotateAngleZ != 0.0F) {
 			setRotation();
 		}
 		renderObject(par1, b);
-		GL11.glPopMatrix();
+		Modchu_GlStateManager.popMatrix();
 	}
 
 	private void upsideDownMove() {
-		Modchu_ModelRendererReplacePoint child = (Modchu_ModelRendererReplacePoint) base.childModels.get(0);
+		Modchu_ModelRendererBase child = (Modchu_ModelRendererBase) base.childModels.get(0);
 		Modchu_ModelBox box = (Modchu_ModelBox) child.cubeList.get(0);
-		GL11.glTranslatef(-box.boxSizeX, -box.boxSizeY, -box.boxSizeZ);
+		Modchu_GlStateManager.translate(-box.boxSizeX, -box.boxSizeY, -box.boxSizeZ);
 	}
 
 	@Override
@@ -972,13 +1169,13 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 			compileDisplayList(par1);
 		}
 
-		GL11.glPushMatrix();
-		GL11.glTranslatef(base.rotationPointX * par1, base.rotationPointY * par1, base.rotationPointZ * par1);
+		Modchu_GlStateManager.pushMatrix();
+		Modchu_GlStateManager.translate(base.rotationPointX * par1, base.rotationPointY * par1, base.rotationPointZ * par1);
 
 		setRotation();
 
-		GL11.glCallList(displayList);
-		GL11.glPopMatrix();
+		Modchu_GlStateManager.callList(displayList);
+		Modchu_GlStateManager.popMatrix();
 	}
 
 	@Override
@@ -988,19 +1185,19 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 			compileDisplayList(par1);
 		}
 
-		GL11.glPushMatrix();
+		Modchu_GlStateManager.pushMatrix();
 		if (base.rotateAngleX != 0.0F || base.rotateAngleY != 0.0F || base.rotateAngleZ != 0.0F) {
-			GL11.glTranslatef(base.rotationPointX * par1, base.rotationPointY * par1, base.rotationPointZ * par1);
+			Modchu_GlStateManager.translate(base.rotationPointX * par1, base.rotationPointY * par1, base.rotationPointZ * par1);
 
 			setRotation();
 		} else if (base.rotationPointX != 0.0F || base.rotationPointY != 0.0F || base.rotationPointZ != 0.0F) {
-			GL11.glTranslatef(base.rotationPointX * par1, base.rotationPointY * par1, base.rotationPointZ * par1);
+			Modchu_GlStateManager.translate(base.rotationPointX * par1, base.rotationPointY * par1, base.rotationPointZ * par1);
 		}
 
 		if (pearent != null) {
 			pearent.postRender(par1);
 		}
-		GL11.glPopMatrix();
+		Modchu_GlStateManager.popMatrix();
 	}
 
 	@Override
@@ -1014,14 +1211,14 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 		}
 
 		if (base.rotateAngleX != 0.0F || base.rotateAngleY != 0.0F || base.rotateAngleZ != 0.0F) {
-			GL11.glTranslatef(base.rotationPointX * par1, base.rotationPointY * par1, base.rotationPointZ * par1);
+			Modchu_GlStateManager.translate(base.rotationPointX * par1, base.rotationPointY * par1, base.rotationPointZ * par1);
 
 			setRotation();
 		} else if (base.rotationPointX != 0.0F || base.rotationPointY != 0.0F || base.rotationPointZ != 0.0F) {
-			GL11.glTranslatef(base.rotationPointX * par1, base.rotationPointY * par1, base.rotationPointZ * par1);
+			Modchu_GlStateManager.translate(base.rotationPointX * par1, base.rotationPointY * par1, base.rotationPointZ * par1);
 		}
 		// ポストレンダリング、あと子供も
-		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, base.matrix);
+		Modchu_GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX, base.matrix);
 
 		if (base.childModels != null) {
 			for (int i = 0; i < base.childModels.size(); i++) {
@@ -1038,9 +1235,9 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 		displayList = Modchu_AS.getInt(Modchu_AS.gLAllocationGenerateDisplayLists, 1);
 		GL11.glNewList(displayList, GL11.GL_COMPILE);
 		Object tessellator = Modchu_AS.get(Modchu_AS.tessellatorInstance);
-		for (int i = 0; i < base.cubeList.size(); i++) {
-			//Modchu_Debug.mDebug1("compileDisplayList cubeList.get(i).getClass()="+base.cubeList.get(i).getClass());
-			base.cubeList.get(i).render(tessellator, par1);
+		for (Modchu_ModelBoxBase modchu_ModelBoxBase : base.cubeList) {
+			//Modchu_Debug.mDebug1("compileDisplayList modchu_ModelBoxBase.getClass()="+modchu_ModelBoxBase.getClass());
+			modchu_ModelBoxBase.render(tessellator, par1);
 		}
 
 		GL11.glEndList();
@@ -1066,7 +1263,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 		float f4 = base.rotateAngleX;
 		float f5 = base.rotateAngleY;
 		float f6 = base.rotateAngleZ;
-		GL11.glPushMatrix();
+		Modchu_GlStateManager.pushMatrix();
 		postRender(f);
 		base.rotationPointX = 0.0F;
 		base.rotationPointY = 0.0F;
@@ -1076,23 +1273,23 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 		base.rotateAngleZ = 0.0F;
 
 		if (!angleFirst) {
-			GL11.glTranslatef(preRotationPointX * f, preRotationPointY * f, preRotationPointZ * f);
+			Modchu_GlStateManager.translate(preRotationPointX * f, preRotationPointY * f, preRotationPointZ * f);
 		}
 		if (preRotateAngleZ != 0.0F) {
-			GL11.glRotatef(preRotateAngleZ * 57.29578F, 0.0F, 0.0F, 1.0F);
+			Modchu_GlStateManager.rotate(preRotateAngleZ * 57.29578F, 0.0F, 0.0F, 1.0F);
 		}
 		if (preRotateAngleY != 0.0F) {
-			GL11.glRotatef(preRotateAngleY * 57.29578F, 0.0F, 1.0F, 0.0F);
+			Modchu_GlStateManager.rotate(preRotateAngleY * 57.29578F, 0.0F, 1.0F, 0.0F);
 		}
 		if (preRotateAngleX != 0.0F) {
-			GL11.glRotatef(preRotateAngleX * 57.29578F, 1.0F, 0.0F, 0.0F);
+			Modchu_GlStateManager.rotate(preRotateAngleX * 57.29578F, 1.0F, 0.0F, 0.0F);
 		}
 		if (angleFirst) {
-			GL11.glTranslatef(preRotationPointX * f, preRotationPointY * f, preRotationPointZ * f);
+			Modchu_GlStateManager.translate(preRotationPointX * f, preRotationPointY * f, preRotationPointZ * f);
 		}
 		render(f);
 
-		GL11.glPopMatrix();
+		Modchu_GlStateManager.popMatrix();
 
 		base.rotationPointX = f1;
 		base.rotationPointY = f2;
@@ -1121,7 +1318,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 		float f4 = base.rotateAngleX;
 		float f5 = base.rotateAngleY;
 		float f6 = base.rotateAngleZ;
-		GL11.glPushMatrix();
+		Modchu_GlStateManager.pushMatrix();
 		postRender(f);
 		base.rotationPointX = 0.0F;
 		base.rotationPointY = 0.0F;
@@ -1130,22 +1327,22 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 		base.rotateAngleY = 0.0F;
 		base.rotateAngleZ = 0.0F;
 		if (!angleFirst) {
-			GL11.glTranslatef(preRotationPointX * f, preRotationPointY * f, preRotationPointZ * f);
+			Modchu_GlStateManager.translate(preRotationPointX * f, preRotationPointY * f, preRotationPointZ * f);
 		}
 		if (preRotateAngleZ != 0.0F) {
-			GL11.glRotatef(preRotateAngleZ, 0.0F, 0.0F, 1.0F);
+			Modchu_GlStateManager.rotate(preRotateAngleZ, 0.0F, 0.0F, 1.0F);
 		}
 		if (preRotateAngleY != 0.0F) {
-			GL11.glRotatef(preRotateAngleY, 0.0F, 1.0F, 0.0F);
+			Modchu_GlStateManager.rotate(preRotateAngleY, 0.0F, 1.0F, 0.0F);
 		}
 		if (preRotateAngleX != 0.0F) {
-			GL11.glRotatef(preRotateAngleX, 1.0F, 0.0F, 0.0F);
+			Modchu_GlStateManager.rotate(preRotateAngleX, 1.0F, 0.0F, 0.0F);
 		}
 		if (angleFirst) {
-			GL11.glTranslatef(preRotationPointX * f, preRotationPointY * f, preRotationPointZ * f);
+			Modchu_GlStateManager.translate(preRotationPointX * f, preRotationPointY * f, preRotationPointZ * f);
 		}
 		render(f);
-		GL11.glPopMatrix();
+		Modchu_GlStateManager.popMatrix();
 		base.rotationPointX = f1;
 		base.rotationPointY = f2;
 		base.rotationPointZ = f3;
@@ -1180,7 +1377,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 	@Override
 	public void individuallyHidePreRotateRender(float par1) {
 		if (!base.isHidden) {
-			GL11.glPushMatrix();
+			Modchu_GlStateManager.pushMatrix();
 			preRotateRender(par1);
 			if (base.showModel && !compiled) {
 				compileDisplayList(par1);
@@ -1192,40 +1389,40 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 				if (base.rotationPointX == 0.0F
 						&& base.rotationPointY == 0.0F
 						&& base.rotationPointZ == 0.0F) {
-					GL11.glCallList(displayList);
+					Modchu_GlStateManager.callList(displayList);
 					allChildModelsRender(par1);
 				} else {
-					GL11.glPushMatrix();
-					GL11.glTranslatef(base.rotationPointX * par1, base.rotationPointY * par1, base.rotationPointZ * par1);
-					GL11.glCallList(displayList);
+					Modchu_GlStateManager.pushMatrix();
+					Modchu_GlStateManager.translate(base.rotationPointX * par1, base.rotationPointY * par1, base.rotationPointZ * par1);
+					Modchu_GlStateManager.callList(displayList);
 
 					allChildModelsRender(par1);
 
-					GL11.glPopMatrix();
+					Modchu_GlStateManager.popMatrix();
 				}
 			} else {
-				GL11.glPushMatrix();
-				GL11.glTranslatef(base.rotationPointX * par1, base.rotationPointY * par1, base.rotationPointZ * par1);
+				Modchu_GlStateManager.pushMatrix();
+				Modchu_GlStateManager.translate(base.rotationPointX * par1, base.rotationPointY * par1, base.rotationPointZ * par1);
 
 				if (preRotateAngleZ != 0.0F) {
-					GL11.glRotatef(preRotateAngleZ * (180F / (float) Math.PI), 0.0F, 0.0F, 1.0F);
+					Modchu_GlStateManager.rotate(preRotateAngleZ * (180F / (float) Math.PI), 0.0F, 0.0F, 1.0F);
 				}
 
 				if (preRotateAngleY != 0.0F) {
-					GL11.glRotatef(preRotateAngleY * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
+					Modchu_GlStateManager.rotate(preRotateAngleY * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
 				}
 
 				if (preRotateAngleX != 0.0F) {
-					GL11.glRotatef(preRotateAngleX * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
+					Modchu_GlStateManager.rotate(preRotateAngleX * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
 				}
 
-				GL11.glCallList(displayList);
+				Modchu_GlStateManager.callList(displayList);
 
 				allChildModelsRender(par1);
 
-				GL11.glPopMatrix();
+				Modchu_GlStateManager.popMatrix();
 			}
-			GL11.glPopMatrix();
+			Modchu_GlStateManager.popMatrix();
 		}
 	}
 
@@ -1517,7 +1714,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 /*//b181delete
 	private void compileDisplayList(float par1) {
 		displayList = GLAllocation.generateDisplayLists(1);
-		GL11.glNewList(displayList, GL11.GL_COMPILE);
+		Modchu_GlStateManager.newList(displayList, GL11.GL_COMPILE);
 		Tessellator var2 = Tessellator.instance;
 		Iterator var3 = cubeList.iterator();
 
@@ -1526,7 +1723,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 			var4.render(var2, par1);
 		}
 
-		GL11.glEndList();
+		Modchu_GlStateManager.EndList();
 		compiled = true;
 	}
 
@@ -1554,13 +1751,13 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 					compileDisplayList(par1);
 				}
 
-				GL11.glTranslatef(field_82906_o, field_82908_p, field_82907_q);
+				Modchu_GlStateManager.translate(field_82906_o, field_82908_p, field_82907_q);
 				Iterator var2;
 				ModchuModel_ModelRenderer var3;
 
 				if (rotateAngleX == 0.0F && rotateAngleY == 0.0F && rotateAngleZ == 0.0F) {
 					if (rotationPointX == 0.0F && rotationPointY == 0.0F && rotationPointZ == 0.0F) {
-						GL11.glCallList(displayList);
+						Modchu_GlStateManager.callList(displayList);
 
 						if (childModels != null) {
 							var2 = childModels.iterator();
@@ -1571,8 +1768,8 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 							}
 						}
 					} else {
-						GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
-						GL11.glCallList(displayList);
+						Modchu_GlStateManager.translate(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
+						Modchu_GlStateManager.callList(displayList);
 
 						if (childModels != null) {
 							var2 = childModels.iterator();
@@ -1583,25 +1780,25 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 							}
 						}
 
-						GL11.glTranslatef(-rotationPointX * par1, -rotationPointY * par1, -rotationPointZ * par1);
+						Modchu_GlStateManager.translate(-rotationPointX * par1, -rotationPointY * par1, -rotationPointZ * par1);
 					}
 				} else {
-					GL11.glPushMatrix();
-					GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
+					Modchu_GlStateManager.pushMatrix();
+					Modchu_GlStateManager.translate(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
 
 					if (rotateAngleZ != 0.0F) {
-						GL11.glRotatef(rotateAngleZ * (180F / (float) Math.PI), 0.0F, 0.0F, 1.0F);
+						Modchu_GlStateManager.rotate(rotateAngleZ * (180F / (float) Math.PI), 0.0F, 0.0F, 1.0F);
 					}
 
 					if (rotateAngleY != 0.0F) {
-						GL11.glRotatef(rotateAngleY * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
+						Modchu_GlStateManager.rotate(rotateAngleY * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
 					}
 
 					if (rotateAngleX != 0.0F) {
-						GL11.glRotatef(rotateAngleX * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
+						Modchu_GlStateManager.rotate(rotateAngleX * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
 					}
 
-					GL11.glCallList(displayList);
+					Modchu_GlStateManager.callList(displayList);
 
 					if (childModels != null) {
 						var2 = childModels.iterator();
@@ -1612,10 +1809,10 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 						}
 					}
 
-					GL11.glPopMatrix();
+					Modchu_GlStateManager.popMatrix();
 				}
 
-				GL11.glTranslatef(-field_82906_o, -field_82908_p, -field_82907_q);
+				Modchu_GlStateManager.translate(-field_82906_o, -field_82908_p, -field_82907_q);
 			}
 		}
 	}
@@ -1627,23 +1824,23 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 					compileDisplayList(par1);
 				}
 
-				GL11.glPushMatrix();
-				GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
+				Modchu_GlStateManager.pushMatrix();
+				Modchu_GlStateManager.translate(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
 
 				if (rotateAngleY != 0.0F) {
-					GL11.glRotatef(rotateAngleY * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
+					Modchu_GlStateManager.rotate(rotateAngleY * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
 				}
 
 				if (rotateAngleX != 0.0F) {
-					GL11.glRotatef(rotateAngleX * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
+					Modchu_GlStateManager.rotate(rotateAngleX * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
 				}
 
 				if (rotateAngleZ != 0.0F) {
-					GL11.glRotatef(rotateAngleZ * (180F / (float) Math.PI), 0.0F, 0.0F, 1.0F);
+					Modchu_GlStateManager.rotate(rotateAngleZ * (180F / (float) Math.PI), 0.0F, 0.0F, 1.0F);
 				}
 
-				GL11.glCallList(displayList);
-				GL11.glPopMatrix();
+				Modchu_GlStateManager.callList(displayList);
+				Modchu_GlStateManager.popMatrix();
 			}
 		}
 	}
@@ -1657,21 +1854,21 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 
 				if (rotateAngleX == 0.0F && rotateAngleY == 0.0F && rotateAngleZ == 0.0F) {
 					if (rotationPointX != 0.0F || rotationPointY != 0.0F || rotationPointZ != 0.0F) {
-						GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
+						Modchu_GlStateManager.translate(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
 					}
 				} else {
-					GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
+					Modchu_GlStateManager.translate(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
 
 					if (rotateAngleZ != 0.0F) {
-						GL11.glRotatef(rotateAngleZ * (180F / (float) Math.PI), 0.0F, 0.0F, 1.0F);
+						Modchu_GlStateManager.rotate(rotateAngleZ * (180F / (float) Math.PI), 0.0F, 0.0F, 1.0F);
 					}
 
 					if (rotateAngleY != 0.0F) {
-						GL11.glRotatef(rotateAngleY * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
+						Modchu_GlStateManager.rotate(rotateAngleY * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
 					}
 
 					if (rotateAngleX != 0.0F) {
-						GL11.glRotatef(rotateAngleX * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
+						Modchu_GlStateManager.rotate(rotateAngleX * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
 					}
 				}
 			}

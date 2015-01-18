@@ -3,7 +3,7 @@ package modchu.model;
 import modchu.lib.Modchu_ITexturedTriangle;
 import modchu.lib.Modchu_Reflect;
 import modchu.lib.characteristic.Modchu_AS;
-import modchu.lib.characteristic.recompileonly.Modchu_TexturedTriangle;
+import modchu.lib.characteristic.Modchu_TexturedTriangle;
 
 import org.lwjgl.opengl.GL11;
 
@@ -63,6 +63,7 @@ public class ModchuModel_TexturedTriangleMaster implements Modchu_ITexturedTrian
 		vn = var3;
 	}
 
+	@Override
 	public void flipFace() {
 		Object[] o = new Object[vertexPositions.length];
 		for (int var2 = 0; var2 < vertexPositions.length; ++var2) {
@@ -71,7 +72,9 @@ public class ModchuModel_TexturedTriangleMaster implements Modchu_ITexturedTrian
 		vertexPositions = o;
 	}
 
+	@Override
 	public void draw(Object tessellator, float f) {
+		tessellator = Modchu_AS.get(Modchu_AS.tessellatorInstance);
 		Object[] vec3 = Modchu_Reflect.newInstanceArray("Vec3", nVertices);
 		int i;
 

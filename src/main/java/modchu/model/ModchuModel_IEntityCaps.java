@@ -1,6 +1,8 @@
 package modchu.model;
 
-public interface ModchuModel_IModelCapsConstant {
+import modchu.lib.characteristic.Modchu_IEntityCapsBase;
+
+public interface ModchuModel_IEntityCaps extends Modchu_IEntityCapsBase {
 
 	public static final int caps_getIsSneak									= 0x080000;
 	public static final int caps_getIsRiding										= 0x080001;
@@ -32,7 +34,7 @@ public interface ModchuModel_IModelCapsConstant {
 	public static final int caps_armorType					 					= 0x080034;
 	public static final int caps_isItemHolder									= 0x080035;
 	public static final int caps_isPlayer											= 0x080036;
-	public static final int caps_sittingyOffset									= 0x080037;
+	public static final int caps_sittingYOffset									= 0x080037;
 	public static final int caps_model											= 0x080038;
 	public static final int caps_tempLimbSwing								= 0x080039;
 	public static final int caps_actionInit										= 0x080040;
@@ -94,6 +96,7 @@ public interface ModchuModel_IModelCapsConstant {
 	public static final int caps_bipedRightLeg									= 0x080099;
 	public static final int caps_bipedLeftLeg									= 0x080100;
 	public static final int caps_showModelSettingBoolean				= 0x080101;
+	public static final int caps_allMultiModelActionRunInitFlag			= 0x080102;
 
 	public static final byte entityType_LMM = 1;
 	public static final byte entityType_PFLM = 2;
