@@ -52,7 +52,7 @@ public class ModchuModel_ThreadMotionDataRead extends Thread {
 	}
 
 	public void regster(int i, String[] s1) {
-		if (readList != null) ;else readList = new ArrayList();
+		if (readList != null); else readList = new ArrayList();
 		if (!readList.contains(i)) readList.add(i);
 		nameArray = s1;
 	}

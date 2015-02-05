@@ -55,7 +55,7 @@ public class ModchuModel_Config extends Modchu_Config {
 					String s2 = en.getKey();
 					ConcurrentHashMap<String, Boolean> map1 = en.getValue();
 					if (map1 != null
-							&& !map1.isEmpty()) ;else continue;
+							&& !map1.isEmpty()); else continue;
 					sb.delete(0, sb.length());
 					sb.append(s).append(s2);
 					Modchu_Debug.mDebug("saveShowModelParamater showModel[] partsSaveFlag configPartsMap != null ? "+(configPartsMap != null));
@@ -333,7 +333,7 @@ public class ModchuModel_Config extends Modchu_Config {
 		ConcurrentHashMap<String, String> renemeMap = null;
 		if (configShowPartsRenemeMap != null
 				&& configShowPartsRenemeMap.containsKey(s3)) renemeMap = configShowPartsRenemeMap.get(s3);
-		if (renemeMap != null) ;else renemeMap = new ConcurrentHashMap();
+		if (renemeMap != null); else renemeMap = new ConcurrentHashMap();
 		for(int i1 = 0; i1 < s1.length && i1 < s2.length; i1++) {
 			renemeMap.put(s1[i1], s2[i1]);
 		}
@@ -347,7 +347,7 @@ public class ModchuModel_Config extends Modchu_Config {
 
 	public static ConcurrentHashMap<Integer, String> getConfigShowPartsHideMap(Object model, String s, int i) {
 		//Modchu_Debug.mDebug("getConfigShowPartsHideMap s="+s);
-		if (model != null) ;else {
+		if (model != null); else {
 			//Modchu_Debug.mDebug("getConfigShowPartsHideMap model == null !!");
 			return null;
 		}
@@ -422,7 +422,7 @@ public class ModchuModel_Config extends Modchu_Config {
 	}
 
 	public static ConcurrentHashMap<Integer, String> getConfigShowPartsNemeMap(String s, int i) {
-		if (s != null) ;else return null;
+		if (s != null); else return null;
 		//Modchu_Debug.mDebug("getConfigShowPartsNemeMap s="+s+" i="+i);
 		String s1 = new StringBuilder().append(s).append(",").append(i).toString();
 		ConcurrentHashMap<Integer, String> map = null;
@@ -587,7 +587,7 @@ public class ModchuModel_Config extends Modchu_Config {
 				&& configIndexOfAllSetVisibleMap.containsKey(s2)) {
 			map = configIndexOfAllSetVisibleMap.get(s2);
 		}
-		if (map != null) ;else map = new ConcurrentHashMap();
+		if (map != null); else map = new ConcurrentHashMap();
 		if (list != null
 				&& !list.isEmpty()) {
 			map.put(s1, list);
@@ -633,7 +633,7 @@ public class ModchuModel_Config extends Modchu_Config {
 				&& configIndexOfAllSetVisibleBooleanMap.containsKey(s2)) {
 			map = configIndexOfAllSetVisibleBooleanMap.get(s2);
 		}
-		if (map != null) ;else map = new ConcurrentHashMap();
+		if (map != null); else map = new ConcurrentHashMap();
 		map.put(s1, b);
 		configIndexOfAllSetVisibleBooleanMap.put(s2, map);
 	}

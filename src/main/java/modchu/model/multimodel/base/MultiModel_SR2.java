@@ -44,7 +44,7 @@ import modchu.model.ModchuModel_IEntityCaps;public class MultiModel_SR2 extend
 	}	protected void eyeAnimations(ModchuModel_IEntityCaps entityCaps, float f, float f1, float renderPartialTicks) {
 		Object entityliving = entityCaps != null ? entityCaps.getCapsValue(entityCaps.caps_Entity) : null;
 		//Modchu_Debug.mDebug("MultiModel_SR2 eyeAnimations entityliving="+entityliving);
-		if (entityliving != null) ;else return;
+		if (entityliving != null); else return;
 		int ticksExisted = Modchu_AS.getInt(Modchu_AS.entityTicksExisted, entityliving);
 		float f3 = (float)ticksExisted + renderPartialTicks + Modchu_EntityCapsHelper.getCapsValueFloat(this, entityCaps, caps_entityIdFactor);
 		// 目パチ

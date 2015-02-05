@@ -515,9 +515,9 @@ package modchu.model.multimodel.base;import modchu.lib.Modchu_Debug;import mo
 			}
 		}
 	}	@Override
-	public void showAllParts(ModchuModel_IEntityCaps entityCaps) {
-		boolean b = Modchu_EntityCapsHelper.getCapsValueInt(this, entityCaps, caps_armorType) == 0;
-		//Modchu_Debug.mDebug("MultiModel showAllParts b="+b);		ModchuModel_IEntityCaps entityCaps1 = (ModchuModel_IEntityCaps) entityCaps;
+	public void showAllParts(ModchuModel_IEntityCaps entityCaps) {		int armorType = Modchu_EntityCapsHelper.getCapsValueInt(this, entityCaps, caps_armorType);
+		boolean b = armorType == 0;
+/*		if (entityCaps instanceof ModchuModel_IEntityCaps				&& Modchu_EntityCapsHelper.getCapsValueByte(this, entityCaps, entityCaps.caps_EntityType) == entityCaps.entityType_LMM) {			Modchu_Debug.mDebug1("MultiModel showAllParts LMM armorType="+armorType+" b="+b);		} else {			Modchu_Debug.mDebug1("MultiModel showAllParts entityCaps="+entityCaps);			float[] f = getArmorModelsSize();			//Modchu_Debug.mlDebug("modelSize="+modelSize+" "+this);			//Modchu_Debug.mlDebug("modelSize="+modelSize+" f[0]="+f[0]+" f[1]="+f[1]);			armorType = modelSize == f[0] ? 1 : modelSize == f[1] ? 2 : 0;			//Modchu_Debug.mDebug("MultiModel showAllParts LMM armorType="+armorType+" b="+b);		}*/		ModchuModel_IEntityCaps entityCaps1 = entityCaps != null ? (ModchuModel_IEntityCaps) entityCaps : null;
 		setArmorBipedHeadShowModel(entityCaps1, b);
 		setArmorBipedBodyShowModel(entityCaps1, b);
 		setArmorBipedRightArmShowModel(entityCaps1, b);

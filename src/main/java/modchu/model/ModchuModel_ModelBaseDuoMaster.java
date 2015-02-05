@@ -1,74 +1,80 @@
 package modchu.model;
 
+import modchu.lib.Modchu_Debug;
 import modchu.lib.Modchu_IModelBaseDuo;
+import modchu.lib.Modchu_IModelBaseDuoMaster;
 import modchu.lib.Modchu_Main;
 import modchu.lib.Modchu_Reflect;
+import modchu.lib.characteristic.Modchu_AS;
 import modchu.lib.characteristic.Modchu_CastHelper;
-import modchu.lib.characteristic.Modchu_IEntityCapsBase;
-import modchu.lib.characteristic.Modchu_ModelBaseDuo;
+import modchu.model.multimodel.base.MultiModelBaseBiped;
 
 import org.lwjgl.opengl.GL11;
 
-public class ModchuModel_ModelBaseDuoMaster implements Modchu_IModelBaseDuo {
-	public Modchu_ModelBaseDuo base;
+public class ModchuModel_ModelBaseDuoMaster implements Modchu_IModelBaseDuoMaster {
+	public Modchu_IModelBaseDuo base;
 	public int renderCount;
 
-	public ModchuModel_ModelBaseDuoMaster(Modchu_ModelBaseDuo modelBaseDuo, Object render) {
+	public ModchuModel_ModelBaseDuoMaster(Modchu_IModelBaseDuo modelBaseDuo, Object render) {
 		base = modelBaseDuo;
 	}
 
 	@Override
-	public boolean render(Object entity, float par2, float par3, float par4, float par5, float par6, float par7, Modchu_IEntityCapsBase entityCaps, boolean isRendering) {
-		return render(entity, par2, par3, par4, par5, par6, par7, (ModchuModel_IEntityCaps) entityCaps, isRendering);
-	}
-
-	public boolean render(Object entity, float par2, float par3, float par4, float par5, float par6, float par7, ModchuModel_IEntityCaps entityCaps, boolean isRendering) {
+	public void render(Object entity, float par2, float par3, float par4, float par5, float par6, float par7, Object entityCaps, boolean isRendering) {
 		GL11.glPushMatrix();
+		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 		renderBefore(entity, par2, par3, par4, par5, par6, par7, entityCaps, isRendering);
-		//boolean lri = (renderCount & 0x0f) == 0;
-		if (base.modelInner != null) {
-			if (base.textureInner != null) {
-				if (base.textureInner[base.renderParts] != null) {
+		//Modchu_Debug.mDebug1("ModchuModel_ModelBaseDuoMaster render entityCaps="+entityCaps+" base.getIsAlphablend()="+base.getIsAlphablend());
+		if (base.getIsAlphablend()) {
+			if (base.getIsModelAlphablend()) {
+				GL11.glAlphaFunc(GL11.GL_GREATER, 0.0f);
+				GL11.glEnable(GL11.GL_ALPHA_TEST);
+				GL11.glEnable(GL11.GL_BLEND);
+				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			} else {
+				GL11.glDisable(GL11.GL_BLEND);
+			}
+		}
+		Object modelInner = base.getModelInner();
+		int renderParts = base.getRenderParts();
+		float[] textureLightColor = base.getTextureLightColor();
+		if (modelInner != null) {
+			Modchu_Debug.mDebug1("ModchuModel_ModelBaseDuoMaster render modelInner entityCaps="+entityCaps);
+			Object[] textureInner = base.getTextureInner();
+			if (textureInner != null) {
+				if (textureInner[renderParts] != null) {
 					// 通常パーツ
-					if (base.isAlphablend) {
-						if (base.isModelAlphablend) {
-							GL11.glAlphaFunc(GL11.GL_GREATER, 0.0f);
-							GL11.glEnable(GL11.GL_ALPHA_TEST);
-							GL11.glEnable(GL11.GL_BLEND);
-							GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-						} else {
-							GL11.glDisable(GL11.GL_BLEND);
-						}
-					}
-					ModchuModel_Client.setTexture(base.textureInner[base.renderParts]);
-					base.modelInner.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
+					ModchuModel_Client.setTexture(textureInner[renderParts]);
+					render(modelInner, entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 				}
 			} else {
 				// ほぼエンチャントエフェクト用
-				base.modelInner.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
+				render(modelInner, entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 			}
-			if (base.textureInnerLight != null && renderCount == 0) {
+			Object[] textureInnerLight = base.getTextureInnerLight();
+			if (textureInnerLight != null && renderCount == 0) {
 				// 発光テクスチャ表示処理
-				if (base.textureInnerLight[base.renderParts] != null) {
-					ModchuModel_Client.setTexture(base.textureInnerLight[base.renderParts]);
+				if (textureInnerLight[renderParts] != null) {
+					ModchuModel_Client.setTexture(textureInnerLight[renderParts]);
 					GL11.glEnable(GL11.GL_BLEND);
 					GL11.glEnable(GL11.GL_ALPHA_TEST);
 					GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 					GL11.glDepthFunc(GL11.GL_LEQUAL);
 
 					ModchuModel_Client.setLightmapTextureCoords(0x00f000f0);//61680
-					if (base.textureLightColor == null) {
+					if (textureLightColor == null) {
 						GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 					} else {
 						//発光色を調整
 						GL11.glColor4f(
-								base.textureLightColor[0],
-								base.textureLightColor[1],
-								base.textureLightColor[2],
-								base.textureLightColor[3]);
+								textureLightColor[0],
+								textureLightColor[1],
+								textureLightColor[2],
+								textureLightColor[3]);
 					}
-					base.modelInner.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
-					ModchuModel_Client.setLightmapTextureCoords(base.lighting);
+					render(modelInner, entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
+					int lighting = base.getLighting();
+					ModchuModel_Client.setLightmapTextureCoords(lighting);
 					GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 					GL11.glDisable(GL11.GL_BLEND);
 					GL11.glEnable(GL11.GL_ALPHA_TEST);
@@ -76,21 +82,24 @@ public class ModchuModel_ModelBaseDuoMaster implements Modchu_IModelBaseDuo {
 			}
 		}
 		renderMiddle(entity, par2, par3, par4, par5, par6, par7, entityCaps, isRendering);
-		if (base.modelOuter != null) {
-			if (base.textureOuter != null) {
+		Object modelOuter = base.getModelOuter();
+		if (modelOuter != null) {
+			Object[] textureOuter = base.getTextureOuter();
+			if (textureOuter != null) {
 				// 通常パーツ
-				if (base.textureOuter[base.renderParts] != null) {
-					ModchuModel_Client.setTexture(base.textureOuter[base.renderParts]);
-					base.modelOuter.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
+				if (textureOuter[renderParts] != null) {
+					ModchuModel_Client.setTexture(textureOuter[renderParts]);
+					render(modelOuter, entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 				}
 			} else {
 				// ほぼエンチャントエフェクト用
-				base.modelOuter.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
+				render(modelOuter, entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 			}
-			if (base.textureOuterLight != null && renderCount == 0) {
+			Object[] textureOuterLight = base.getTextureOuterLight();
+			if (textureOuterLight != null && renderCount == 0) {
 				// 発光テクスチャ表示処理
-				if (base.textureOuterLight[base.renderParts] != null) {
-					ModchuModel_Client.setTexture(base.textureOuterLight[base.renderParts]);
+				if (textureOuterLight[renderParts] != null) {
+					ModchuModel_Client.setTexture(textureOuterLight[renderParts]);
 					float var4 = 1.0F;
 					GL11.glEnable(GL11.GL_BLEND);
 					GL11.glEnable(GL11.GL_ALPHA_TEST);
@@ -98,32 +107,40 @@ public class ModchuModel_ModelBaseDuoMaster implements Modchu_IModelBaseDuo {
 					GL11.glDepthFunc(GL11.GL_LEQUAL);
 
 					ModchuModel_Client.setLightmapTextureCoords(0x00f000f0);//61680
-					if (base.textureLightColor == null) {
+					if (textureLightColor == null) {
 						GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 					} else {
 						//発光色を調整
 						GL11.glColor4f(
-								base.textureLightColor[0],
-								base.textureLightColor[1],
-								base.textureLightColor[2],
-								base.textureLightColor[3]);
+								textureLightColor[0],
+								textureLightColor[1],
+								textureLightColor[2],
+								textureLightColor[3]);
 					}
-					base.modelOuter.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
-					ModchuModel_Client.setLightmapTextureCoords(base.lighting);
+					render(modelOuter, entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
+					int lighting = base.getLighting();
+					ModchuModel_Client.setLightmapTextureCoords(lighting);
 					GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 					GL11.glDisable(GL11.GL_BLEND);
 					GL11.glEnable(GL11.GL_ALPHA_TEST);
 				}
 			}
 		}
-//		isAlphablend = false;
 		renderCount++;
 		renderAfter(entity, par2, par3, par4, par5, par6, par7, entityCaps, isRendering);
+		GL11.glPopAttrib();
 		GL11.glPopMatrix();
-		return false;
 	}
 
-	private void renderBefore(Object entity, float par2, float par3, float par4, float par5, float par6, float par7, ModchuModel_IEntityCaps entityCaps, boolean isRendering) {
+	private void render(Object modelInner, Object entityCaps, float par2, float par3, float par4, float par5, float par6, float par7, boolean isRendering) {
+		if (modelInner instanceof MultiModelBaseBiped) {
+			((MultiModelBaseBiped) modelInner).render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
+			return;
+		}
+		Modchu_Reflect.invokeMethod(modelInner.getClass(), "render", new Class[]{ Modchu_Reflect.loadClass("MMM_IModelCaps"), float.class, float.class, float.class, float.class, float.class, float.class, boolean.class }, modelInner, new Object[]{ entityCaps, par2, par3, par4, par5, par6, par7, isRendering });
+	}
+
+	private void renderBefore(Object entity, float par2, float par3, float par4, float par5, float par6, float par7, Object entityCaps, boolean isRendering) {
 		float f9 = 1.0F;
 		if (Modchu_Main.getMinecraftVersion() < 80) {
 			f9 = (Float) Modchu_Reflect.invokeMethod("Entity", "func_382_a", "getEntityBrightness", new Class[]{ float.class }, entity, new Object[]{ 1.0F });
@@ -134,7 +151,9 @@ public class ModchuModel_ModelBaseDuoMaster implements Modchu_IModelBaseDuo {
 		float f10 = ModchuModel_ConfigData.transparency;
 		//if (f10 <= 0.5F) f10 = 0.501F;
 
-		Object o = entityCaps != null ? entityCaps.getCapsValue(entityCaps.caps_freeVariable, "itemArmorColorFloat"+base.renderParts) : null;
+		int renderParts = base.getRenderParts();
+		Object o = entityCaps != null
+				&& entityCaps instanceof ModchuModel_IEntityCaps ? ((ModchuModel_IEntityCaps) entityCaps).getCapsValue(((ModchuModel_IEntityCaps) entityCaps).caps_freeVariable, "itemArmorColorFloat"+renderParts) : null;
 		//GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		if (o != null) {
 			float[] f0 = (float[]) o;
@@ -178,7 +197,7 @@ public class ModchuModel_ModelBaseDuoMaster implements Modchu_IModelBaseDuo {
 
 	}
 
-	private void renderMiddle(Object entity, float par2, float par3, float par4, float par5, float par6, float par7, ModchuModel_IEntityCaps entityCaps, boolean isRendering) {
+	private void renderMiddle(Object entity, float par2, float par3, float par4, float par5, float par6, float par7, Object entityCaps, boolean isRendering) {
 		float f9 = 1.0F;
 		if (Modchu_Main.getMinecraftVersion() < 80) {
 			f9 = Modchu_CastHelper.Float(Modchu_Reflect.invokeMethod("Entity", "func_382_a", "getEntityBrightness", new Class[]{ float.class }, entity, new Object[]{ 1.0F }));
@@ -186,7 +205,9 @@ public class ModchuModel_ModelBaseDuoMaster implements Modchu_IModelBaseDuo {
 		float f10 = ModchuModel_ConfigData.transparency;
 		//if (f10 <= 0.5F) f10 = 0.501F;
 
-		Object o = entityCaps != null ? entityCaps.getCapsValue(entityCaps.caps_freeVariable, "itemArmorColorFloat"+base.renderParts) : null;
+		int renderParts = base.getRenderParts();
+		Object o = entityCaps != null
+				&& entityCaps instanceof ModchuModel_IEntityCaps ? ((ModchuModel_IEntityCaps) entityCaps).getCapsValue(((ModchuModel_IEntityCaps) entityCaps).caps_freeVariable, "itemArmorColorFloat"+renderParts) : null;
 		//GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		if (o != null) {
 			float[] f0 = (float[]) o;
@@ -203,7 +224,7 @@ public class ModchuModel_ModelBaseDuoMaster implements Modchu_IModelBaseDuo {
 			GL11.glColor4f(f9, f9, f9, f10);
 	}
 
-	private void renderAfter(Object entity, float par2, float par3, float par4, float par5, float par6, float par7, ModchuModel_IEntityCaps entityCaps, boolean isRendering) {
+	private void renderAfter(Object entity, float par2, float par3, float par4, float par5, float par6, float par7, Object entityCaps, boolean isRendering) {
 		if (ModchuModel_ConfigData.transparency != 1.0F)
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		else GL11.glColor3f(1.0F, 1.0F, 1.0F);

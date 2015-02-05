@@ -21,7 +21,7 @@ public class ModchuModel_TexturedTriangleMaster implements Modchu_ITexturedTrian
 	private boolean setColor;
 
 	public ModchuModel_TexturedTriangleMaster(Modchu_TexturedTriangle baseTexturedTriangle, Object... o) {
-		if (o != null) ;else return;
+		if (o != null); else return;
 		base = baseTexturedTriangle;
 		if (o.length > 1) {
 			init((Object[])o[0], (float[][])o[1], (float[][])o[2], (float[]) o[3], (Float)o[4], (Float)o[5]);

@@ -169,7 +169,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 
 	@Override
 	public void addChild(Modchu_ModelRenderer modelRenderer) {
-		if (modelRenderer != null) ;else return;
+		if (modelRenderer != null); else return;
 		if (base.childModels == null) {
 			base.childModels = new ArrayList();
 		}
@@ -204,7 +204,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 	public Modchu_ModelRendererBase addParts(Class pModelBoxBase, String pName, Object... pArg) {
 		pName = (new StringBuilder()).append(boxName).append(".").append(pName).toString();
 		Object textureOffset = getTextureOffset(pName);
-		if (textureOffset != null) ;else textureOffset = Modchu_Reflect.newInstance("TextureOffset", new Class[]{ int.class, int.class }, new Object[]{ 0, 0 });
+		if (textureOffset != null); else textureOffset = Modchu_Reflect.newInstance("TextureOffset", new Class[]{ int.class, int.class }, new Object[]{ 0, 0 });
 		int tempTextureOffsetX = textureOffsetX;
 		int tempTextureOffsetY = textureOffsetY;
 		setTextureOffset(Modchu_AS.getInt(Modchu_AS.textureOffsetTextureOffsetX, textureOffset), Modchu_AS.getInt(Modchu_AS.textureOffsetTextureOffsetY, textureOffset));
@@ -242,7 +242,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 	@Override
 	public Object getModelBoxBaseObject(Class pModelBoxBase, Object... pArg) {
 		Object o = Modchu_Reflect.newInstance(pModelBoxBase, new Class[]{ Modchu_ModelRendererBase.class, Object[].class }, new Object[]{ base, pArg });
-		if (o != null) ;else {
+		if (o != null); else {
 			Modchu_Debug.mDebug1("getModelBoxBaseObject null !! pModelBoxBase="+pModelBoxBase);
 		}
 		return o;
@@ -307,7 +307,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 
 	@Override
 	public void renderItemsHead(Object pModelMulti, Modchu_IEntityCapsBase entityCaps, float scale, int addSupport) {
-		Object itemStack = entityCaps.getCapsValue(Modchu_IEntityCapsBase.caps_HeadMount);
+		Object itemStack = entityCaps.getCapsValue(Modchu_IEntityCapsBase.caps_HeadMount, 9);
 		Object entity = entityCaps.getCapsValue(Modchu_IEntityCapsBase.caps_Entity);
 
 		renderItems(entity, true, null, itemStack, scale, addSupport, Modchu_Main.getMinecraftVersion() > 179 ? Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeHEAD) : null);
@@ -333,7 +333,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 
 	@Override
 	public void renderItems(Object entityLiving, boolean pRealBlock, Object enumAction, Object itemStack, float scale, int addSupport, Enum type) {
-		if (entityLiving != null) ;else return;
+		if (entityLiving != null); else return;
 		itemstack = itemStack;
 		switch (addSupport) {
 		case 0:
@@ -347,7 +347,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 
 	@Override
 	public void renderItems(Object entityLiving, boolean pRealBlock, Object enumAction, Object itemStack) {
-		if (entityLiving != null) ;else return;
+		if (entityLiving != null); else return;
 		itemstack = itemStack;
 		renderItems(entityLiving, pRealBlock, enumAction, itemStack, 1.0F);
 	}
@@ -360,10 +360,10 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 	@Override
 	public void renderItems(Object entityLiving, boolean pRealBlock, Object enumAction, Object itemstack, float scale, Enum type) {
 		if (itemstack != null
-				&& entityLiving != null) ;else {
-			//if (itemstack != null) ;else Modchu_Debug.mDebug("renderItems itemstack == null.");
-			//if (entityLiving != null) ;else Modchu_Debug.mDebug("renderItems entityLiving == null.");
-			//if (render != null) ;else Modchu_Debug.mDebug("renderItems render == null.");
+				&& entityLiving != null); else {
+			//if (itemstack != null); else Modchu_Debug.mDebug("renderItems itemstack == null.");
+			//if (entityLiving != null); else Modchu_Debug.mDebug("renderItems entityLiving == null.");
+			//if (render != null); else Modchu_Debug.mDebug("renderItems render == null.");
 			return;
 		}
 		int version = Modchu_Main.getMinecraftVersion();
@@ -372,7 +372,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 			return;
 		}
 		Object render = Modchu_Main.getRender(entityLiving);
-		if (render != null) ;else return;
+		if (render != null); else return;
 		// アイテムのレンダリング
 		Modchu_GlStateManager.pushMatrix();
 		Object item = Modchu_AS.get(Modchu_AS.itemStackGetItem, itemstack);
@@ -468,7 +468,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 					}
 
 					Object iBlockState = Modchu_AS.get(Modchu_AS.blockGetStateFromMeta, block, metadata);
-					if (iBlockState != null) ;else iBlockState = Modchu_AS.get(Modchu_AS.blockGetDefaultState, block);
+					if (iBlockState != null); else iBlockState = Modchu_AS.get(Modchu_AS.blockGetDefaultState, block);
 					//Modchu_Debug.mDebug("renderItems iBlockState="+iBlockState);
 					blockRender(block, iBlockState, 1.0F, true);
 				}
@@ -562,7 +562,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 
 	private void oldRenderItems(Object entityLiving, boolean pRealBlock, Object enumAction, Object itemstack, float scale) {
 		Object render = Modchu_Main.getRender(entityLiving);
-		if (render != null) ;else return;
+		if (render != null); else return;
 		// アイテムのレンダリング
 		Modchu_GlStateManager.pushMatrix();
 		int version = Modchu_Main.getMinecraftVersion();
@@ -928,7 +928,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 	public boolean renderDecoBlock(Object entityLiving, boolean pRealBlock, Object enumAction, float scale, int addSupport) {
 		//DecoBlock, FavBlock用描画
 		Object render = Modchu_Main.getRender(baseModel);
-		if (render != null) ;else return false;
+		if (render != null); else return false;
 		Object block = Modchu_AS.get(Modchu_AS.getBlockItemStack, itemstack);
 		boolean flag = false;
 		boolean rotate = false;
@@ -1576,13 +1576,13 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 
 	@Override
 	public void setFreeVariable(String s, Object o) {
-		if (freeVariableMap != null) ;else freeVariableMap = new ConcurrentHashMap();
+		if (freeVariableMap != null); else freeVariableMap = new ConcurrentHashMap();
 		freeVariableMap.put(s, o);
 	}
 
 	@Override
 	public void removeFreeVariable(String s) {
-		if (freeVariableMap != null) ;else return;
+		if (freeVariableMap != null); else return;
 		if (freeVariableMap.containsKey(s)) freeVariableMap.remove(s);
 	}
 

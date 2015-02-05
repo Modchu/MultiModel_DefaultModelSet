@@ -17,19 +17,19 @@ import modchu.model.ModchuModel_IEntityCaps;public class MultiModelCustom exte
 		this(null, f, f1, i, j);
 	}	public MultiModelCustom(String s, float f, float f1, int i, int j) {
 		super(f, f1, i < 0 ? 64 : i, j < 0 ? 32 : j);
-		if (s != null) ;else s = "1";
+		if (s != null); else s = "1";
 		modelName = s;
 		init(f, f1);
 		Modchu_Debug.mlDebug1("public MultiModelCustom s="+s);
 		//Modchu_Debug.mlDebug("public MultiModelCustom modelSize="+modelSize);
-		customModel = new ModchuModel_CustomModel(base, this, s, null, null, f, 0.0F, null);
-	}	public MultiModelCustom(float f, Object modelBiped, String textureName) {
-		this(f, modelBiped, textureName, null);
-	}	public MultiModelCustom(float f, Object modelBiped, String textureName, HashMap map) {
+		customModel = new ModchuModel_CustomModel(this, s, null, null, f, 0.0F, null);
+	}	public MultiModelCustom(float f, MultiModelBaseBiped multiModelBaseBiped, String textureName) {
+		this(f, multiModelBaseBiped, textureName, null);
+	}	public MultiModelCustom(float f, MultiModelBaseBiped multiModelBaseBiped, String textureName, HashMap map) {
 		super(f, 0.0F, 64, 32);
 		init(f, 0.0F);
 		Modchu_Debug.mlDebug1("public MultiModelCustom 2 textureName="+textureName);
-		customModel = new ModchuModel_CustomModel(base, this, null, modelBiped, textureName, f, 0.0F, map);
+		customModel = new ModchuModel_CustomModel(this, null, multiModelBaseBiped, textureName, f, 0.0F, map);
 	}	private void init(float f, float f1) {
 		dummy = new Modchu_ModelRenderer(this, 0, 0);
 		dummy.addBox(0.0F, 0.0F, 0.0F, 0, 0, 0, f);

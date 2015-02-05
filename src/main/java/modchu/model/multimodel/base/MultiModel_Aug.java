@@ -90,7 +90,7 @@ import modchu.model.ModchuModel_IEntityCaps;public class MultiModel_Aug extend
 	public void setLivingAnimationsLM(ModchuModel_IEntityCaps entityCaps, float f, float f1, float renderPartialTicks) {
 		super.setLivingAnimationsLM(entityCaps, f, f1, renderPartialTicks);
 		Object entityliving = entityCaps.getCapsValue(entityCaps.caps_Entity);
-		if (entityliving != null) ;else return;		int ticksExisted = Modchu_AS.getInt(Modchu_AS.entityTicksExisted, entityliving);
+		if (entityliving != null); else return;		int ticksExisted = Modchu_AS.getInt(Modchu_AS.entityTicksExisted, entityliving);
 		float f3 = ticksExisted + renderPartialTicks + Modchu_EntityCapsHelper.getCapsValueFloat(this, entityCaps, caps_entityIdFactor);
 		float f4 = 0.0F;
 		if (Modchu_EntityCapsHelper.getCapsValueBoolean(this, entityCaps, caps_isLookSuger)) {
