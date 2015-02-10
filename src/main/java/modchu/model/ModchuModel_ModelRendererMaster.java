@@ -13,6 +13,7 @@ import modchu.lib.Modchu_Main;
 import modchu.lib.Modchu_ModelBox;
 import modchu.lib.Modchu_ModelRendererBase;
 import modchu.lib.Modchu_Reflect;
+import modchu.lib.Modchu_RenderEngine;
 import modchu.lib.characteristic.Modchu_AS;
 import modchu.lib.characteristic.Modchu_CastHelper;
 import modchu.lib.characteristic.Modchu_GlStateManager;
@@ -363,9 +364,9 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 				&& entityLiving != null); else {
 			//if (itemstack != null); else Modchu_Debug.mDebug("renderItems itemstack == null.");
 			//if (entityLiving != null); else Modchu_Debug.mDebug("renderItems entityLiving == null.");
-			//if (render != null); else Modchu_Debug.mDebug("renderItems render == null.");
 			return;
 		}
+		//Modchu_Debug.mDebug("renderItems itemstack="+itemstack);
 		int version = Modchu_Main.getMinecraftVersion();
 		if (version < 180) {
 			oldRenderItems(entityLiving, pRealBlock, enumAction, itemstack, scale);
@@ -398,8 +399,10 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 				Modchu_GlStateManager.enableCull();
 				if (Modchu_AS.getBoolean(Modchu_AS.isCamouflage, block)) Modchu_GlStateManager.disableAlpha();
 				//Modchu_AS.set(Modchu_AS.renderManagerItemRendererRenderItem, entityLiving, itemstack, type);
-				Object blockRendererDispatcher = Modchu_AS.get(Modchu_AS.minecraftGetBlockRendererDispatcher);
+				//Object blockRendererDispatcher = Modchu_AS.get(Modchu_AS.minecraftGetBlockRendererDispatcher);
 				Modchu_AS.set(Modchu_AS.renderBindTexture, render, Modchu_AS.get(Modchu_AS.textureMapLocationBlocksTexture));
+				//Modchu_RenderEngine.instance.bindTexture(Modchu_AS.get(Modchu_AS.textureMapLocationBlocksTexture));
+				//Modchu_Debug.mDebug1("renderItems textureMapLocationBlocksTexture="+Modchu_AS.get(Modchu_AS.textureMapLocationBlocksTexture));
 				int metadata = Modchu_AS.getInt(Modchu_AS.itemGetMetadata, item, Modchu_AS.getInt(Modchu_AS.itemStackGetMetadata, itemstack));
 				//Modchu_Debug.mDebug("renderItems metadata="+metadata);
 				//Modchu_Debug.mDebug("renderItems block.getClass()="+block.getClass());
@@ -526,6 +529,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 		int renderPasses = Modchu_AS.getBoolean(Modchu_AS.itemRequiresMultipleRenderPasses, item) ? 1 : 0;
 		type = Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeTHIRD_PERSON);
 		Modchu_GlStateManager.scale(scale, scale, scale);
+		if (version > 179) Modchu_GlStateManager.bindTexture(9999);
 		for (int j = 0; j <= renderPasses; j++) {
 			if (!ModchuModel_Main.isSSP
 					| renderPasses > 0) {
@@ -536,6 +540,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 				Modchu_GlStateManager.color(f15, f17, f19, 1.0F);
 			}
 			Modchu_AS.set(Modchu_AS.renderManagerItemRendererRenderItem, entityLiving, itemstack, version > 179 ? type : j);
+			//Modchu_Debug.mDebug("renderManagerItemRendererRenderItem itemstack="+itemstack);
 			//render.renderManager.itemRenderer.renderItem(entityLiving, itemstack, j);
 		}
 		renderItemsEndSetting();

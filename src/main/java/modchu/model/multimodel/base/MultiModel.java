@@ -274,8 +274,7 @@ package modchu.model.multimodel.base;import modchu.lib.Modchu_Debug;import mo
 		//f4 = 向いている上下方向で変化
 		//f5 = スケール値？
 		//Modchu_Debug.dDebug("setRotationAnglesLM f3="+f3+" f4="+f4, 4);
-		super.setRotationAnglesLM(f, f1, f2, f3, f4, f5, entityCaps);
-		setDefaultPause(f, f1, f2, f3, f4, f5, entityCaps);
+		setDefaultPause(f, f1, f2, f3, f4, f5, entityCaps);		super.setRotationAnglesLM(f, f1, f2, f3, f4, f5, entityCaps);
 		bipedHead.rotateAngleY = f3 / 57.29578F;
 		bipedHead.rotateAngleX = f4 / 57.29578F;
 		bipedRightArm.rotateAngleX = Modchu_AS.getFloat(Modchu_AS.mathHelperCos, f * 0.6662F + 3.141593F) * 2.0F * f1 * 0.5F;
@@ -381,7 +380,7 @@ package modchu.model.multimodel.base;import modchu.lib.Modchu_Debug;import mo
 	}	@Override
 	public void skirtFloats(float f, float f1, float f2, float f3, float f4, float f5, ModchuModel_IEntityCaps entityCaps) {
 		if (Modchu_EntityCapsHelper.getCapsValueInt(this, null, caps_skirtFloats) < 2) return;
-		float motionY = (float) getMotionY();
+		float motionY = (float) Modchu_EntityCapsHelper.getCapsValueDouble(this, entityCaps, caps_skirtFloatsMotionY);;
 		SkirtFront.rotationPointX = SkirtBack.rotationPointX = SkirtRight.rotationPointZ = SkirtLeft.rotationPointZ = motionY * 4.0F;		SkirtFront.rotateAngleX = SkirtRight.rotateAngleZ = motionY;
 		SkirtLeft.rotateAngleZ = SkirtBack.rotateAngleX = -motionY;		SkirtFront.scaleX = SkirtBack.scaleX = SkirtRight.scaleZ = SkirtLeft.scaleZ = 1.0F - (motionY * 1.0F);
 	}	@Override

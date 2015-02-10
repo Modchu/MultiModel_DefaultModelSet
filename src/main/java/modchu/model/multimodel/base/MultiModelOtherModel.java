@@ -16,6 +16,7 @@ import modchu.lib.Modchu_Main;
 import modchu.lib.Modchu_Reflect;
 import modchu.lib.characteristic.Modchu_AS;
 import modchu.lib.characteristic.Modchu_CastHelper;
+import modchu.lib.characteristic.Modchu_ModelRenderer;
 import modchu.model.ModchuModel_IEntityCaps;
 
 public class MultiModelOtherModel extends MultiModelBaseBiped {
@@ -107,6 +108,20 @@ public class MultiModelOtherModel extends MultiModelBaseBiped {
 	}
 
 	@Override
+	public void armsinit(float f, float f1) {
+		// 手持ち
+		Arms[0] = new Modchu_ModelRenderer(this, 0, 0);
+		Arms[0].setRotationPoint(0.5F, 6.5F, 0F);
+		Arms[1] = new Modchu_ModelRenderer(this, 0, 0);
+		Arms[1].setRotationPoint(-0.5F, 6.5F, 0F);
+		Arms[1].isInvertX = true;
+		HeadMount = new Modchu_ModelRenderer(this, "HeadMount");
+		HeadMount.setRotationPoint(0F, 0F, 0F);
+		HeadTop = new Modchu_ModelRenderer(this, "HeadTop");
+		HeadTop.setRotationPoint(0.0F, -8.0F, 0.0F);
+	}
+
+	@Override
 	public void changeModel(ModchuModel_IEntityCaps o) {
 		super.changeModel(o);
 		initRenderDummyEntity();
@@ -157,71 +172,54 @@ public class MultiModelOtherModel extends MultiModelBaseBiped {
 	@Override
 	public void setRotationAnglesLM(float f, float f1, float f2, float pheadYaw, float pheadPitch, float f5, ModchuModel_IEntityCaps entityCaps) {
 	}
-
+/*
 	@Override
 	public void renderItems(ModchuModel_IEntityCaps entityCaps) {
-		// TODO 自動生成されたメソッド・スタブ
-
+		super.renderItems(entityCaps);
 	}
 
 	@Override
 	public void renderItemsLM(ModchuModel_IEntityCaps entityCaps) {
-		// TODO 自動生成されたメソッド・スタブ
-
+		//Arms[0].postRender(1.0F);
+		super.renderItemsLM(entityCaps);
 	}
 
 	@Override
 	public void renderItemsHead(ModchuModel_IEntityCaps entityCaps) {
-		// TODO 自動生成されたメソッド・スタブ
-
+		super.renderItemsHead(entityCaps);
 	}
 
 	@Override
 	public void renderItemsArmorHead(ModchuModel_IEntityCaps entityCaps) {
-		// TODO 自動生成されたメソッド・スタブ
-
+		super.renderItemsArmorHead(entityCaps);
 	}
-
+*/
 	@Override
 	public void setRotationAnglesfirstPerson(float f, float f1, float f2, float f3, float f4, float f5, ModchuModel_IEntityCaps entityCaps) {
-		// TODO 自動生成されたメソッド・スタブ
-
 	}
 
 	@Override
 	public void setArmorBipedHeadShowModel(ModchuModel_IEntityCaps entityCaps, boolean b) {
-		// TODO 自動生成されたメソッド・スタブ
-
 	}
 
 	@Override
 	public void setArmorBipedBodyShowModel(ModchuModel_IEntityCaps entityCaps, boolean b) {
-		// TODO 自動生成されたメソッド・スタブ
-
 	}
 
 	@Override
 	public void setArmorBipedRightArmShowModel(ModchuModel_IEntityCaps entityCaps, boolean b) {
-		// TODO 自動生成されたメソッド・スタブ
-
 	}
 
 	@Override
 	public void setArmorBipedLeftArmShowModel(ModchuModel_IEntityCaps entityCaps, boolean b) {
-		// TODO 自動生成されたメソッド・スタブ
-
 	}
 
 	@Override
 	public void setArmorBipedRightLegShowModel(ModchuModel_IEntityCaps entityCaps, boolean b) {
-		// TODO 自動生成されたメソッド・スタブ
-
 	}
 
 	@Override
 	public void setArmorBipedLeftLegShowModel(ModchuModel_IEntityCaps entityCaps, boolean b) {
-		// TODO 自動生成されたメソッド・スタブ
-
 	}
 
 	@Override
@@ -293,6 +291,7 @@ public class MultiModelOtherModel extends MultiModelBaseBiped {
 
 	@Override
 	public void initModel(float psize, float pyoffset, Object... o) {
+		afterInit(psize, pyoffset);
 	}
 
 	@Override

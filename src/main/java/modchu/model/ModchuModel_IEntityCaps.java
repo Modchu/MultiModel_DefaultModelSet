@@ -97,6 +97,9 @@ public interface ModchuModel_IEntityCaps extends Modchu_IEntityCapsBase {
 	public static final int caps_bipedLeftLeg									= 0x080100;
 	public static final int caps_showModelSettingBoolean				= 0x080101;
 	public static final int caps_allMultiModelActionRunInitFlag			= 0x080102;
+	public static final int caps_skirtFloatsMotionY							= 0x080103;
+	public static final int caps_breastFloatsMotionY						= 0x080104;
+	public static final int caps_breastFloats									= 0x080105;
 
 	public static final byte entityType_LMM = 1;
 	public static final byte entityType_PFLM = 2;

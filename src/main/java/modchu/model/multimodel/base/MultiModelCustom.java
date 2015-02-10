@@ -33,7 +33,7 @@ import modchu.model.ModchuModel_IEntityCaps;public class MultiModelCustom exte
 	}	private void init(float f, float f1) {
 		dummy = new Modchu_ModelRenderer(this, 0, 0);
 		dummy.addBox(0.0F, 0.0F, 0.0F, 0, 0, 0, f);
-	}	@Override
+	}	@Override	public void initSkirtFloats() {	}	@Override
 	public String getUsingTexture() {
 		return "default_Custom";
 	}	@Override
