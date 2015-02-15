@@ -307,11 +307,11 @@ package modchu.model.multimodel.base;import modchu.lib.Modchu_Debug;import mo
 		// アイテム持ってるときの腕振りを抑える
 		if (heldItem[1] != 0
 				&& !Modchu_EntityCapsHelper.getCapsValueBoolean(this, entityCaps, caps_oldwalking)) {
-			bipedLeftArm.rotateAngleX = bipedLeftArm.rotateAngleX * 0.5F - 0.3141593F * heldItem[1];
+			if (heldItem[1] == 3) {				bipedLeftArm.rotateAngleX = -0.8F;				bipedLeftArm.rotateAngleY = -0.4F;			} else {				bipedLeftArm.rotateAngleX = bipedLeftArm.rotateAngleX * 0.5F - 0.3141593F * heldItem[1];			}
 		}
 		if (heldItem[0] != 0
 				&& !Modchu_EntityCapsHelper.getCapsValueBoolean(this, entityCaps, caps_oldwalking)) {
-			bipedRightArm.rotateAngleX = bipedRightArm.rotateAngleX * 0.5F - 0.3141593F * heldItem[0];
+			if (heldItem[0] == 3) {				bipedRightArm.rotateAngleX = -0.8F;				bipedRightArm.rotateAngleY = -0.4F;			} else {				bipedRightArm.rotateAngleX = bipedRightArm.rotateAngleX * 0.5F - 0.3141593F * heldItem[0];			}
 		}
 		bipedRightArm.rotateAngleY = bipedLeftArm.rotateAngleY = 0.0F;		armSwing(f, f1, f2, f3, f4, f5, entityCaps);		bipedRightLeg.rotationPointZ = bipedLeftLeg.rotationPointZ =
 				bipedBody.rotateAngleX = bipedBody.rotateAngleY = bipedBody.rotateAngleZ =
@@ -653,6 +653,6 @@ package modchu.model.multimodel.base;import modchu.lib.Modchu_Debug;import mo
 		return 0.4F;
 	}	@Override
 	public boolean isItemHolder(ModchuModel_IEntityCaps entityCaps) {
-		return false;
+		return true;
 	}
 }

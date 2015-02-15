@@ -13,7 +13,6 @@ import modchu.lib.Modchu_Main;
 import modchu.lib.Modchu_ModelBox;
 import modchu.lib.Modchu_ModelRendererBase;
 import modchu.lib.Modchu_Reflect;
-import modchu.lib.Modchu_RenderEngine;
 import modchu.lib.characteristic.Modchu_AS;
 import modchu.lib.characteristic.Modchu_CastHelper;
 import modchu.lib.characteristic.Modchu_GlStateManager;
@@ -376,6 +375,17 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 		if (render != null); else return;
 		// アイテムのレンダリング
 		Modchu_GlStateManager.pushMatrix();
+		int tempTextureStateTextureName = 0;
+		if (version > 179) {
+			int activeTextureUnit = Modchu_CastHelper.Int(Modchu_Reflect.getFieldObject("net.minecraft.client.renderer.GlStateManager", "field_179162_o", "activeTextureUnit"));
+			Object[] textureState = Modchu_CastHelper.ObjectArray(Modchu_Reflect.getFieldObject("net.minecraft.client.renderer.GlStateManager", "field_179174_p", "textureState"));
+			if (textureState != null
+					&& activeTextureUnit < textureState.length
+					&& textureState[activeTextureUnit] != null) {
+				tempTextureStateTextureName = (Integer) Modchu_Reflect.getFieldObject(textureState[activeTextureUnit].getClass(), "field_179059_b", "textureName", textureState[activeTextureUnit]);
+				Modchu_GlStateManager.bindTexture(tempTextureStateTextureName + 1);
+			}
+		}
 		Object item = Modchu_AS.get(Modchu_AS.itemStackGetItem, itemstack);
 		Object block = Modchu_AS.get(Modchu_AS.getBlockItemStack, itemstack);
 		boolean skullFlag = Modchu_AS.getBoolean(Modchu_AS.isSkull, item);
@@ -494,7 +504,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 				Modchu_GlStateManager.scale(scale, scale, scale);
 				Modchu_AS.set(Modchu_AS.tileEntitySkullRendererRenderSkull, -0.5F, 0.0F, -0.5F, Modchu_AS.getEnum(Modchu_AS.enumFacingUP), 180.0F, Modchu_AS.get(Modchu_AS.itemStackGetMetadata, itemstack), gameprofile, -1);
 			}
-			renderItemsEndSetting();
+			renderItemsEndSetting(tempTextureStateTextureName);
 			return;
 		} else {
 			if (base.adjust) Modchu_GlStateManager.translate(0.075F, -0.5F, 0.2F);
@@ -507,6 +517,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 			if (base.adjust) Modchu_GlStateManager.translate(-0.0625F, 0.4375F, 0.0625F);
 			if (Modchu_Reflect.loadClass("EntityPlayer").isInstance(entityLiving)
 					&& Modchu_AS.get(Modchu_AS.entityPlayerFishEntity, entityLiving) != null) itemstack = Modchu_Reflect.newInstance("ItemStack", new Class[]{}, new Object[]{ Modchu_AS.get(Modchu_AS.getItem, "fishing_rod"), 0 });
+			float var6 = 1.0F;
 			if (Modchu_Reflect.loadClass("ItemBlock").isInstance(item)) {
 				int renderType = Modchu_AS.getInt(Modchu_AS.blockGetRenderType, Modchu_AS.get(Modchu_AS.blockGetBlockFromItem, item));
 				//Modchu_Debug.mDebug("renderItems renderType="+renderType);
@@ -519,7 +530,48 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 				} else {
 					if (base.adjust) Modchu_GlStateManager.translate(0.0F, 0.1F, 0.0F);
 				}
+			} else if (Modchu_Reflect.loadClass("ItemBow").isInstance(item)) {
+				var6 = 0.625F;
+				Modchu_GlStateManager.translate(0.0F, 0.0F, -0.2F);
+
+				//Modchu_GlStateManager.rotate(-20.0F, 0.0F, 1.0F, 0.0F);
+				Modchu_GlStateManager.scale(var6, var6, var6);
+				Modchu_GlStateManager.rotate(0.0F, 1.0F, 0.0F, 0.0F);
+				//Modchu_GlStateManager.rotate(135.0F, 0.0F, 1.0F, 0.0F);
+			} else if (Modchu_AS.getBoolean(Modchu_AS.itemIsFull3D, item)) {
+				var6 = 0.975F;
+
+				if (Modchu_AS.getBoolean(Modchu_AS.itemShouldRotateAroundWhenRendering, item)) {
+					Modchu_GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
+					Modchu_GlStateManager.translate(0.0F, -0.125F, 0.0F);
+				}
+
+				if (enumAction == Modchu_AS.getEnum(Modchu_AS.enumActionBlock)) {
+					//Modchu_GlStateManager.translate(Modchu_Debug.debaf1, Modchu_Debug.debaf2, Modchu_Debug.debaf3);
+					Modchu_GlStateManager.translate(-0.2F, 0.0F, -0.2F);
+					//Modchu_GlStateManager.rotate(Modchu_Debug.debaf2, 0.0F, 1.0F, 0.0F);
+					//Modchu_GlStateManager.rotate(Modchu_Debug.debaf1, 1.0F, 0.0F, 0.0F);
+					//Modchu_GlStateManager.rotate(Modchu_Debug.debaf3, 0.0F, 0.0F, 1.0F);
+					//Modchu_Debug.mdDebug("x="+Modchu_Debug.debaf1+" y="+Modchu_Debug.debaf2+" z="+Modchu_Debug.debaf3);
+					Modchu_GlStateManager.rotate(-25.0F, 0.0F, 1.0F, 0.0F);
+					Modchu_GlStateManager.rotate(-25.0F, 1.0F, 0.0F, 0.0F);
+					Modchu_GlStateManager.rotate(-60.0F, 0.0F, 0.0F, 1.0F);
+				} else {
+					Modchu_GlStateManager.translate(0.0F, 0.0F, -0.2F);
+				}
+				//Modchu_GlStateManager.translate(0.0F, 0.1875F, 0.1F);
+				//Modchu_GlStateManager.scale(var6, var6, var6);
+				//Modchu_GlStateManager.rotate(-100.0F, 1.0F, 0.0F, 0.0F);
+				//Modchu_GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
+			} else {
+				//var6 = 0.375F;
+				//Modchu_GlStateManager.translate(0.15F, 0.15F, -0.05F);
+				//Modchu_GlStateManager.scale(var6, var6, var6);
+				//Modchu_GlStateManager.rotate(60.0F, 0.0F, 0.0F, 1.0F);
+				//Modchu_GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
+				//Modchu_GlStateManager.rotate(20.0F, 0.0F, 0.0F, 1.0F);
 			}
+
 			if (skullFlag) {
 				if (base.adjust) Modchu_GlStateManager.translate(0.0F, 0.1F, 0.0F);
 			}
@@ -529,7 +581,7 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 		int renderPasses = Modchu_AS.getBoolean(Modchu_AS.itemRequiresMultipleRenderPasses, item) ? 1 : 0;
 		type = Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeTHIRD_PERSON);
 		Modchu_GlStateManager.scale(scale, scale, scale);
-		if (version > 179) Modchu_GlStateManager.bindTexture(9999);
+		//if (version > 179) Modchu_GlStateManager.bindTexture(9999);
 		for (int j = 0; j <= renderPasses; j++) {
 			if (!ModchuModel_Main.isSSP
 					| renderPasses > 0) {
@@ -543,14 +595,18 @@ public class ModchuModel_ModelRendererMaster implements Modchu_IModelRenderer {
 			//Modchu_Debug.mDebug("renderManagerItemRendererRenderItem itemstack="+itemstack);
 			//render.renderManager.itemRenderer.renderItem(entityLiving, itemstack, j);
 		}
-		renderItemsEndSetting();
+		//Modchu_AS.set(Modchu_AS.renderBindTexture, render, Modchu_AS.get(Modchu_AS.textureMapLocationBlocksTexture));
+		renderItemsEndSetting(tempTextureStateTextureName);
 	}
 
-	private void renderItemsEndSetting() {
+	private void renderItemsEndSetting(int i) {
 		Modchu_GlStateManager.disableCull();
 		Modchu_GlStateManager.enableAlpha();
 		Modchu_GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		Modchu_GlStateManager.popMatrix();
+		if (Modchu_Main.getMinecraftVersion() > 179) {
+			Modchu_GlStateManager.bindTexture(i);
+		}
 	}
 
 	public void blockRender(Object block, Object iBlockState, float f, boolean b) {
