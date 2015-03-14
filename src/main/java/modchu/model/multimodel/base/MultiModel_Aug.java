@@ -1,14 +1,10 @@
-package modchu.model.multimodel.base;import modchu.lib.Modchu_Debug;
-import modchu.lib.Modchu_EntityCapsHelper;
-import modchu.lib.characteristic.Modchu_AS;
-import modchu.lib.characteristic.Modchu_ModelRenderer;
-import modchu.model.ModchuModel_IEntityCaps;public class MultiModel_Aug extends MultiModel_SR2 {	public Modchu_ModelRenderer sidetailUpperR;
-	public Modchu_ModelRenderer sidetailUpperL;	public Modchu_ModelRenderer shaggyB;
-	public Modchu_ModelRenderer shaggyR;
-	public Modchu_ModelRenderer shaggyL;	public Modchu_ModelRenderer sensor1;
-	public Modchu_ModelRenderer sensor2;
-	public Modchu_ModelRenderer sensor3;
-	public Modchu_ModelRenderer sensor4;	public MultiModel_Aug() {
+package modchu.model.multimodel.base;import modchu.lib.Modchu_AS;import modchu.lib.Modchu_EntityCapsHelper;import modchu.model.ModchuModel_IEntityCaps;import modchu.model.ModchuModel_ModelRenderer;public class MultiModel_Aug extends MultiModel_SR2 {	public ModchuModel_ModelRenderer sidetailUpperR;
+	public ModchuModel_ModelRenderer sidetailUpperL;	public ModchuModel_ModelRenderer shaggyB;
+	public ModchuModel_ModelRenderer shaggyR;
+	public ModchuModel_ModelRenderer shaggyL;	public ModchuModel_ModelRenderer sensor1;
+	public ModchuModel_ModelRenderer sensor2;
+	public ModchuModel_ModelRenderer sensor3;
+	public ModchuModel_ModelRenderer sensor4;	public MultiModel_Aug() {
 		this(0.0F);
 	}	public MultiModel_Aug(float f) {
 		this(f, 0.0F);
@@ -19,41 +15,41 @@ import modchu.model.ModchuModel_IEntityCaps;public class MultiModel_Aug extend
 	}	@Override
 	public void initModel(float f, float f1, boolean isAfterInit) {
 		super.initModel(f, f1, false);		// 再構成パーツ
-		ChignonR = new Modchu_ModelRenderer(this, 0, 18);
+		ChignonR = new ModchuModel_ModelRenderer(this, 0, 18, "ChignonR");
 		ChignonR.addBox(-5F, -7F, 0.2F, 1, 3, 3, f);
 		ChignonR.setRotationPoint(0.0F, -1.5F, 0.0F);
-		SideTailR = new Modchu_ModelRenderer(this);
+		SideTailR = new ModchuModel_ModelRenderer(this, "SideTailR");
 		SideTailR.setTextureOffset(46, 20).addBox(-1.5F, -0.5F, -1.0F, 2, 10, 2, f);
 		SideTailR.setRotationPoint(-5F, -7.8F, 1.9F);
-		SideTailL = new Modchu_ModelRenderer(this);
+		SideTailL = new ModchuModel_ModelRenderer(this, "SideTailL");
 		SideTailL.setTextureOffset(54, 20).addBox(0.5F, -0.5F, -1.0F, 2, 10, 2, f);
 		SideTailL.setRotationPoint(4.0F, -7.8F, 1.9F);		// 増加パーツ
-		shaggyB = new Modchu_ModelRenderer(this, 24, 0);
+		shaggyB = new ModchuModel_ModelRenderer(this, 24, 0, "shaggyB");
 		shaggyB.addPlate(-5.0F, 0.0F, 0.0F, 10, 4, 4, f);
 		shaggyB.setRotationPoint(0.0F, -1.0F, 4.0F);
 		shaggyB.setRotateAngleX(0.4F);
-		shaggyR = new Modchu_ModelRenderer(this, 34, 4);
+		shaggyR = new ModchuModel_ModelRenderer(this, 34, 4, "shaggyR");
 		shaggyR.addPlate(0.0F, 0.0F, -5.0F, 10, 4, 1, f);
 		shaggyR.setRotationPoint(4.0F, -1.0F, 0.0F);
 		shaggyR.setRotateAngleZ(-0.4F);
-		shaggyL = new Modchu_ModelRenderer(this, 24, 4);
+		shaggyL = new ModchuModel_ModelRenderer(this, 24, 4, "shaggyL");
 		shaggyL.addPlate(0.0F, 0.0F, -5.0F, 10, 4, 5, f);
 		shaggyL.setRotationPoint(-4.0F, -1.0F, 0.0F);
-		shaggyL.setRotateAngleZ(0.4F);		sensor1 = new Modchu_ModelRenderer(this, 0, 0);
+		shaggyL.setRotateAngleZ(0.4F);		sensor1 = new ModchuModel_ModelRenderer(this, 0, 0, "sensor1");
 		sensor1.addPlate(-8.0F, -4.0F, 0.0F, 8, 4, 0);
 		sensor1.setRotationPoint(0.0F, -8.0F, 0.0F);
-		sensor2 = new Modchu_ModelRenderer(this, 0, 4);
+		sensor2 = new ModchuModel_ModelRenderer(this, 0, 4, "sensor2");
 		sensor2.addPlate(0.0F, -4.0F, 0.0F, 8, 4, 0);
 		sensor2.setRotationPoint(0.0F, -8.0F, 0.0F);
-		sensor3 = new Modchu_ModelRenderer(this, 44, 0);
+		sensor3 = new ModchuModel_ModelRenderer(this, 44, 0, "sensor3");
 		sensor3.addPlate(0.0F, -7.0F, -4.0F, 4, 8, 1);
 		sensor3.setRotationPoint(0.0F, -8.0F, 0.0F);
-		sensor4 = new Modchu_ModelRenderer(this, 34, 0);
+		sensor4 = new ModchuModel_ModelRenderer(this, 34, 0, "sensor4");
 		sensor4.addPlate(0.0F, -4.0F, -10.0F, 10, 4, 1);
-		sensor4.setRotationPoint(0.0F, -8.0F, 0.0F);		sidetailUpperR = new Modchu_ModelRenderer(this, 52, 10);
+		sensor4.setRotationPoint(0.0F, -8.0F, 0.0F);		sidetailUpperR = new ModchuModel_ModelRenderer(this, 52, 10, "sidetailUpperR");
 		sidetailUpperR.addBox(-4.0F, 0.0F, -1.0F, 4, 3, 2);
 		sidetailUpperR.setRotationPoint(1.2F, -1.5F, 0.0F);
-		sidetailUpperL = new Modchu_ModelRenderer(this, 52, 15);
+		sidetailUpperL = new ModchuModel_ModelRenderer(this, 52, 15, "sidetailUpperL");
 		sidetailUpperL.addBox(0.0F, 0.0F, -1.0F, 4, 3, 2);
 		sidetailUpperL.setRotationPoint(-0.5F, -1.5F, 0.0F);
 		ChignonL.setRotationPoint(0.0F, -1.5F, 0.0F);
@@ -64,10 +60,6 @@ import modchu.model.ModchuModel_IEntityCaps;public class MultiModel_Aug extend
 		bipedHead.removeChild(bipedHeadwear);
 		bipedHead.removeChild(Tail);
 		bipedHead.removeChild(ChignonB);
-		if (SideTailR != null
-				&& !SideTailR.cubeList.isEmpty()) bipedHead.addChild(SideTailR);
-		if (SideTailL != null
-				&& !SideTailL.cubeList.isEmpty()) bipedHead.addChild(SideTailL);
 		if (shaggyB != null
 				&& !shaggyB.cubeList.isEmpty()) bipedHead.addChild(shaggyB);
 		if (shaggyR != null

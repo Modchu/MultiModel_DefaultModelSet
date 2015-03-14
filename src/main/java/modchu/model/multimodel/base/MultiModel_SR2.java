@@ -1,10 +1,5 @@
-package modchu.model.multimodel.base;import modchu.lib.Modchu_Debug;
-import modchu.lib.Modchu_EntityCapsHelper;
-import modchu.lib.Modchu_Reflect;
-import modchu.lib.characteristic.Modchu_AS;
-import modchu.lib.characteristic.Modchu_ModelRenderer;
-import modchu.model.ModchuModel_IEntityCaps;public class MultiModel_SR2 extends MultiModel {	public Modchu_ModelRenderer eyeR;
-	public Modchu_ModelRenderer eyeL;	public MultiModel_SR2()
+package modchu.model.multimodel.base;import modchu.lib.Modchu_AS;import modchu.lib.Modchu_EntityCapsHelper;import modchu.lib.Modchu_Reflect;import modchu.model.ModchuModel_IEntityCaps;import modchu.model.ModchuModel_ModelRenderer;public class MultiModel_SR2 extends MultiModel {	public ModchuModel_ModelRenderer eyeR;
+	public ModchuModel_ModelRenderer eyeL;	public MultiModel_SR2()
 	{
 		this(0.0F);
 	}	public MultiModel_SR2(float f)
@@ -18,10 +13,10 @@ import modchu.model.ModchuModel_IEntityCaps;public class MultiModel_SR2 extend
 	}	@Override
 	public void initModel(float f, float f1, boolean isAfterInit) {
 		super.initModel(f, f1, false);		// 追加パーツ
-		eyeR = new Modchu_ModelRenderer(this, 32, 19);
+		eyeR = new ModchuModel_ModelRenderer(this, 32, 19, "eyeR");
 		eyeR.addPlate(-4.0F, -5.0F, -4.001F, 4, 4, 0, f);
 		eyeR.setRotationPoint(0.0F, 0.0F, 0.0F);
-		eyeL = new Modchu_ModelRenderer(this, 42, 19);
+		eyeL = new ModchuModel_ModelRenderer(this, 42, 19, "eyeL");
 		eyeL.addPlate(0.0F, -5.0F, -4.001F, 4, 4, 0, f);
 		eyeL.setRotationPoint(0.0F, 0.0F, 0.0F);
 		if (isAfterInit) afterInit(f, f1);

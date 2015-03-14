@@ -1,14 +1,17 @@
 package modchu.model;
 
-import modchu.lib.Modchu_ITexturedTriangle;
+import java.util.HashMap;
+
+import modchu.lib.Modchu_AS;
+import modchu.lib.Modchu_Debug;
+import modchu.lib.Modchu_ITexturedQuad;
+import modchu.lib.Modchu_ITexturedQuadMaster;
 import modchu.lib.Modchu_Reflect;
-import modchu.lib.characteristic.Modchu_AS;
-import modchu.lib.characteristic.Modchu_TexturedTriangle;
 
 import org.lwjgl.opengl.GL11;
 
-public class ModchuModel_TexturedTriangleMaster implements Modchu_ITexturedTriangle {
-	public Modchu_TexturedTriangle base;
+public class ModchuModel_TexturedTriangleMaster implements Modchu_ITexturedQuadMaster {
+	public Modchu_ITexturedQuad base;
 
 	public Object[] vertexPositions;
 	public int nVertices;
@@ -20,21 +23,30 @@ public class ModchuModel_TexturedTriangleMaster implements Modchu_ITexturedTrian
 	public int alpha;
 	private boolean setColor;
 
-	public ModchuModel_TexturedTriangleMaster(Modchu_TexturedTriangle baseTexturedTriangle, Object... o) {
-		if (o != null); else return;
-		base = baseTexturedTriangle;
-		if (o.length > 1) {
-			init((Object[])o[0], (float[][])o[1], (float[][])o[2], (float[]) o[3], (Float)o[4], (Float)o[5]);
+	public ModchuModel_TexturedTriangleMaster(HashMap<String, Object> map) {
+		base = (Modchu_ITexturedQuad) map.get("base");
+		//Modchu_Debug.mDebug("ModchuModel_TexturedTriangleMaster base="+base);
+		if (map.size() > 1) {
+			init((Object[])map.get("Object[]"), (float[][])map.get("float[][]"), (float[][])map.get("float[][]1"), (float[])map.get("float[]"), (Float)map.get("Float"), (Float)map.get("Float1"));
 		} else {
 			nVertices = 0;
 			invertNormal = false;
-			vertexPositions = (Object[]) o[0];
+			vertexPositions = (Object[])map.get("Object[]");
 			nVertices = vertexPositions.length;
 		}
 	}
 
 	public void init(Object[] positionTextureVertex, float[][] var2, float[][] var3, float[] var4, float var5, float var6) {
-		if (var4 != null) {
+/*
+		Modchu_Debug.mDebug("ModchuModel_TexturedTriangleMaster init positionTextureVertex="+positionTextureVertex);
+		Modchu_Debug.mDebug("ModchuModel_TexturedTriangleMaster init var2="+var2);
+		Modchu_Debug.mDebug("ModchuModel_TexturedTriangleMaster init var3="+var3);
+		Modchu_Debug.mDebug("ModchuModel_TexturedTriangleMaster init var4="+var4);
+		Modchu_Debug.mDebug("ModchuModel_TexturedTriangleMaster init var5="+var5);
+		Modchu_Debug.mDebug("ModchuModel_TexturedTriangleMaster init var6="+var6);
+*/
+		if (var4 != null
+				&& var4.length > 3) {
 			red = (int) (255.0F * var4[0]);
 			green = (int) (255.0F * var4[1]);
 			blue = (int) (255.0F * var4[2]);
@@ -73,8 +85,8 @@ public class ModchuModel_TexturedTriangleMaster implements Modchu_ITexturedTrian
 	}
 
 	@Override
-	public void draw(Object tessellator, float f) {
-		tessellator = Modchu_AS.get(Modchu_AS.tessellatorInstance);
+	public void draw(float f) {
+		Object tessellator = Modchu_AS.get(Modchu_AS.tessellatorInstance);
 		Object[] vec3 = Modchu_Reflect.newInstanceArray("Vec3", nVertices);
 		int i;
 
@@ -128,6 +140,11 @@ public class ModchuModel_TexturedTriangleMaster implements Modchu_ITexturedTrian
 		}
 
 		Modchu_AS.set(Modchu_AS.tessellatorDraw, tessellator);
+	}
+
+	@Override
+	public void setInvertNormal(boolean b) {
+		invertNormal = b;
 	}
 
 }

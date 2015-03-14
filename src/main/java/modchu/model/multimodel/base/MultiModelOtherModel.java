@@ -3,21 +3,22 @@ package modchu.model.multimodel.base;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.lwjgl.opengl.GL11;
-
+import modchu.lib.Modchu_AS;
 import modchu.lib.Modchu_ASAlmighty;
 import modchu.lib.Modchu_ASBase;
+import modchu.lib.Modchu_CastHelper;
 import modchu.lib.Modchu_Debug;
 import modchu.lib.Modchu_EntityCapsHelper;
 import modchu.lib.Modchu_Main;
 import modchu.lib.Modchu_Reflect;
-import modchu.lib.characteristic.Modchu_AS;
-import modchu.lib.characteristic.Modchu_CastHelper;
-import modchu.lib.characteristic.Modchu_ModelRenderer;
 import modchu.model.ModchuModel_IEntityCaps;
+import modchu.model.ModchuModel_ModelRenderer;
+
+import org.lwjgl.opengl.GL11;
 
 public class MultiModelOtherModel extends MultiModelBaseBiped {
 	public Object model;
@@ -69,6 +70,7 @@ public class MultiModelOtherModel extends MultiModelBaseBiped {
 	public MultiModelOtherModel(float f, float f1, int i, int j, Object model1, HashMap<String, Object> dataMap) {
 		super(f, f1, i < 0 ? 64 : i, j < 0 ? 32 : j);
 		model = model1;
+		mainFrame = new ModchuModel_ModelRenderer(this, "mainFrame");
 		if (dataMap != null
 				&& !dataMap.isEmpty()) {
 			for (Entry<String, Object> en : ((Map<String, Object>) dataMap).entrySet()) {
@@ -110,14 +112,14 @@ public class MultiModelOtherModel extends MultiModelBaseBiped {
 	@Override
 	public void armsinit(float f, float f1) {
 		// 手持ち
-		Arms[0] = new Modchu_ModelRenderer(this, 0, 0);
+		Arms[0] = new ModchuModel_ModelRenderer(this, 0, 0);
 		Arms[0].setRotationPoint(0.5F, 6.5F, 0F);
-		Arms[1] = new Modchu_ModelRenderer(this, 0, 0);
+		Arms[1] = new ModchuModel_ModelRenderer(this, 0, 0);
 		Arms[1].setRotationPoint(-0.5F, 6.5F, 0F);
 		Arms[1].isInvertX = true;
-		HeadMount = new Modchu_ModelRenderer(this, "HeadMount");
+		HeadMount = new ModchuModel_ModelRenderer(this, "HeadMount");
 		HeadMount.setRotationPoint(0F, 0F, 0F);
-		HeadTop = new Modchu_ModelRenderer(this, "HeadTop");
+		HeadTop = new ModchuModel_ModelRenderer(this, "HeadTop");
 		HeadTop.setRotationPoint(0.0F, -8.0F, 0.0F);
 	}
 
@@ -143,6 +145,23 @@ public class MultiModelOtherModel extends MultiModelBaseBiped {
 		} catch (Exception e) {
 			Modchu_Debug.lDebug1("MultiModelOtherModel render Exception !!", 2, e);
 		}
+		mainFrame.render(f5);
+	}
+
+	@Override
+	public void defaultAddChild() {
+		Object rightArm = Modchu_AS.get(Modchu_AS.modelRightArm, model);
+		if (rightArm != null
+				&& Arms[0] != null) {
+			List childModels = Modchu_AS.getList("ModelRenderer", "childModels", rightArm);
+			if (childModels != null
+					&& !childModels.contains(Arms[0])) Modchu_AS.set("ModelRenderer", "addChild", rightArm, new Class[]{ Modchu_Reflect.loadClass("ModelRenderer") }, Arms[0]);
+		}
+/*
+		Object leftArm = Modchu_AS.get(Modchu_AS.modelLeftArm, model);
+		if (leftArm != null
+				&& Arms[0] != null) Modchu_AS.set("ModelRenderer", "addChild", leftArm, new Class[]{ Modchu_Reflect.loadClass("ModelRenderer") }, Arms[1]);
+*/
 	}
 
 	protected void renderScaleSetting() {

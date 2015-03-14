@@ -12,13 +12,12 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
+import modchu.lib.Modchu_AS;
+import modchu.lib.Modchu_CastHelper;
 import modchu.lib.Modchu_Config;
 import modchu.lib.Modchu_Debug;
+import modchu.lib.Modchu_Main;
 import modchu.lib.Modchu_Reflect;
-import modchu.lib.characteristic.Modchu_AS;
-import modchu.lib.characteristic.Modchu_CastHelper;
-import modchu.lib.characteristic.Modchu_ModelBase;
-import modchu.lib.characteristic.Modchu_ModelRenderer;
 import modchu.model.multimodel.base.MultiModelBaseBiped;
 import modchu.model.multimodel.base.MultiModelCustom;
 
@@ -309,7 +308,7 @@ public class ModchuModel_Config extends Modchu_Config {
 		if (flag
 				| (getConfigShowPartsRenemeMapFlagString != null
 				&& !getConfigShowPartsRenemeMapFlagString.equals(s))) {
-			Object o = ModchuModel_Main.getModelMaster(model);
+			Object o = Modchu_Main.getModchuCharacteristicObjectMaster(model);
 			MultiModelBaseBiped multiModelBaseBiped = o instanceof MultiModelBaseBiped ? (MultiModelBaseBiped) o : null;
 			if (multiModelBaseBiped != null) {
 				ModchuModel_ModelDataBase data = ModchuModel_ModelDataMaster.instance.getPlayerData(Modchu_AS.get(Modchu_AS.minecraftThePlayer));
@@ -367,7 +366,7 @@ public class ModchuModel_Config extends Modchu_Config {
 				| (getConfigShowPartsHideMapFlagString != null
 				&& !getConfigShowPartsHideMapFlagString.equals(s3))) {
 			Modchu_Debug.mDebug("getConfigShowPartsHideMap flag通過.");
-			Object o = ModchuModel_Main.getModelMaster(model);
+			Object o = Modchu_Main.getModchuCharacteristicObjectMaster(model);
 			MultiModelBaseBiped multiModelBaseBiped = o instanceof MultiModelBaseBiped ? (MultiModelBaseBiped) o : null;
 			if (multiModelBaseBiped != null) {
 				Modchu_Debug.mDebug("getConfigShowPartsHideMap multiModelBaseBiped ok.");
@@ -479,7 +478,7 @@ public class ModchuModel_Config extends Modchu_Config {
 			Object o;
 			try {
 				o = fields[i1].get(model);
-				if (Modchu_ModelRenderer.class.isInstance(o)) {
+				if (o instanceof ModchuModel_ModelRenderer) {
 					//Modchu_Debug.mDebug("PFLM_Config showPartsSetting ModchuModel_ModelRenderer.class.isInstance fields["+i1+"].getType() = "+fields[i1].getType());
 					try {
 						s1 = fields[i1].getName();

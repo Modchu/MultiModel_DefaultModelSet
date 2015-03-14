@@ -2,17 +2,16 @@ package modchu.model.multimodel.base;
 
 import java.lang.reflect.Method;
 
+import modchu.lib.Modchu_AS;
+import modchu.lib.Modchu_CastHelper;
 import modchu.lib.Modchu_Debug;
+import modchu.lib.Modchu_EntityCapsBase;
 import modchu.lib.Modchu_EntityCapsHelper;
+import modchu.lib.Modchu_GlStateManager;
 import modchu.lib.Modchu_Reflect;
-import modchu.lib.characteristic.Modchu_AS;
-import modchu.lib.characteristic.Modchu_CastHelper;
-import modchu.lib.characteristic.Modchu_EntityCapsBase;
-import modchu.lib.characteristic.Modchu_GlStateManager;
 import modchu.model.ModchuModel_IEntityCaps;
 import modchu.model.ModchuModel_Main;
-
-import org.lwjgl.opengl.GL11;
+import modchu.model.ModchuModel_ModelRenderer;
 
 public class MultiModelLMMModel extends MultiModelBaseBiped {
 	public Object model;
@@ -54,6 +53,7 @@ public class MultiModelLMMModel extends MultiModelBaseBiped {
 
 	@Override
 	public void initModel(float psize, float pyoffset, Object... o) {
+		mainFrame = new ModchuModel_ModelRenderer(this, "mainFrame");
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class MultiModelLMMModel extends MultiModelBaseBiped {
 
 	protected void initDummyEntityCaps(ModchuModel_IEntityCaps entityCaps) {
 		Object entity = entityCaps.getCapsValue(entityCaps.caps_Entity);
-		Object dummyEntityCaps = Modchu_Reflect.newInstance(ModchuModel_Main.isLMMX ? "modchu.lib.lmm.characteristic.Modchu_LMMXModelCaps" : "modchu.lib.lmm.characteristic.Modchu_LMMModelCaps", new Class[]{ Modchu_EntityCapsBase.class }, new Object[]{ entityCaps });
+		Object dummyEntityCaps = Modchu_Reflect.newInstance(ModchuModel_Main.isLMMX ? "modchu.lib.lmm.Modchu_LMMXModelCaps" : "modchu.lib.lmm.Modchu_LMMModelCaps", new Class[]{ Modchu_EntityCapsBase.class }, new Object[]{ entityCaps });
 		setDummyEntityCaps(entityCaps, dummyEntityCaps);
 		Object render = Modchu_AS.get(Modchu_AS.renderManagerGetEntityClassRenderObject, Modchu_Reflect.loadClass(ModchuModel_Main.isLMMX ? "littleMaidMobX.LMM_EntityLittleMaid" : "LMM_EntityLittleMaid"));
 		Modchu_Reflect.setFieldObject(model.getClass(), "render", model, render);

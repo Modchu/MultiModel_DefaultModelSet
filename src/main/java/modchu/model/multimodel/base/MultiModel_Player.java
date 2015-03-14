@@ -1,10 +1,10 @@
-package modchu.model.multimodel.base;import modchu.lib.Modchu_EntityCapsHelper;import modchu.lib.characteristic.Modchu_CastHelper;import modchu.lib.characteristic.Modchu_ModelRenderer;import modchu.model.ModchuModel_IEntityCaps;public class MultiModel_Player extends MultiModel_Biped {
-	public Modchu_ModelRenderer bipedJacket;
-	public Modchu_ModelRenderer bipedRightSleeve;
-	public Modchu_ModelRenderer bipedLeftSleeve;
-	public Modchu_ModelRenderer bipedRightPants;
-	public Modchu_ModelRenderer bipedLeftPants;
-	public boolean slimFlag;	private Modchu_ModelRenderer rightArmSleeve;	private Modchu_ModelRenderer rightArmSleeve2;	private Modchu_ModelRenderer leftArmSleeve;	private Modchu_ModelRenderer leftArmSleeve2;	private Modchu_ModelRenderer rightLegPants;	private Modchu_ModelRenderer rightLegPants2;	private Modchu_ModelRenderer leftLegPants;	private Modchu_ModelRenderer leftLegPants2;	public MultiModel_Player() {
+package modchu.model.multimodel.base;import modchu.lib.Modchu_CastHelper;import modchu.model.ModchuModel_IEntityCaps;import modchu.model.ModchuModel_ModelRenderer;public class MultiModel_Player extends MultiModel_Biped {
+	public ModchuModel_ModelRenderer bipedJacket;
+	public ModchuModel_ModelRenderer bipedRightSleeve;
+	public ModchuModel_ModelRenderer bipedLeftSleeve;
+	public ModchuModel_ModelRenderer bipedRightPants;
+	public ModchuModel_ModelRenderer bipedLeftPants;
+	public boolean slimFlag;	private ModchuModel_ModelRenderer rightArmSleeve;	private ModchuModel_ModelRenderer rightArmSleeve2;	private ModchuModel_ModelRenderer leftArmSleeve;	private ModchuModel_ModelRenderer leftArmSleeve2;	private ModchuModel_ModelRenderer rightLegPants;	private ModchuModel_ModelRenderer rightLegPants2;	private ModchuModel_ModelRenderer leftLegPants;	private ModchuModel_ModelRenderer leftLegPants2;	public MultiModel_Player() {
 		this(0.0F);
 	}	public MultiModel_Player(Object... o) {
 		this(0.0F, o);
@@ -27,33 +27,33 @@ package modchu.model.multimodel.base;import modchu.lib.Modchu_EntityCapsHelper
 	public void initModel(float f, float f1, boolean isAfterInit, Object... o) {
 		slimFlag = o != null				&& o.length > 0				&& f == 0.0F ? Modchu_CastHelper.Boolean(o[0]) : false;		if (f != 0.0F) textureHeight = 32;		super.initModel(f, f1, false, (Object[]) o);
 		if (slimFlag) {
-			bipedLeftArm = new Modchu_ModelRenderer(this, 32, 48);
+			bipedLeftArm = new ModchuModel_ModelRenderer(this, 32, 48);
 			bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 3, 12, 4, f);
 			bipedLeftArm.setRotationPoint(3.0F, 0.0F, 0.0F);
-			bipedRightArm = new Modchu_ModelRenderer(this, 40, 16);
+			bipedRightArm = new ModchuModel_ModelRenderer(this, 40, 16);
 			bipedRightArm.addBox(-2.0F, -2.0F, -2.0F, 3, 12, 4, f);
 			bipedRightArm.setRotationPoint(-3.0F, 0.0F, 0.0F);
 		}
 		if (f == 0.0F) {
-			bipedJacket = new Modchu_ModelRenderer(this, 16, 32);
+			bipedJacket = new ModchuModel_ModelRenderer(this, 16, 32);
 			bipedJacket.addBox(-4.0F, 0.0F, -2.0F, 8, 12, 4, f + 0.49F);
 			if (slimFlag) {
-				bipedRightSleeve = new Modchu_ModelRenderer(this, 40, 32);
+				bipedRightSleeve = new ModchuModel_ModelRenderer(this, 40, 32);
 				bipedRightSleeve.addBox(-2.0F, -2.0F, -2.0F, 3, 12, 4, f + 0.249F);
-				bipedLeftSleeve = new Modchu_ModelRenderer(this, 48, 48);
+				bipedLeftSleeve = new ModchuModel_ModelRenderer(this, 48, 48);
 				bipedLeftSleeve.addBox(-1.0F, -2.0F, -2.0F, 3, 12, 4, f + 0.249F);
 			} else {
-				bipedRightSleeve = new Modchu_ModelRenderer(this, 40, 32);
+				bipedRightSleeve = new ModchuModel_ModelRenderer(this, 40, 32);
 				bipedRightSleeve.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, f + 0.49F);
-				bipedLeftSleeve = new Modchu_ModelRenderer(this, 48, 48);
+				bipedLeftSleeve = new ModchuModel_ModelRenderer(this, 48, 48);
 				bipedLeftSleeve.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, f + 0.49F);
 			}
-			bipedRightPants = new Modchu_ModelRenderer(this, 0, 32);
+			bipedRightPants = new ModchuModel_ModelRenderer(this, 0, 32);
 			bipedRightPants.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, f + 0.49F);
-			bipedLeftPants = new Modchu_ModelRenderer(this, 0, 48);
+			bipedLeftPants = new ModchuModel_ModelRenderer(this, 0, 48);
 			bipedLeftPants.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, f + 0.49F);
 		}		if (isAfterInit) afterInit(f, f1);
-	}	@Override	public void actionPartsInit(float f, float f1) {		super.actionPartsInit(f, f1);		if (modelSize != 0.0F) return;		rightArm = new Modchu_ModelRenderer(this, 40, 16);		rightArm.addBox(-2.0F, -1.0F, -1.0F, 3, 6, 4, f);		rightArm2 = new Modchu_ModelRenderer(this, 40, 24);		rightArm2.addBox(-1.0F, 0.0F, -1.0F, 3, 6, 4, f);		leftArm = new Modchu_ModelRenderer(this, 32, 48);		leftArm.addBox(0.0F, -1.0F, -1.0F, 3, 6, 4, f);		leftArm2 = new Modchu_ModelRenderer(this, 32, 56);		leftArm2.addBox(-1.0F, 0.0F, -1.0F, 3, 6, 4, f);		rightArmSleeve = new Modchu_ModelRenderer(this, 40, 32);		rightArmSleeve.addBox(-2.0F, -1.0F, -1.0F, 3, 6, 4, f);		rightArmSleeve2 = new Modchu_ModelRenderer(this, 40, 40);		rightArmSleeve2.addBox(-1.0F, 0.0F, -1.0F, 3, 6, 4, f);		leftArmSleeve = new Modchu_ModelRenderer(this, 48, 48);		leftArmSleeve.addBox(0.0F, -1.0F, -1.0F, 3, 6, 4, f);		leftArmSleeve2 = new Modchu_ModelRenderer(this, 48, 56);		leftArmSleeve2.addBox(-1.0F, 0.0F, -1.0F, 3, 6, 4, f);		rightLegPants = new Modchu_ModelRenderer(this, 0, 32);		rightLegPants.addBox(-2.5F, 0.0F, -2F, 4, 6, 4, f);		rightLegPants2 = new Modchu_ModelRenderer(this, 0, 38);		rightLegPants2.addBox(-1.1F, 0.0F, -1.5F, 4, 6, 4, f);		leftLegPants = new Modchu_ModelRenderer(this, 0, 48);		leftLegPants.addBox(-0.5F, 0.0F, -2F, 4, 6, 4, f);		leftLegPants2 = new Modchu_ModelRenderer(this, 0, 54);		leftLegPants2.addBox(-0.9F, 0.0F, -1.5F, 4, 6, 4, f);		rightHand.showModel = leftHand.showModel = rightArm.showModel =				leftArm.showModel = rightArmPlus.showModel = rightArmPlus2.showModel =				leftArmPlus.showModel = leftArmPlus2.showModel = rightLegPlus.showModel =				rightLegPlus2.showModel = leftLegPlus.showModel = leftLegPlus2.showModel =				rightArm2.showModel = leftArm2.showModel = rightLeg.showModel =						rightLeg2.showModel = leftLeg.showModel = leftLeg2.showModel =								rightArmSleeve.showModel = rightArmSleeve2.showModel = leftArmSleeve.showModel =										leftArmSleeve2.showModel = rightLegPants.showModel = rightLegPants2.showModel =												leftLegPants.showModel = leftLegPants2.showModel =	false;	}	@Override	public void setDefaultPause(float f, float f1, float f2, float f3, float f4, float f5, ModchuModel_IEntityCaps entityCaps) {		super.setDefaultPause(f, f1, f2, f3, f4, f5, entityCaps);		if (!slimFlag) return;		bipedRightArm.setRotationPoint(-5.0F, 2.0F, 0.0F);		bipedLeftArm.setRotationPoint(5.0F, 2.0F, 0.0F);	}	@Override
+	}	@Override	public void actionPartsInit(float f, float f1) {		super.actionPartsInit(f, f1);		if (modelSize != 0.0F) return;		rightArm = new ModchuModel_ModelRenderer(this, 40, 16);		rightArm.addBox(-2.0F, -1.0F, -1.0F, 3, 6, 4, f);		rightArm2 = new ModchuModel_ModelRenderer(this, 40, 24);		rightArm2.addBox(-1.0F, 0.0F, -1.0F, 3, 6, 4, f);		leftArm = new ModchuModel_ModelRenderer(this, 32, 48);		leftArm.addBox(0.0F, -1.0F, -1.0F, 3, 6, 4, f);		leftArm2 = new ModchuModel_ModelRenderer(this, 32, 56);		leftArm2.addBox(-1.0F, 0.0F, -1.0F, 3, 6, 4, f);		rightArmSleeve = new ModchuModel_ModelRenderer(this, 40, 32);		rightArmSleeve.addBox(-2.0F, -1.0F, -1.0F, 3, 6, 4, f);		rightArmSleeve2 = new ModchuModel_ModelRenderer(this, 40, 40);		rightArmSleeve2.addBox(-1.0F, 0.0F, -1.0F, 3, 6, 4, f);		leftArmSleeve = new ModchuModel_ModelRenderer(this, 48, 48);		leftArmSleeve.addBox(0.0F, -1.0F, -1.0F, 3, 6, 4, f);		leftArmSleeve2 = new ModchuModel_ModelRenderer(this, 48, 56);		leftArmSleeve2.addBox(-1.0F, 0.0F, -1.0F, 3, 6, 4, f);		rightLegPants = new ModchuModel_ModelRenderer(this, 0, 32);		rightLegPants.addBox(-2.5F, 0.0F, -2F, 4, 6, 4, f);		rightLegPants2 = new ModchuModel_ModelRenderer(this, 0, 38);		rightLegPants2.addBox(-1.1F, 0.0F, -1.5F, 4, 6, 4, f);		leftLegPants = new ModchuModel_ModelRenderer(this, 0, 48);		leftLegPants.addBox(-0.5F, 0.0F, -2F, 4, 6, 4, f);		leftLegPants2 = new ModchuModel_ModelRenderer(this, 0, 54);		leftLegPants2.addBox(-0.9F, 0.0F, -1.5F, 4, 6, 4, f);		rightHand.showModel = leftHand.showModel = rightArm.showModel =				leftArm.showModel = rightArmPlus.showModel = rightArmPlus2.showModel =				leftArmPlus.showModel = leftArmPlus2.showModel = rightLegPlus.showModel =				rightLegPlus2.showModel = leftLegPlus.showModel = leftLegPlus2.showModel =				rightArm2.showModel = leftArm2.showModel = rightLeg.showModel =						rightLeg2.showModel = leftLeg.showModel = leftLeg2.showModel =								rightArmSleeve.showModel = rightArmSleeve2.showModel = leftArmSleeve.showModel =										leftArmSleeve2.showModel = rightLegPants.showModel = rightLegPants2.showModel =												leftLegPants.showModel = leftLegPants2.showModel =	false;	}	@Override	public void setDefaultPause(float f, float f1, float f2, float f3, float f4, float f5, ModchuModel_IEntityCaps entityCaps) {		super.setDefaultPause(f, f1, f2, f3, f4, f5, entityCaps);		if (!slimFlag) return;		bipedRightArm.setRotationPoint(-5.0F, 2.0F, 0.0F);		bipedLeftArm.setRotationPoint(5.0F, 2.0F, 0.0F);	}	@Override
 	public void defaultAddChildSetting() {
 		super.defaultAddChildSetting();
 		if (modelSize != 0.0F) return;		if (bipedBody != null) {

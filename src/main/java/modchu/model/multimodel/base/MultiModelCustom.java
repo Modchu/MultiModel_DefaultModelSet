@@ -1,12 +1,5 @@
-package modchu.model.multimodel.base;import java.util.HashMap;
-import java.util.Random;import modchu.lib.Modchu_Debug;
-import modchu.lib.Modchu_EntityCapsHelper;
-import modchu.lib.Modchu_Reflect;
-import modchu.lib.characteristic.Modchu_IEntityCapsBase;
-import modchu.lib.characteristic.Modchu_ModelRenderer;
-import modchu.model.ModchuModel_CustomModel;
-import modchu.model.ModchuModel_IEntityCaps;public class MultiModelCustom extends MultiModel {	public ModchuModel_CustomModel customModel;
-	public Modchu_ModelRenderer dummy;
+package modchu.model.multimodel.base;import java.util.HashMap;import java.util.Random;import modchu.lib.Modchu_Debug;import modchu.lib.Modchu_EntityCapsHelper;import modchu.lib.Modchu_IEntityCapsBase;import modchu.model.ModchuModel_CustomModel;import modchu.model.ModchuModel_IEntityCaps;import modchu.model.ModchuModel_ModelRenderer;public class MultiModelCustom extends MultiModel {	public ModchuModel_CustomModel customModel;
+	public ModchuModel_ModelRenderer dummy;
 	public String modelName;	public MultiModelCustom() {
 		this(0.0F);
 	}	public MultiModelCustom(float f) {
@@ -31,7 +24,7 @@ import modchu.model.ModchuModel_IEntityCaps;public class MultiModelCustom exte
 		Modchu_Debug.mlDebug1("public MultiModelCustom 2 textureName="+textureName);
 		customModel = new ModchuModel_CustomModel(this, null, multiModelBaseBiped, textureName, f, 0.0F, map);
 	}	private void init(float f, float f1) {
-		dummy = new Modchu_ModelRenderer(this, 0, 0);
+		dummy = new ModchuModel_ModelRenderer(this, 0, 0);
 		dummy.addBox(0.0F, 0.0F, 0.0F, 0, 0, 0, f);
 	}	@Override	public void initSkirtFloats() {	}	@Override
 	public String getUsingTexture() {
@@ -40,15 +33,15 @@ import modchu.model.ModchuModel_IEntityCaps;public class MultiModelCustom exte
 	public void initModel(float f, float f1, Object... o) {
 		initModel(f, f1, true);
 	}	public void initModel(float f, float f1, boolean isAfterInit) {
-		bipedHead = new Modchu_ModelRenderer(this);
-		bipedHeadwear = new Modchu_ModelRenderer(this);
-		bipedBody = new Modchu_ModelRenderer(this);
-		bipedRightArm = new Modchu_ModelRenderer(this);
-		bipedLeftArm = new Modchu_ModelRenderer(this);
-		bipedRightLeg = new Modchu_ModelRenderer(this);
-		bipedLeftLeg = new Modchu_ModelRenderer(this);
-		mainFrame = new Modchu_ModelRenderer(this);
-		Skirt = new Modchu_ModelRenderer(this);
+		bipedHead = new ModchuModel_ModelRenderer(this);
+		bipedHeadwear = new ModchuModel_ModelRenderer(this);
+		bipedBody = new ModchuModel_ModelRenderer(this);
+		bipedRightArm = new ModchuModel_ModelRenderer(this);
+		bipedLeftArm = new ModchuModel_ModelRenderer(this);
+		bipedRightLeg = new ModchuModel_ModelRenderer(this);
+		bipedLeftLeg = new ModchuModel_ModelRenderer(this);
+		mainFrame = new ModchuModel_ModelRenderer(this);
+		Skirt = new ModchuModel_ModelRenderer(this);
 		bipedHead.addChild(bipedHeadwear);
 		bipedBody.addChild(bipedHead);
 		bipedBody.addChild(bipedRightArm);
@@ -59,24 +52,24 @@ import modchu.model.ModchuModel_IEntityCaps;public class MultiModelCustom exte
 		if (isAfterInit) afterInit(f, f1);
 	}	@Override
 	public void actionPartsInit(float f, float f1) {
-		rightArm = new Modchu_ModelRenderer(this);
-		rightArmPlus = new Modchu_ModelRenderer(this);
-		rightArm2 = new Modchu_ModelRenderer(this);
-		rightArmPlus2 = new Modchu_ModelRenderer(this);
-		rightHand = new Modchu_ModelRenderer(this);
-		leftArm = new Modchu_ModelRenderer(this);
-		leftArmPlus = new Modchu_ModelRenderer(this);
-		leftArm2 = new Modchu_ModelRenderer(this);
-		leftArmPlus2 = new Modchu_ModelRenderer(this);
-		leftHand = new Modchu_ModelRenderer(this);
-		rightLeg = new Modchu_ModelRenderer(this);
-		rightLegPlus = new Modchu_ModelRenderer(this);
-		rightLeg2 = new Modchu_ModelRenderer(this);
-		rightLegPlus2 = new Modchu_ModelRenderer(this);
-		leftLeg = new Modchu_ModelRenderer(this);
-		leftLegPlus = new Modchu_ModelRenderer(this);
-		leftLeg2 = new Modchu_ModelRenderer(this);
-		leftLegPlus2 = new Modchu_ModelRenderer(this);		rightHand.showModel = leftHand.showModel = rightArm.showModel =
+		rightArm = new ModchuModel_ModelRenderer(this);
+		rightArmPlus = new ModchuModel_ModelRenderer(this);
+		rightArm2 = new ModchuModel_ModelRenderer(this);
+		rightArmPlus2 = new ModchuModel_ModelRenderer(this);
+		rightHand = new ModchuModel_ModelRenderer(this);
+		leftArm = new ModchuModel_ModelRenderer(this);
+		leftArmPlus = new ModchuModel_ModelRenderer(this);
+		leftArm2 = new ModchuModel_ModelRenderer(this);
+		leftArmPlus2 = new ModchuModel_ModelRenderer(this);
+		leftHand = new ModchuModel_ModelRenderer(this);
+		rightLeg = new ModchuModel_ModelRenderer(this);
+		rightLegPlus = new ModchuModel_ModelRenderer(this);
+		rightLeg2 = new ModchuModel_ModelRenderer(this);
+		rightLegPlus2 = new ModchuModel_ModelRenderer(this);
+		leftLeg = new ModchuModel_ModelRenderer(this);
+		leftLegPlus = new ModchuModel_ModelRenderer(this);
+		leftLeg2 = new ModchuModel_ModelRenderer(this);
+		leftLegPlus2 = new ModchuModel_ModelRenderer(this);		rightHand.showModel = leftHand.showModel = rightArm.showModel =
 				leftArm.showModel = rightArmPlus.showModel = rightArmPlus2.showModel =
 				leftArmPlus.showModel = leftArmPlus2.showModel = rightLegPlus.showModel =
 				rightLegPlus2.showModel = leftLegPlus.showModel = leftLegPlus2.showModel =
@@ -85,11 +78,11 @@ import modchu.model.ModchuModel_IEntityCaps;public class MultiModelCustom exte
 	}	@Override
 	public void skirtFloatsInit(float f, float f1) {
 		if (Modchu_EntityCapsHelper.getCapsValueInt(this, null, caps_skirtFloats) < 2) return;
-		SkirtTop = new Modchu_ModelRenderer(this, 8, 16);
-		SkirtFront = new Modchu_ModelRenderer(this, 8, 24);
-		SkirtRight = new Modchu_ModelRenderer(this, 0, 24);
-		SkirtLeft = new Modchu_ModelRenderer(this, 16, 24);
-		SkirtBack = new Modchu_ModelRenderer(this, 24, 24);
+		SkirtTop = new ModchuModel_ModelRenderer(this, 8, 16);
+		SkirtFront = new ModchuModel_ModelRenderer(this, 8, 24);
+		SkirtRight = new ModchuModel_ModelRenderer(this, 0, 24);
+		SkirtLeft = new ModchuModel_ModelRenderer(this, 16, 24);
+		SkirtBack = new ModchuModel_ModelRenderer(this, 24, 24);
 		if (customModel != null) customModel.skirtFloatsInit(f, f1);
 	}	@Override
 	public void render(ModchuModel_IEntityCaps entityCaps, float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5, boolean pIsRender) {
@@ -165,8 +158,7 @@ import modchu.model.ModchuModel_IEntityCaps;public class MultiModelCustom exte
 	}	@Override
 	public void action(float f, float f1, float f2, float f3, float f4, float f5, int i, ModchuModel_IEntityCaps entityCaps) {
 		if (customModel != null) customModel.action(f, f1, f2, f3, f4, f5, i, entityCaps);
-		else super.action(f, f1, f2, f3, f4, f5, i, entityCaps);
-	}	public void superAction(float f, float f1, float f2, float f3, float f4, float f5, int i, ModchuModel_IEntityCaps entityCaps) {
+		else super.action(f, f1, f2, f3, f4, f5, i, entityCaps);		actionInitSetting(f, f1, f2, f3, f4, f5, i, entityCaps);	}	@Override	public void actionInitSetting(float f, float f1, float f2, float f3, float f4, float f5, int i, ModchuModel_IEntityCaps entityCaps) {		if (customModel != null) customModel.actionInitSetting(f, f1, f2, f3, f4, f5, i, entityCaps);		else super.actionInitSetting(f, f1, f2, f3, f4, f5, i, entityCaps);	}	public void superActionInitSetting(float f, float f1, float f2, float f3, float f4, float f5, int i, ModchuModel_IEntityCaps entityCaps) {		super.actionInitSetting(f, f1, f2, f3, f4, f5, i, entityCaps);	}	public void superAction(float f, float f1, float f2, float f3, float f4, float f5, int i, ModchuModel_IEntityCaps entityCaps) {
 		super.action(f, f1, f2, f3, f4, f5, i, entityCaps);
 	}	@Override
 	public float getHeight(ModchuModel_IEntityCaps entityCaps) {
@@ -327,32 +319,32 @@ import modchu.model.ModchuModel_IEntityCaps;public class MultiModelCustom exte
 		if (customModel != null) customModel.showAllParts(entityCaps);
 	}	public void superShowAllParts(ModchuModel_IEntityCaps entityCaps) {
 	}	@Override
-	public Modchu_ModelRenderer getBipedHead(ModchuModel_IEntityCaps entityCaps) {
+	public ModchuModel_ModelRenderer getBipedHead(ModchuModel_IEntityCaps entityCaps) {
 		if (customModel != null) return customModel.getBipedHead(entityCaps);
 		return bipedHead;
 	}	@Override
-	public Modchu_ModelRenderer getDominantArm(ModchuModel_IEntityCaps entityCaps) {
+	public ModchuModel_ModelRenderer getDominantArm(ModchuModel_IEntityCaps entityCaps) {
 		if (customModel != null) return customModel.getDominantArm(entityCaps);
 		if (Modchu_EntityCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm, getCapsValue(caps_armorType)) == 0) return bipedRightArm;
 		return bipedLeftArm;
 	}	@Override
-	public Modchu_ModelRenderer getBipedRightArm(ModchuModel_IEntityCaps entityCaps) {
+	public ModchuModel_ModelRenderer getBipedRightArm(ModchuModel_IEntityCaps entityCaps) {
 		if (customModel != null) return customModel.getBipedRightArm(entityCaps);
 		return bipedRightArm;
 	}	@Override
-	public Modchu_ModelRenderer getBipedLeftArm(ModchuModel_IEntityCaps entityCaps) {
+	public ModchuModel_ModelRenderer getBipedLeftArm(ModchuModel_IEntityCaps entityCaps) {
 		if (customModel != null) return customModel.getBipedLeftArm(entityCaps);
 		return bipedLeftArm;
 	}	@Override
-	public Modchu_ModelRenderer getBipedRightLeg(ModchuModel_IEntityCaps entityCaps) {
+	public ModchuModel_ModelRenderer getBipedRightLeg(ModchuModel_IEntityCaps entityCaps) {
 		if (customModel != null) return customModel.getBipedRightLeg(entityCaps);
 		return bipedRightLeg;
 	}	@Override
-	public Modchu_ModelRenderer getBipedLeftLeg(ModchuModel_IEntityCaps entityCaps) {
+	public ModchuModel_ModelRenderer getBipedLeftLeg(ModchuModel_IEntityCaps entityCaps) {
 		if (customModel != null) return customModel.getBipedLeftLeg(entityCaps);
 		return bipedLeftLeg;
 	}	@Override
-	public Modchu_ModelRenderer getNotDominantArm(ModchuModel_IEntityCaps entityCaps) {
+	public ModchuModel_ModelRenderer getNotDominantArm(ModchuModel_IEntityCaps entityCaps) {
 		if (customModel != null) return customModel.getNotDominantArm(entityCaps);
 		if (Modchu_EntityCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm, getCapsValue(caps_armorType)) == 0) return bipedLeftArm;
 		return bipedRightArm;
@@ -408,14 +400,14 @@ import modchu.model.ModchuModel_IEntityCaps;public class MultiModelCustom exte
 	}	public void superArmSwing(float f, float f1, float f2, float f3, float f4, float f5, Object entityCaps) {
 		super.armSwing(f, f1, f2, f3, f4, f5, (ModchuModel_IEntityCaps) entityCaps);
 	}	@Override
-	public Modchu_ModelRenderer getArms(int i) {
-		return (Modchu_ModelRenderer) (customModel != null ? customModel.getArms(i) : super.getArms(i));
-	}	public Modchu_ModelRenderer superGetArms(int i) {
+	public ModchuModel_ModelRenderer getArms(int i) {
+		return (ModchuModel_ModelRenderer) (customModel != null ? customModel.getArms(i) : super.getArms(i));
+	}	public ModchuModel_ModelRenderer superGetArms(int i) {
 		return super.getArms(i);
 	}	@Override
-	public Modchu_ModelRenderer getHeadMount() {
-		return (Modchu_ModelRenderer) (customModel != null ? customModel.getHeadMount() : super.getHeadMount());
-	}	public Modchu_ModelRenderer superGetHeadMount() {
+	public ModchuModel_ModelRenderer getHeadMount() {
+		return (ModchuModel_ModelRenderer) (customModel != null ? customModel.getHeadMount() : super.getHeadMount());
+	}	public ModchuModel_ModelRenderer superGetHeadMount() {
 		return super.getHeadMount();
 	}	@Override
 	public void actionRelease6(ModchuModel_IEntityCaps entityCaps) {
@@ -638,11 +630,11 @@ import modchu.model.ModchuModel_IEntityCaps;public class MultiModelCustom exte
 	}	public void superAction30(float f, float f1, float f2, float f3, float f4, float f5, Object entityCaps) {
 		super.action30(f, f1, f2, f3, f4, f5, (ModchuModel_IEntityCaps) entityCaps);
 	}	@Override
-	public void IKProcessing(Modchu_ModelRenderer modchu_ModelRenderer) {
+	public void IKProcessing(ModchuModel_ModelRenderer modchu_ModelRenderer) {
 		if (customModel != null) customModel.IKProcessing(modchu_ModelRenderer);
 		else super.IKProcessing(modchu_ModelRenderer);
 	}	public void superIKProcessing(Object modchu_ModelRenderer) {
-		super.IKProcessing((Modchu_ModelRenderer) modchu_ModelRenderer);
+		super.IKProcessing((ModchuModel_ModelRenderer) modchu_ModelRenderer);
 	}	@Override
 	public void setArmorBipedOtherShowModel(ModchuModel_IEntityCaps entityCaps, boolean b) {
 		if (customModel != null) customModel.setArmorBipedOtherShowModel(entityCaps, b);
@@ -683,16 +675,16 @@ import modchu.model.ModchuModel_IEntityCaps;public class MultiModelCustom exte
 	}	public void superMotionRenameMapClear() {
 		super.motionRenameMapClear();
 	}	@Override
-	public Modchu_ModelRenderer getStringModelRendererMap(String s) {
-		return (Modchu_ModelRenderer) (customModel != null ? customModel.getStringModelRendererMap(s) : super.getStringModelRendererMap(s));
-	}	public Modchu_ModelRenderer superGetStringModelRendererMap(String s) {
+	public ModchuModel_ModelRenderer getStringModelRendererMap(String s) {
+		return (ModchuModel_ModelRenderer) (customModel != null ? customModel.getStringModelRendererMap(s) : super.getStringModelRendererMap(s));
+	}	public ModchuModel_ModelRenderer superGetStringModelRendererMap(String s) {
 		return super.getStringModelRendererMap(s);
 	}	@Override
-	public void putStringModelRendererMap(String s, Modchu_ModelRenderer modchu_ModelRenderer) {
+	public void putStringModelRendererMap(String s, ModchuModel_ModelRenderer modchu_ModelRenderer) {
 		if (customModel != null) customModel.putStringModelRendererMap(s, modchu_ModelRenderer);
 		else super.putStringModelRendererMap(s, modchu_ModelRenderer);
 	}	public void superPutStringModelRendererMap(String s, Object modchu_ModelRenderer) {
-		super.putStringModelRendererMap(s, (Modchu_ModelRenderer) modchu_ModelRenderer);
+		super.putStringModelRendererMap(s, (ModchuModel_ModelRenderer) modchu_ModelRenderer);
 	}	@Override
 	public void renderEars(float par1) {
 		if (customModel != null) customModel.renderEars(par1);
@@ -905,10 +897,10 @@ import modchu.model.ModchuModel_IEntityCaps;public class MultiModelCustom exte
 	}	public void superRender(Object entity, float par2, float par3, float par4, float par5, float par6, float par7) {
 		super.render(entity, par2, par3, par4, par5, par6, par7);
 	}	@Override
-	public Modchu_ModelRenderer getRandomModelBox(Random random) {
-		return (Modchu_ModelRenderer) (customModel != null ? customModel.getRandomModelBox(random) : super.getRandomModelBox(random));
-	}	public Modchu_ModelRenderer superGetRandomModelBox(Object random) {
-		return super.getRandomModelBox((Random) random);
+	public ModchuModel_ModelRenderer getRandomModelBox(Random random) {
+		return (ModchuModel_ModelRenderer) (customModel != null ? customModel.getRandomModelBox(random) : super.getRandomModelBox(random));
+	}	public ModchuModel_ModelRenderer superGetRandomModelBox(Object random) {
+		return (ModchuModel_ModelRenderer) super.getRandomModelBox((Random) random);
 	}	@Override
 	public boolean canSpawnHear(Object world, int pX, int pY, int pZ) {
 		return customModel != null ? customModel.canSpawnHear(world, pX, pY, pZ) : super.canSpawnHear(world, pX, pY, pZ);

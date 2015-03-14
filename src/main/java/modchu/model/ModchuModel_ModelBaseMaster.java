@@ -1,9 +1,9 @@
 package modchu.model;
 
-import org.lwjgl.opengl.GL11;
-
+import modchu.lib.Modchu_IEntityCapsBase;
 import modchu.lib.Modchu_ModelBaseMaster;
-import modchu.lib.characteristic.Modchu_IEntityCapsBase;
+
+import org.lwjgl.opengl.GL11;
 
 public abstract class ModchuModel_ModelBaseMaster extends Modchu_ModelBaseMaster implements ModchuModel_IEntityCaps {
 	public float heldItem[] = new float[] {0.0F, 0.0F};

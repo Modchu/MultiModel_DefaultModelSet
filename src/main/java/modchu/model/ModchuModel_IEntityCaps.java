@@ -1,6 +1,6 @@
 package modchu.model;
 
-import modchu.lib.characteristic.Modchu_IEntityCapsBase;
+import modchu.lib.Modchu_IEntityCapsBase;
 
 public interface ModchuModel_IEntityCaps extends Modchu_IEntityCapsBase {
 
