@@ -8,6 +8,7 @@ import modchu.lib.Modchu_Debug;
 import modchu.lib.Modchu_EntityCapsBase;
 import modchu.lib.Modchu_EntityCapsHelper;
 import modchu.lib.Modchu_GlStateManager;
+import modchu.lib.Modchu_Main;
 import modchu.lib.Modchu_Reflect;
 import modchu.model.ModchuModel_IEntityCaps;
 import modchu.model.ModchuModel_Main;
@@ -16,6 +17,7 @@ import modchu.model.ModchuModel_ModelRenderer;
 public class MultiModelLMMModel extends MultiModelBaseBiped {
 	public Object model;
 	protected Class iDummyEntityCapsClass;
+	public ModchuModel_ModelRenderer dummy;
 
 	public MultiModelLMMModel() {
 		this(0.0F);
@@ -49,6 +51,8 @@ public class MultiModelLMMModel extends MultiModelBaseBiped {
 	protected void init(float f, float f1, int i, int j, Object model1) {
 		model = model1;
 		iDummyEntityCapsClass = Modchu_Reflect.loadClass(ModchuModel_Main.isLMMX ? "mmmlibx.lib.multiModel.model.mc162.IModelCaps" : "MMM_IModelCaps");
+		dummy = new ModchuModel_ModelRenderer(this, 0, 0);
+		dummy.addBox(0.0F, 0.0F, 0.0F, 0, 0, 0, f);
 	}
 
 	@Override
@@ -76,7 +80,7 @@ public class MultiModelLMMModel extends MultiModelBaseBiped {
 
 	protected void initDummyEntityCaps(ModchuModel_IEntityCaps entityCaps) {
 		Object entity = entityCaps.getCapsValue(entityCaps.caps_Entity);
-		Object dummyEntityCaps = Modchu_Reflect.newInstance(ModchuModel_Main.isLMMX ? "modchu.lib.lmm.Modchu_LMMXModelCaps" : "modchu.lib.lmm.Modchu_LMMModelCaps", new Class[]{ Modchu_EntityCapsBase.class }, new Object[]{ entityCaps });
+		Object dummyEntityCaps = Modchu_Reflect.newInstance(Modchu_Main.getModchuCharacteristicClass(ModchuModel_Main.isLMMX ? "Modchu_LMMXModelCaps" : "Modchu_LMMModelCaps"), new Class[]{ Modchu_EntityCapsBase.class }, new Object[]{ entityCaps });
 		setDummyEntityCaps(entityCaps, dummyEntityCaps);
 		Object render = Modchu_AS.get(Modchu_AS.renderManagerGetEntityClassRenderObject, Modchu_Reflect.loadClass(ModchuModel_Main.isLMMX ? "littleMaidMobX.LMM_EntityLittleMaid" : "LMM_EntityLittleMaid"));
 		Modchu_Reflect.setFieldObject(model.getClass(), "render", model, render);
