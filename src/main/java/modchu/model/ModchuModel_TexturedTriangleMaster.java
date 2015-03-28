@@ -3,7 +3,6 @@ package modchu.model;
 import java.util.HashMap;
 
 import modchu.lib.Modchu_AS;
-import modchu.lib.Modchu_Debug;
 import modchu.lib.Modchu_ITexturedQuad;
 import modchu.lib.Modchu_ITexturedQuadMaster;
 import modchu.lib.Modchu_Reflect;

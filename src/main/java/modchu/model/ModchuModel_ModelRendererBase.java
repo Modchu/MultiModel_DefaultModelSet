@@ -106,10 +106,11 @@ public class ModchuModel_ModelRendererBase {
 		isRendering = true;
 		cubeList = new ArrayList();
 		baseModel = pModelBase;
-		List boxList = pModelBase instanceof Modchu_ModelBaseMaster ? ((Modchu_ModelBaseMaster) pModelBase).boxList : Modchu_AS.getList(Modchu_AS.modelBaseBoxList, pModelBase);
-		boxList.add(this);
+		List boxList = pModelBase != null
+				&& pModelBase instanceof Modchu_ModelBaseMaster ? ((Modchu_ModelBaseMaster) pModelBase).boxList : pModelBase != null ? Modchu_AS.getList(Modchu_AS.modelBaseBoxList, pModelBase) : null;
+		if (boxList != null) boxList.add(this);
 		boxName = pName;
-		setTextureSize(Modchu_AS.getInt(Modchu_AS.modelBaseTextureWidth, pModelBase), Modchu_AS.getInt(Modchu_AS.modelBaseTextureHeight, pModelBase));
+		if (pModelBase != null) setTextureSize(Modchu_AS.getInt(Modchu_AS.modelBaseTextureWidth, pModelBase), Modchu_AS.getInt(Modchu_AS.modelBaseTextureHeight, pModelBase));
 
 		rotatePriority = RotXYZ;
 		itemStack = null;

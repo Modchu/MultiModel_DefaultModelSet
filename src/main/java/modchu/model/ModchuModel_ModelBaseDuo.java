@@ -83,12 +83,14 @@ public class ModchuModel_ModelBaseDuo extends ModchuModel_ModelBaseNihil impleme
 				GL11.glDisable(GL11.GL_BLEND);
 			}
 		}
+		//Modchu_Debug.mDebug1("ModchuModel_ModelBaseDuoMaster render modelInner="+modelInner);
 		if (modelInner != null) {
-			Modchu_Debug.mDebug1("ModchuModel_ModelBaseDuoMaster render modelInner entityCaps="+entityCaps);
+			//Modchu_Debug.mDebug1("ModchuModel_ModelBaseDuoMaster render modelInner entityCaps="+entityCaps);
 			if (textureInner != null) {
 				if (textureInner[renderParts] != null) {
 					// 通常パーツ
 					setTexture(textureInner[renderParts]);
+					//Modchu_Debug.mDebug1("ModchuModel_ModelBaseDuoMaster render modelInner isRendering="+isRendering+" textureInner[renderParts]="+textureInner[renderParts]);
 					render(modelInner, entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 				}
 			} else {

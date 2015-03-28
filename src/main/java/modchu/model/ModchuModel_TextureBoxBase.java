@@ -86,7 +86,7 @@ public class ModchuModel_TextureBoxBase {
 		modelMountedYOffset = pMountedYOffset;
 	}
 
-	protected int getRandomColor(int pColor, Random pRand) {
+	public int getRandomColor(int pColor, Random pRand) {
 		List<Integer> llist = new ArrayList<Integer>();
 		for (int li = 0; li < 16; li++) {
 			if ((pColor & 0x01) > 0) {

@@ -8,7 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import modchu.lib.Modchu_AS;
 import modchu.lib.Modchu_CastHelper;
-import modchu.lib.Modchu_Debug;
 import modchu.lib.Modchu_EntityCapsHelper;
 import modchu.lib.Modchu_GlStateManager;
 import modchu.lib.Modchu_IEntityCapsBase;
@@ -92,9 +91,9 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 	public void init(Object modelBase, int x, int y, String s, float sX, float sY, float sZ) {
 		isRendering = true;
 		Object baseModel = getBaseModel();
-		List boxList = Modchu_AS.getList(Modchu_AS.modelBaseBoxList, baseModel);
-		boxList.add(this);
-		setTextureSize(Modchu_AS.getInt(Modchu_AS.modelBaseTextureWidth, baseModel), Modchu_AS.getInt(Modchu_AS.modelBaseTextureHeight, baseModel));
+		List boxList = baseModel != null ? Modchu_AS.getList(Modchu_AS.modelBaseBoxList, baseModel) : null;
+		if (boxList != null) boxList.add(this);
+		if (baseModel != null) setTextureSize(Modchu_AS.getInt(Modchu_AS.modelBaseTextureWidth, baseModel), Modchu_AS.getInt(Modchu_AS.modelBaseTextureHeight, baseModel));
 
 		rotatePriority = RotXYZ;
 		itemStack = null;
@@ -154,32 +153,32 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		return makeBall(var1, var2, var3, var4, var5, var6);
 	}
 
-	public void renderItemsHead(Object pModelMulti, Modchu_IEntityCapsBase entityCaps, float scale, int addSupport) {
+	public void renderItemsHead(String s, Object pModelMulti, Modchu_IEntityCapsBase entityCaps, float scale, int addSupport) {
 		Object itemStack = entityCaps.getCapsValue(entityCaps.caps_HeadMount, 9);
 		Object entity = entityCaps.getCapsValue(entityCaps.caps_Entity);
 
-		renderItems(entity, true, null, itemStack, scale, addSupport, Modchu_Main.getMinecraftVersion() > 179 ? Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeHEAD) : null);
+		renderItems(s, entity, true, null, itemStack, scale, addSupport, Modchu_Main.getMinecraftVersion() > 179 ? Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeHEAD) : null);
 	}
 
-	public void renderItemsHead(Object pModelMulti, Modchu_IEntityCapsBase entityCaps, Object itemStack, float scale, int addSupport) {
+	public void renderItemsHead(String s, Object pModelMulti, Modchu_IEntityCapsBase entityCaps, Object itemStack, float scale, int addSupport) {
 		Object entity = entityCaps.getCapsValue(entityCaps.caps_Entity);
 
-		renderItems(entity, true, null, itemStack, scale, addSupport, Modchu_Main.getMinecraftVersion() > 179 ? Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeHEAD) : null);
+		renderItems(s, entity, true, null, itemStack, scale, addSupport, Modchu_Main.getMinecraftVersion() > 179 ? Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeHEAD) : null);
 	}
 
-	public boolean renderItems(Object pModelMulti, Modchu_IEntityCapsBase entityCaps, boolean pRealBlock, int pIndex) {
+	public boolean renderItems(String s, Object pModelMulti, Modchu_IEntityCapsBase entityCaps, boolean pRealBlock, int pIndex) {
 		Object[] itemstacks = Modchu_CastHelper.ObjectArray(Modchu_EntityCapsHelper.getCapsValue(entityCaps, entityCaps.caps_Items));
 		if (itemstacks == null) return false;
 		Object[] enumActions = Modchu_CastHelper.ObjectArray(Modchu_EntityCapsHelper.getCapsValue(entityCaps, entityCaps.caps_Actions));
 		Object entity = entityCaps.getCapsValue(entityCaps.caps_Entity);
 
-		renderItems(entity, pRealBlock, enumActions != null
+		renderItems(s, entity, pRealBlock, enumActions != null
 				&& enumActions.length > pIndex ? enumActions[pIndex] : null, itemstacks != null
 						&& itemstacks.length > pIndex ? itemstacks[pIndex] : null);
 		return true;
 	}
 
-	public void renderItems(Object entityLiving, boolean pRealBlock, Object enumAction, Object itemStack1, float scale, int addSupport, Enum type) {
+	public void renderItems(String s, Object entityLiving, boolean pRealBlock, Object enumAction, Object itemStack1, float scale, int addSupport, Enum type) {
 		if (entityLiving != null); else return;
 		itemStack = itemStack1;
 		switch (addSupport) {
@@ -189,20 +188,37 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 			renderDecoBlock(entityLiving, pRealBlock, enumAction, scale, addSupport);
 			return;
 		}
-		renderItems(entityLiving, pRealBlock, enumAction, itemStack1, scale, type);
+		renderItems(s, entityLiving, pRealBlock, enumAction, itemStack1, scale, type);
 	}
 
-	public void renderItems(Object entityLiving, boolean pRealBlock, Object enumAction, Object itemStack1) {
+	public void renderItems(String s, Object entityLiving, boolean pRealBlock, Object enumAction, Object itemStack1) {
 		if (entityLiving != null); else return;
 		itemStack = itemStack1;
-		renderItems(entityLiving, pRealBlock, enumAction, itemStack1, 1.0F);
+		renderItems(s, entityLiving, pRealBlock, enumAction, itemStack1, 1.0F);
 	}
 
-	public void renderItems(Object entityLiving, boolean pRealBlock, Object enumAction, Object itemstack, float scale) {
-		renderItems(entityLiving, pRealBlock, enumAction, itemstack, scale, Modchu_Main.getMinecraftVersion() > 179 ? Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeTHIRD_PERSON) : null);
+	public void renderItems(String s, Object entityLiving, boolean pRealBlock, Object enumAction, Object itemstack, float scale) {
+		renderItems(s, entityLiving, pRealBlock, enumAction, itemstack, scale, Modchu_Main.getMinecraftVersion() > 179 ? Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeTHIRD_PERSON) : null);
 	}
 
-	public void renderItems(Object entityLiving, boolean pRealBlock, Object enumAction, Object itemstack, float scale, Enum type) {
+	public void renderItems(String s, Object entityLiving, boolean pRealBlock, Object enumAction, Object itemstack, float scale, Enum type) {
+		String eventName = "modchuModel_ModelRendererRenderItems".concat(s);
+		boolean isCanceled = false;
+		if (ModchuModel_Main.modchuLibEvent(eventName)) {
+			boolean flag = true;
+			Object[] o = ModchuModel_Main.modchuLibEvent(eventName, new Object[]{ this, entityLiving, pRealBlock, itemstack, scale, type });
+			isCanceled = o != null
+					&& o.length > 0 ? Modchu_CastHelper.Boolean(o[0]) : false;
+			if (o != null
+					&& o.length > 1) {
+				if (o.length > 2) entityLiving = o[2];
+				if (o.length > 3) pRealBlock = Modchu_CastHelper.Boolean(o[3]);
+				if (o.length > 4) itemstack = o[4];
+				if (o.length > 5) scale = Modchu_CastHelper.Float(o[5]);
+				if (o.length > 6) type = (Enum) o[6];
+			}
+		}
+		if (isCanceled) return;
 		if (itemstack != null
 				&& entityLiving != null); else {
 			//if (itemstack != null); else Modchu_Debug.mDebug("renderItems itemstack == null.");
@@ -604,7 +620,7 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 			}
 *///147delete
 			// 152deleterender.func_110776_a(s1);
-			loadBlockTexture();
+			loadBlockTexture(render);
 			GL11.glEnable(GL11.GL_CULL_FACE);
 			Class BlockDoublePlant = Modchu_Reflect.loadClass("net.minecraft.block.BlockDoublePlant");
 			if (BlockDoublePlant != null
@@ -935,7 +951,7 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 			if (scale > 1.0F) Modchu_GlStateManager.scale(scale, scale, scale);
 			Modchu_GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			if (translatef) Modchu_GlStateManager.translate(translatefX, translatefY, translatefZ);
-			loadBlockTexture();
+			loadBlockTexture(render);
 			Object renderBlocks = Modchu_AS.get(Modchu_AS.renderRenderBlocks, render);
 			int itemDamage = Modchu_AS.getInt(Modchu_AS.itemStackGetItemDamage, itemStack);
 			Modchu_AS.get(Modchu_AS.renderBlocksRenderBlockAsItem, renderBlocks, block, itemDamage, 1.0F);
@@ -958,8 +974,11 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		return flag;
 	}
 
-	private void loadBlockTexture() {
-		if (Modchu_Main.getMinecraftVersion() < 160) return;
+	private void loadBlockTexture(Object render) {
+		if (Modchu_Main.getMinecraftVersion() < 160) {
+			Modchu_AS.set(Modchu_AS.renderBindTexture, render, "/terrain.png");
+			return;
+		}
 		//Modchu_Debug.mDebug("loadBlockTexture GetResourceLocation="+(Modchu_AS.get(Modchu_AS.textureManagerGetResourceLocation, 0)));
 		Modchu_AS.set(Modchu_AS.textureManagerBindTexture, Modchu_AS.get(Modchu_AS.textureManagerGetResourceLocation, 0));
 		//TextureManager var4 = Minecraft.getMinecraft().getTextureManager();

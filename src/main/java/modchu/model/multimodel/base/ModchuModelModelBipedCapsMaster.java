@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Random;
 
 import modchu.lib.Modchu_IEntityCapsBase;
-import modchu.lib.Modchu_IModelBaseMaster;
 import modchu.lib.Modchu_IModelBiped;
 import modchu.lib.Modchu_IModelBipedMaster;
 

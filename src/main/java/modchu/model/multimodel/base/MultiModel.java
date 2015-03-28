@@ -1,4 +1,4 @@
-package modchu.model.multimodel.base;import modchu.lib.Modchu_AS;import modchu.lib.Modchu_Debug;import modchu.lib.Modchu_EntityCapsHelper;import modchu.lib.Modchu_Main;import modchu.lib.Modchu_ModelPlateMaster;import modchu.model.ModchuModel_IEntityCaps;import modchu.model.ModchuModel_ModelRenderer;public class MultiModel extends MultiModelSkirtFloats {	public ModchuModel_ModelRenderer ChignonR;
+package modchu.model.multimodel.base;import modchu.lib.Modchu_AS;import modchu.lib.Modchu_EntityCapsHelper;import modchu.lib.Modchu_Main;import modchu.lib.Modchu_ModelPlateMaster;import modchu.model.ModchuModel_IEntityCaps;import modchu.model.ModchuModel_ModelRenderer;public class MultiModel extends MultiModelSkirtFloats {	public ModchuModel_ModelRenderer ChignonR;
 	public ModchuModel_ModelRenderer ChignonL;
 	public ModchuModel_ModelRenderer ChignonB;
 	public ModchuModel_ModelRenderer Tail;
@@ -42,13 +42,13 @@ package modchu.model.multimodel.base;import modchu.lib.Modchu_AS;import modch
 		Skirt.addBox(-4F, -4F, -4F, 8, 8, 8, f);
 		ChignonR = new ModchuModel_ModelRenderer(this, 24, 18, "ChignonR");
 		ChignonR.addBox(-5F, -7F, 0.2F, 1, 3, 3, f);
-		ChignonR.setRotationPoint(0.0F, -1.5F, 0.0F);
+		ChignonR.setRotationPoint(0.0F, 0.0F, 0.0F);
 		ChignonL = new ModchuModel_ModelRenderer(this, 24, 18, "ChignonL");
 		ChignonL.addBox(4F, -7F, 0.2F, 1, 3, 3, f);
-		ChignonL.setRotationPoint(0.0F, -1.5F, 0.0F);
+		ChignonL.setRotationPoint(0.0F, 0.0F, 0.0F);
 		ChignonB = new ModchuModel_ModelRenderer(this, 52, 10, "ChignonB");
 		ChignonB.addBox(-2F, -7.2F, 4F, 4, 4, 2, f);
-		ChignonB.setRotationPoint(0.0F, -1.5F, 0.0F);
+		ChignonB.setRotationPoint(0.0F, 0.0F, 0.0F);
 		Tail = new ModchuModel_ModelRenderer(this, 46, 20, "Tail");
 		Tail.addBox(-1.5F, -6.8F, 4F, 3, 9, 3, f);
 		Tail.setRotationPoint(0.0F, 0.0F, 0.0F);
@@ -387,8 +387,8 @@ package modchu.model.multimodel.base;import modchu.lib.Modchu_AS;import modch
 		if (bipedHead != null) bipedHead.setRotationPoint(0.0F, 0.0F, 0.0F);
 		if (bipedHeadwear != null) bipedHeadwear.setRotationPoint(0.0F, 0.0F, 0.0F);
 		if (bipedBody != null) bipedBody.setRotationPoint(0.0F, -3.0F, 0.0F);
-		if (bipedRightArm != null) bipedRightArm.setRotationPoint(-3.0F, -3.0F, 0.0F);
-		if (bipedLeftArm != null) bipedLeftArm.setRotationPoint(3.0F, -3.0F, 0.0F);
+		if (bipedRightArm != null) bipedRightArm.setRotationPoint(-3.5F, -3.2F, 0.0F);
+		if (bipedLeftArm != null) bipedLeftArm.setRotationPoint(3.5F, -3.2F, 0.0F);
 		if (bipedRightLeg != null) bipedRightLeg.setRotationPoint(-1.5F, 3.5F, 0.0F);
 		if (bipedLeftLeg != null) bipedLeftLeg.setRotationPoint(1.5F, 3.5F, 0.0F);
 		if (Skirt != null) Skirt.setRotationPoint(0.0F, 4.0F, 0.0F);

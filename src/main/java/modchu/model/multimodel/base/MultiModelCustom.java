@@ -327,11 +327,7 @@ package modchu.model.multimodel.base;import java.util.HashMap;import java.uti
 		if (customModel != null) return customModel.getDominantArm(entityCaps);
 		if (Modchu_EntityCapsHelper.getCapsValueInt(this, entityCaps, caps_dominantArm, getCapsValue(caps_armorType)) == 0) return bipedRightArm;
 		return bipedLeftArm;
-	}	@Override
-	public ModchuModel_ModelRenderer getBipedRightArm(ModchuModel_IEntityCaps entityCaps) {
-		if (customModel != null) return customModel.getBipedRightArm(entityCaps);
-		return bipedRightArm;
-	}	@Override
+	}	@Override	public ModchuModel_ModelRenderer getBipedBody(ModchuModel_IEntityCaps entityCaps) {		if (customModel != null) return customModel.getBipedBody(entityCaps);		return bipedBody;	}	@Override	public ModchuModel_ModelRenderer getBipedRightArm(ModchuModel_IEntityCaps entityCaps) {		if (customModel != null) return customModel.getBipedRightArm(entityCaps);		return bipedRightArm;	}	@Override
 	public ModchuModel_ModelRenderer getBipedLeftArm(ModchuModel_IEntityCaps entityCaps) {
 		if (customModel != null) return customModel.getBipedLeftArm(entityCaps);
 		return bipedLeftArm;

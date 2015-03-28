@@ -1,4 +1,4 @@
-package modchu.model.multimodel.base;import modchu.lib.Modchu_AS;import modchu.lib.Modchu_EntityCapsHelper;import modchu.model.ModchuModel_IEntityCaps;import modchu.model.ModchuModel_ModelRenderer;public class MultiModel_Aug extends MultiModel_SR2 {	public ModchuModel_ModelRenderer sidetailUpperR;
+package modchu.model.multimodel.base;import modchu.lib.Modchu_AS;import modchu.lib.Modchu_CastHelper;import modchu.lib.Modchu_EntityCapsHelper;import modchu.model.ModchuModel_IEntityCaps;import modchu.model.ModchuModel_ModelRenderer;public class MultiModel_Aug extends MultiModel_SR2 {	public ModchuModel_ModelRenderer sidetailUpperR;
 	public ModchuModel_ModelRenderer sidetailUpperL;	public ModchuModel_ModelRenderer shaggyB;
 	public ModchuModel_ModelRenderer shaggyR;
 	public ModchuModel_ModelRenderer shaggyL;	public ModchuModel_ModelRenderer sensor1;
@@ -89,7 +89,7 @@ package modchu.model.multimodel.base;import modchu.lib.Modchu_AS;import modch
 			f3 *= 8.0F;
 			f4 = -0.2F;
 		} else {
-			f4 = (1F - Modchu_EntityCapsHelper.getCapsValueInt(this, entityCaps, caps_health ) / 20F) * 0.5F;
+			f4 = (1F - Modchu_CastHelper.Float(entityCaps.getCapsValue(caps_health), false) / 20F) * 0.5F;
 		}
 		float f5 = Modchu_AS.getFloat(Modchu_AS.mathHelperSin, f3 * 0.067F) * 0.05F - f4;
 		float f6 = 40.0F / 57.29578F;
