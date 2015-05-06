@@ -431,7 +431,7 @@ public class ModchuModel_Config extends Modchu_Config {
 			return configShowPartsNemeMap.get(s1);
 		}
 		Object[] option = null;
-		Object[] textureModel = ModchuModel_Main.modelNewInstance(null, s, true, false, option);
+		Object[] textureModel = ModchuModel_TextureManagerBase.instance.modelNewInstance(null, s, true, false, option);
 		if (textureModel != null) {
 			int i1 = 0;
 			switch(i) {

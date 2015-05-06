@@ -110,6 +110,8 @@ public class MultiModelLMMModel extends MultiModelBaseBiped {
 		if (model != null); else return;
 		Object dummyEntityCaps = getDummyEntityCaps(entityCaps);
 		if (dummyEntityCaps != null); else return;
+		f *= 0.1F;
+		f1 *= 0.1F;
 		try {
 			Modchu_Reflect.invokeMethod(model.getClass(), "setLivingAnimations", new Class[]{ iDummyEntityCapsClass, float.class, float.class, float.class }, model, new Object[]{ dummyEntityCaps, f, f1, renderPartialTicks });
 		} catch (Exception e) {
@@ -121,6 +123,9 @@ public class MultiModelLMMModel extends MultiModelBaseBiped {
 	public void setRotationAnglesLM(float f, float f1, float f2, float pheadYaw, float pheadPitch, float f5, ModchuModel_IEntityCaps entityCaps) {
 		Object dummyEntityCaps = getDummyEntityCaps(entityCaps);
 		if (dummyEntityCaps != null); else return;
+		f *= 0.1F;
+		f1 *= 0.1F;
+		//f5 *= 0.4F;
 		setEntityCapsToModelAttributes(entityCaps);
 		Method method = Modchu_Reflect.getMethod(model.getClass(), "setRotationAngles", new Class[]{
 			float.class, float.class, float.class, float.class, float.class, float.class, iDummyEntityCapsClass  }, -1);
@@ -217,8 +222,8 @@ public class MultiModelLMMModel extends MultiModelBaseBiped {
 	public int showArmorParts(ModchuModel_IEntityCaps entityCaps, int parts, int index) {
 		Object dummyEntityCaps = getDummyEntityCaps(entityCaps);
 		if (dummyEntityCaps != null); else return -1;
-		Method method = Modchu_Reflect.getMethod(model.getClass(), "showArmorParts", new Class[]{ iDummyEntityCapsClass, int.class }, -1);
-		if (method != null) return Modchu_CastHelper.Int(Modchu_Reflect.invoke(method, model, new Object[]{ dummyEntityCaps, parts }));
+		Method method = Modchu_Reflect.getMethod(model.getClass(), "showArmorParts", new Class[]{ int.class, int.class }, -1);
+		if (method != null) return Modchu_CastHelper.Int(Modchu_Reflect.invoke(method, model, new Object[]{ parts, index }));
 		return -1;
 	}
 

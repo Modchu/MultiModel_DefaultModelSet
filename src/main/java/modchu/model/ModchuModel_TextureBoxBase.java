@@ -19,10 +19,12 @@ public class ModchuModel_TextureBoxBase {
 	public String textureName;
 	public int contractColor;
 	public int wildColor;
+/*
 	public float modelHeight;
 	public float modelWidth;
 	public float modelYOffset;
 	public float modelMountedYOffset;
+*/
 	public boolean isUpdateSize;
 
 	/**
@@ -44,7 +46,7 @@ public class ModchuModel_TextureBoxBase {
 	/**
 	 * マルチモデルクラス
 	 */
-	public MultiModelBaseBiped[] models;
+	//public MultiModelBaseBiped[] models;
 	/**
 	 * pName, pTextureDir, pClassPrefix
 	 */
@@ -59,7 +61,7 @@ public class ModchuModel_TextureBoxBase {
 	public ModchuModel_TextureBoxBase() {
 		textures = new HashMap<Integer, Object>();
 		armors = new TreeMap<String, Map<Integer, Object>>();
-		modelHeight = modelWidth = modelYOffset = modelMountedYOffset = 0.0F;
+		//modelHeight = modelWidth = modelYOffset = modelMountedYOffset = 0.0F;
 		contractColor = -1;
 		wildColor = -1;
 	}
@@ -78,14 +80,14 @@ public class ModchuModel_TextureBoxBase {
 		}
 		textureDir = pSearch;
 	}
-
+/*
 	public void setModelSize(float pHeight, float pWidth, float pYOffset, float pMountedYOffset) {
 		modelHeight = pHeight;
 		modelWidth = pWidth;
 		modelYOffset = pYOffset;
 		modelMountedYOffset = pMountedYOffset;
 	}
-
+*/
 	public int getRandomColor(int pColor, Random pRand) {
 		List<Integer> llist = new ArrayList<Integer>();
 		for (int li = 0; li < 16; li++) {
@@ -119,17 +121,15 @@ public class ModchuModel_TextureBoxBase {
 	public int getRandomContractColor(Random pRand) {
 		return getRandomColor(getContractColorBits(), pRand);
 	}
-
+/*
 	public void setModels(String pModelName, MultiModelBaseBiped[] pModels, MultiModelBaseBiped[] pDefModels) {
 		modelName = pModelName;
 		models = pModels != null ? pModels : pDefModels;
 		textureName = (new StringBuilder()).append(packegeName).append("_").append(modelName).toString();
-		isUpdateSize = (models != null
-				&& models.length > 0
-				&& models[0] != null) ? Modchu_EntityCapsHelper.getCapsValueBoolean(models[0], Modchu_IEntityCapsBase.caps_isUpdateSize) : false;
+		isUpdateSize = true;
 		//Modchu_Debug.mDebug("setModels models[0].getClass()="+models[0].getClass());
 	}
-
+*/
 	/**
 	 * テクスチャのフルパスを返す。
 	 * 登録インデックスが無い場合はNULLを返す。
@@ -224,7 +224,7 @@ public class ModchuModel_TextureBoxBase {
 	public boolean hasArmor() {
 		return !armors.isEmpty();
 	}
-
+/*
 	public float getHeight(Modchu_IEntityCapsBase entityCaps) {
 		return models != null ? models[0].getHeight(entityCaps) : modelHeight;
 	}
@@ -240,7 +240,7 @@ public class ModchuModel_TextureBoxBase {
 	public float getMountedYOffset(Modchu_IEntityCapsBase entityCaps) {
 		return models != null ? models[0].getMountedYOffset(entityCaps) : modelMountedYOffset;
 	}
-
+*/
 	public ModchuModel_TextureBoxBase duplicate() {
 		ModchuModel_TextureBoxBase lbox = new ModchuModel_TextureBoxBase();
 		lbox.textureName = textureName;
@@ -250,7 +250,7 @@ public class ModchuModel_TextureBoxBase {
 		lbox.textureDir = textureDir;
 		lbox.textures = textures;
 		lbox.armors = armors;
-		lbox.models = models;
+		//lbox.models = models;
 		lbox.isUpdateSize = isUpdateSize;
 
 		return lbox;

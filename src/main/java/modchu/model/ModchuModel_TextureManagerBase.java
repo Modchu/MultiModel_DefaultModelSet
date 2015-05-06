@@ -29,13 +29,17 @@ import modchu.lib.Modchu_HelperBase;
 import modchu.lib.Modchu_Main;
 import modchu.lib.Modchu_Reflect;
 import modchu.model.multimodel.base.MultiModelBaseBiped;
+import modchu.model.multimodel.base.MultiModelCustom;
+import modchu.model.multimodel.base.MultiModelLMMModel;
+import modchu.model.multimodel.base.MultiModelOtherModel;
 
 public class ModchuModel_TextureManagerBase {
 
 	public static ModchuModel_TextureManagerBase instance = new ModchuModel_TextureManagerBase();
 
-	public static String nameTextureIndex = "config/mod_ModchuModel_textureList.cfg";
-	public static String defaultModelName = "Orign";
+	public String nameTextureIndex = "config/mod_ModchuModel_textureList.cfg";
+	public String defaultModelName = "Orign";
+	public String modelClassName = "MultiModel";
 
 	public static final int tx_oldwild		= 0x10; //16;
 	public static final int tx_oldarmor1	= 0x11; //17;
@@ -68,58 +72,27 @@ public class ModchuModel_TextureManagerBase {
 	};
 
 	/**
-	 * ローカルで保持しているモデルのリスト
+	 * ローカルで保持しているモデルの初期化用クラス名マップ
 	 */
-	public Map<String, MultiModelBaseBiped[]> modelMap = new TreeMap();
+	public Map<String, String> modelClassNameMap = new HashMap();
+	/**
+	 * OtherCustomモデル初期化用データマップ
+	 */
+	public Map<String, Object[]> otherModelDataMap = new HashMap();
 	/**
 	 * ローカルで保持しているテクスチャパック
 	 */
 	public Map<String, ModchuModel_TextureBoxBase> textures = new TreeMap();
-	/**
-	 * サーバー側での管理番号を識別するのに使う、クライアント用。
-	 */
-	//public Map<ModchuModel_TextureBoxBase, Integer> textureServerIndex = new HashMap<ModchuModel_TextureBoxBase, Integer>();
-	/**
-	 * サーバー・クライアント間でテクスチャパックの名称リストの同期を取るのに使う、サーバー用。
-	 */
-	//public List<ModchuModel_TextureBoxServer> textureServer = new ArrayList<ModchuModel_TextureBoxServer>();
-	/**
-	 * Entity毎にデフォルトテクスチャを参照。
-	 * 構築方法はEntityListを参照のこと。
-	 */
-	//public Map<Class, ModchuModel_TextureBoxBase> defaultTextures = new HashMap<Class, ModchuModel_TextureBoxBase>();
-
-	/**
-	 * クライアント側で使う
-	 */
-/*
-	public String[] requestString = new String[] {
-		null, null, null, null, null, null, null, null,
-		null, null, null, null, null, null, null, null
-	};
-	public int[] requestStringCounter = new int[] {
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-	};
-	public int[] requestIndex = new int[] {
-		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1
-	};
-	public int[] requestIndexCounter = new int[] {
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-	};
-*/
-	//public Map<Modchu_ITextureEntityBase, int[]> stackGetTexturePack = new HashMap<Modchu_ITextureEntityBase, int[]>();
-	//public Map<Modchu_ITextureEntityBase, Object[]> stackSetTexturePack = new HashMap<Modchu_ITextureEntityBase, Object[]>();
 
 	public List<Object[]> searchPrefix = new ArrayList();
-
 	private LinkedList<String> searchSettledList = new LinkedList();
-
-
+	public static ArrayList<String> modelNewInstanceNgList = new ArrayList();
+	public static HashMap<Object, Map> entityModelMapData = new HashMap();
+	public static HashMap<String, Object[]> dummyModelMapData = new HashMap();
 
 	public void init() {
+		modelClassNameMap.put(defaultModelName, "modchu.model.multimodel.base.MultiModel");
+		loadTextures();
 	}
 
 	public String[] getSearch(String pName) {
@@ -172,6 +145,7 @@ public class ModchuModel_TextureManagerBase {
 	 * @param pBoxBase
 	 * @return
 	 */
+/*
 	public ModchuModel_TextureBoxBase getTextureBox(ModchuModel_TextureBoxBase pBoxBase) {
 		if (pBoxBase instanceof ModchuModel_TextureBoxBase) {
 			return (ModchuModel_TextureBoxBase)pBoxBase;
@@ -180,7 +154,7 @@ public class ModchuModel_TextureManagerBase {
 		}
 		return null;
 	}
-/*
+
 	public ModchuModel_TextureBoxServer getTextureBoxServer(String pName) {
 		for (ModchuModel_TextureBoxServer lbox : textureServer) {
 			if (lbox.textureName.equals(pName)) {
@@ -213,7 +187,8 @@ public class ModchuModel_TextureManagerBase {
 		// ファイルを解析してテクスチャを追加
 		// jar内のテクスチャを追加
 		Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures jar load.");
-		if (Modchu_FileManager.minecraftJar == null) {
+		List<File> jarList = Modchu_FileManager.getMinecraftJarList();
+		if (jarList.isEmpty()) {
 			Modchu_Debug.tDebug("getTexture-append-jar-file not founded.");
 		} else {
 			for (Object[] lss : searchPrefix) {
@@ -225,7 +200,9 @@ public class ModchuModel_TextureManagerBase {
 						for (String s6 : s3) {
 							String[] lst = new String[]{ s4, s5, s6 };
 							Modchu_Debug.tDebug("getTexture minecraftJar [%s] [%s] [%s]", s4, s5, s6);
-							addTexturesJar(Modchu_FileManager.minecraftJar, lst);
+							for (File file : jarList) {
+								addTexturesJar(file, lst);
+							}
 						}
 					}
 				}
@@ -233,7 +210,7 @@ public class ModchuModel_TextureManagerBase {
 		}
 		Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures jar load end.");
 		// jar内のテクスチャを追加
-		if (Modchu_FileManager.minecraftJar == null) Modchu_Debug.tDebug("getTexture-append-jar-file not founded.");
+		if (jarList.isEmpty()) Modchu_Debug.tDebug("getTexture-append-jar-file not founded.");
 		Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures mods load.");
 		for (Object[] lss : searchPrefix) {
 			String[] s1 = (String[]) lss[0];
@@ -265,7 +242,6 @@ public class ModchuModel_TextureManagerBase {
 			}
 		}
 		Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures mods load end.");
-		// TODO:実験コード
 		buildCrafterTexture();
 		setModels();
 
@@ -281,29 +257,11 @@ public class ModchuModel_TextureManagerBase {
 	}
 
 	public void setModels() {
-		Modchu_Debug.tDebug("ModchuModel_TextureManagerBase setModels");
-		// テクスチャパッケージにモデルクラスを紐付け
-		MultiModelBaseBiped[] ldm = modelMap.get(defaultModelName);
-		if (ldm == null && !modelMap.isEmpty()) {
-			ldm = (MultiModelBaseBiped[])modelMap.values().toArray()[0];
-		}
-		if (textures != null
-				&& !textures.isEmpty()) {
-			for (Entry<String, ModchuModel_TextureBoxBase> en : textures.entrySet()) {
-				ModchuModel_TextureBoxBase ltb = en.getValue();
-				if (ltb.modelName.isEmpty()) {
-					ltb.setModels(defaultModelName, null, ldm);
-				} else {
-					if (modelMap.containsKey(ltb.modelName)) {
-						ltb.setModels(ltb.modelName, modelMap.get(ltb.modelName), ldm);
-					}
-				}
-			}
-		}
-		Modchu_Debug.tDebug("ModchuModel_TextureManagerBase setModels 1 modelMap.size()="+(modelMap != null ? modelMap.size() : null));
-		if (modelMap != null
-				&& !modelMap.isEmpty()) {
-			for (Entry<String, MultiModelBaseBiped[]> le : modelMap.entrySet()) {
+		Modchu_Debug.tDebug("ModchuModel_TextureManagerBase setModels 1 modelNameList.size()="+(modelClassNameMap != null ? modelClassNameMap.size() : null));
+/*
+		if (modelNameList != null
+				&& !modelNameList.isEmpty()) {
+			for (Entry<String, MultiModelBaseBiped[]> le : modelNameList.entrySet()) {
 				String key = le.getKey();
 				MultiModelBaseBiped[] value = le.getValue();
 				String ls = value != null
@@ -335,12 +293,13 @@ public class ModchuModel_TextureManagerBase {
 				}
 			}
 		}
+*/
 		Modchu_Debug.tDebug("Loaded Texture Lists.(%d)", textures.size());
 		if (textures != null
 				&& !textures.isEmpty()) {
 			for (Entry<String, ModchuModel_TextureBoxBase> en : textures.entrySet()) {
 				ModchuModel_TextureBoxBase lbox = en.getValue();
-				Modchu_Debug.tDebug("texture: %s(%s) - hasModel:%b", lbox.textureName, lbox.fileName, lbox.models != null);
+				Modchu_Debug.tDebug("texture: %s(%s)", lbox.textureName, lbox.fileName);
 			}
 /*
 			for (int li = textures.size() - 1; li >= 0; li--) {
@@ -357,17 +316,16 @@ public class ModchuModel_TextureManagerBase {
 	}
 
 	public void buildCrafterTexture() {
-		// TODO:実験コード標準モデルテクスチャで構築
 		String textureName = "Crafter_Biped";
 		ModchuModel_TextureBoxBase lbox = new ModchuModel_TextureBoxBase(textureName, new String[] {"", "", ""});
 		lbox.fileName = "";
-
-		lbox.addTexture(0x0c, Modchu_Main.getMinecraftVersion() > 162 ? "textures/entity/steve.png" : "/assets/minecraft/textures/entity/steve.png");
+		int version = Modchu_Main.getMinecraftVersion();
+		lbox.addTexture(0x0c, version > 162 ? "textures/entity/steve.png" : "/mob/char.png");
 		if (armorFilenamePrefix != null && armorFilenamePrefix.length > 0) {
 			for (String ls : armorFilenamePrefix) {
 				Map<Integer, Object> lmap = new HashMap();
-				lmap.put(tx_armor1, Modchu_Main.newResourceLocation((new StringBuilder()).append("textures/models/armor/").append(ls).append("_layer_2.png").toString()));
-				lmap.put(tx_armor2, Modchu_Main.newResourceLocation((new StringBuilder()).append("textures/models/armor/").append(ls).append("_layer_1.png").toString()));
+				lmap.put(tx_armor1, Modchu_Main.newResourceLocation((new StringBuilder()).append(version > 162 ? "textures/models/armor/" : "/armor/").append(ls).append(version > 162 ? "_layer_2.png" : "_2.png").toString()));
+				lmap.put(tx_armor2, Modchu_Main.newResourceLocation((new StringBuilder()).append(version > 162 ? "textures/models/armor/" : "/armor/").append(ls).append(version > 162 ? "_layer_1.png" : "_1.png").toString()));
 				lbox.armors.put(ls, lmap);
 			}
 		}
@@ -484,7 +442,7 @@ public class ModchuModel_TextureManagerBase {
 			String pn = version > 162 ? fname.substring(pSearch[2].length() + lfindprefix) : fname.substring(pSearch[2].length() + lfindprefix).replace(".class", "");
 			if (version > 162) pn = pn.substring(0, pn.length() - 6);
 			//Modchu_Debug.tDebug("addModelClass cn="+cn+" pn="+pn);
-			if (modelMap.containsKey(pn)) return;
+			if (modelClassNameMap.containsKey(pn)) return;
 
 			Class lclass;
 			try {
@@ -494,6 +452,7 @@ public class ModchuModel_TextureManagerBase {
 						Modchu_Debug.tDebug("getModelClass-fail.");
 						return;
 					}
+/*
 					MultiModelBaseBiped mlm[] = new MultiModelBaseBiped[3];
 					Constructor<MultiModelBaseBiped> cm = lclass.getConstructor(float.class);
 					mlm[0] = cm.newInstance(0.0F);
@@ -501,7 +460,8 @@ public class ModchuModel_TextureManagerBase {
 					//Modchu_Debug.mDebug("getModelClass lclass="+lclass+" lsize[0]="+lsize[0]+" lsize[1]="+lsize[1]);
 					mlm[1] = cm.newInstance(lsize[0]);
 					mlm[2] = cm.newInstance(lsize[1]);
-					modelMap.put(pn, mlm);
+*/
+					modelClassNameMap.put(pn, cn);
 					Modchu_Debug.tDebug("addModelClass-%s:%s", pn, cn);
 				} else {
 					Modchu_Debug.tDebug("addModelClass-class == null !!: %s", cn);
@@ -1185,7 +1145,6 @@ public class ModchuModel_TextureManagerBase {
 		ModchuModel_TextureBox lbox = getTextureBox(lpackname);
 		if (lbox == null) {
 			// ローカルには存在しないテクスチャパック
-			// TODO:この辺要修正
 			lbox = getTextureBox("default_Orign").duplicate();
 			lbox.textureName = lpackname;
 //			lbox = new ModchuModel_TextureBox(lpackname, null);
@@ -1231,6 +1190,350 @@ public class ModchuModel_TextureManagerBase {
 	}
 
 	// TODO add Modchu
+	public Object[] modelNewInstance(Object entity, String s, boolean b, boolean useCustom, Object[] option) {
+		return modelNewInstance(entity, s, b, useCustom, option, true);
+	}
+
+	public Object[] modelNewInstance(Object entity, String s, boolean b, boolean useCustom, Object[] option, boolean debug) {
+		if (s != null
+				&& !s.isEmpty()); else return null;
+		Map<String, Object[]> map = null;
+		Object[] models = null;
+		s = ModchuModel_TextureManagerBase.instance.textureNameCheck(s);
+		String s1 = Modchu_Main.lastIndexProcessing(s, "_");
+		if (entity != null) map = entityModelMapData.get(entity);
+		else map = dummyModelMapData;
+		if (!b) {
+			if (map != null) {
+				models = map.get(s);
+				if (models != null
+						&& models[0] != null
+						&& models[1] != null
+						&& models[2] != null) {
+					if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 1 return models. s="+s);
+					return models;
+				} else {
+					if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 1 models == null s="+s);
+				}
+			}
+		}
+		if (map != null); else {
+			map = new HashMap<String, Object[]>();
+			//Modchu_Debug.mDebug("ModchuModel_TextureManagerBase modelNewInstance map = new HashMap");
+		}
+		if (debug) Modchu_Debug.lDebug1("ModchuModel_TextureManagerBase modelNewInstance 2 s1="+s1+" modelNewInstanceNgList.contains(s1)="+modelNewInstanceNgList.contains(s1));
+		models = modelNewInstanceNgList.contains(s1) ? null : modelNewInstance(s, useCustom, option);
+		if (debug) Modchu_Debug.lDebug1("ModchuModel_TextureManagerBase modelNewInstance 2.5 models="+models);
+		if (models != null
+				&& models[0] != null
+				&& models[1] != null
+				&& models[2] != null) {
+			map.put(s, models);
+			if (entity != null) entityModelMapData.put(entity, map);
+			if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 3 return models="+models);
+			return models;
+		}
+		if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 4 return models="+models);
+		return models;
+	}
+
+	public Object[] modelNewInstance(String s, boolean useCustom, Object[] option) {
+		if (s != null
+				&& !s.isEmpty()); else return null;
+		boolean debug = false;
+		Object[] models = new Object[3];
+/*
+		String s1 = s != null ? Modchu_Main.lastIndexProcessing(s, "_") : s;
+		boolean defaultFlag = s1 != null
+				&& (defaultModelName != null
+				&& s1.indexOf(defaultModelName) > -1);
+		String s2 = defaultFlag ? "modchu.model.multimodel.base.MultiModel" : new StringBuilder().append(modelClassName).append("_").append(s1).toString();
+		String s3 = getModelClassName(s2);
+*/
+		//Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance s3="+s3);
+		Class c = null;
+		if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-1 s="+s);
+		if (s.lastIndexOf(ModchuModel_ModelAddManager.addLmmModelString) < 0) {
+			c = Modchu_Reflect.loadClass(getModelClassName(s), -1);
+			if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-2 s="+s+" c="+c);
+		}
+		if (c != null) {
+			Object o = modelNewInstance(c, new Class[]{ float.class, float.class, int.class, int.class, Object[].class }, new Object[]{ 0.0F, 0.0F, -1, -1, option });
+			if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-3 o="+o);
+			if (o != null); else {
+				o = modelNewInstance(c, new Class[]{ float.class }, new Object[]{ 0.0F });
+			}
+			if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-4 o="+o);
+			MultiModelBaseBiped multiModelBaseBiped = o != null
+					&& o instanceof MultiModelBaseBiped ? (MultiModelBaseBiped) o : null;
+			if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-5 multiModelBaseBiped="+multiModelBaseBiped);
+			if (multiModelBaseBiped != null) {
+				models[0] = multiModelBaseBiped;
+/*//125delete
+				if (isSmartMoving
+						&& mod_pflm_playerformlittlemaid.playerFormLittleMaidVersion <= 124) {
+					boolean isBiped = modc_PFLM_PlayerFormLittleMaid.BipedClass != null ?
+							modc_PFLM_PlayerFormLittleMaid.BipedClass.isInstance(models[0]) : s.equalsIgnoreCase("Biped");
+					float[] f1 = new float[2];
+					f1[0] = isBiped ? 0.5F : 0.1F;
+					f1[1] = isBiped ? 1.0F : 0.5F;
+					//Modchu_Debug.mDebug("4modelNewInstance o != null isBiped="+isBiped);
+					models[1] = Modchu_Reflect.newInstance(c, new Class[]{ float.class, int.class, int.class }, new Object[]{ f1[0], MultiModelSmart.NoScaleStart, MultiModelSmart.Scale });
+					models[2] = Modchu_Reflect.newInstance(c, new Class[]{ float.class, int.class, int.class }, new Object[]{ f1[1], MultiModelSmart.NoScaleStart, MultiModelSmart.NoScaleEnd });
+					//Modchu_Debug.mDebug("5modelNewInstance o != null models[1] != null ? "+(models[1] != null));
+				} else {
+*///125delete
+					float[] f1 = getArmorModelsSize(models[0]);
+					if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-6 getArmorModelsSize f1[0]="+f1[0]+" f1[1]="+f1[1]);
+					o = modelNewInstance(c, new Class[]{ float.class, float.class, int.class, int.class, Object[].class }, new Object[]{ f1[0], 0.0F, -1, -1, option });
+					if (o != null); else {
+						o = modelNewInstance(c, new Class[]{ float.class }, new Object[]{ f1[0] });
+					}
+					models[1] = o != null
+							&& o instanceof MultiModelBaseBiped ? (MultiModelBaseBiped) o : null;
+					o = modelNewInstance(c, new Class[]{ float.class, float.class, int.class, int.class, Object[].class }, new Object[]{ f1[1], 0.0F, -1, -1, option });
+					if (o != null); else {
+						o = modelNewInstance(c, new Class[]{ float.class }, new Object[]{ f1[1] });
+					}
+					models[2] = o != null
+							&& o instanceof MultiModelBaseBiped ? (MultiModelBaseBiped) o : null;
+/*//125delete
+				}
+*///125delete
+			} else {
+				Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-7 multiModelBaseBiped == null !! s="+s);
+			}
+		} else {
+			Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-8 c == null s="+s);
+			debug = true;
+			String s4 = Modchu_Main.lastIndexProcessing(s, "_");
+			if (s.lastIndexOf(ModchuModel_ModelAddManager.addLmmModelString) > -1) {
+				String s5 = Modchu_Main.lastIndexProcessing(s.substring(0, s.indexOf(";")), "_");
+				if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-9 s5="+s5);
+				Object[] mlm = ModchuModel_ModelAddManager.getLMMTextureManagerModels(s5);
+				if (mlm != null) {
+					if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-10 mlm="+mlm);
+					Class ModchuLmmModel = ModchuModel_ModelAddManager.getModchuLmmModelClass();
+					if (ModchuLmmModel != null) {
+						models = newMultiModelLMMModel(mlm);
+					}
+				} else {
+					if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-11 mlm == null !!");
+				}
+			}
+			else if (s4.startsWith("Custom")) {
+				Object[] o1 = newMultiModelOtherModel(s4);
+				if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-12 c == null o1="+o1);
+				if (o1 != null) {
+					models = o1;
+					if (debug) {
+						Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-13 c == null models="+models);
+						Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-13 c == null models[0]="+models[0]);
+						Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-13 c == null models[1]="+models[1]);
+						Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-13 c == null models[2]="+models[2]);
+					}
+				} else {
+					s4 = Modchu_Main.lastIndexProcessing(s4, "Custom");
+					if (s4 != null
+							&& !s4.isEmpty()) {
+						models[0] = new MultiModelCustom(s4, 0.0F, 0.0F, 64, 32);
+						if (models[0] != null) {
+							float[] lsize = ((MultiModelCustom) models[0]).getArmorModelsSize();
+							models[1] = new MultiModelCustom(s4, lsize[0], 0.0F, 64, 32);
+							models[2] = new MultiModelCustom(s4, lsize[1], 0.0F, 64, 32);
+						}
+						if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-14 c == null MultiModelCustom models="+models);
+					} else {
+						if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-15 c == null s == null !!");
+					}
+				}
+			}
+			if (models != null); else {
+				Modchu_Debug.systemLogDebug("ModchuModel_TextureManagerBase modelNewInstance 2-16 null error !! s="+s);
+			}
+		}
+		if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-17 return models="+models);
+		return models;
+	}
+
+	private static Object modelNewInstance(Class c, Class[] c1, Object[] o) {
+		if (c != null); else return null;
+		Object o1 = null;
+		try {
+			Constructor co = Modchu_Reflect.getConstructor(c, c1, -1);
+			if (co != null) o1 = Modchu_Reflect.newInstance(c, c1, o);
+		} catch(Exception e) {
+			Modchu_Debug.systemLogDebug("ModchuModel_TextureManagerBase modelNewInstance newInstance Exception !!");
+			Modchu_Debug.systemLogDebug("", e);
+		}
+		return o1;
+	}
+
+	public Object[] newModelCustom(Object[] models, String s) {
+		return newModelCustom(models, s, null);
+	}
+
+	public Object[] newModelCustom(Object[] models, String s, HashMap map) {
+		Class c = MultiModelCustom.class;
+		float[] f1;
+		if (models != null); else {
+/*
+			models = new MultiModel[3];
+			models[0] = new MultiModel(0.0F);
+			f1 = ((MultiModel) models[0]).getArmorModelsSize();
+			models[1] = new MultiModel(f1[0]);
+			models[2] = new MultiModel(f1[1]);
+*/
+			Modchu_Debug.mlDebug1("newModelCustom models == null !! return s="+s);
+			return null;
+		}
+		if (s.indexOf("_") < 0
+				| c.isInstance(models[0])) {
+			if (s.indexOf("_") < 0) Modchu_Debug.mlDebug1("newModelCustom s.indexOf(\"_\") < 0 return s="+s);
+			if (c.isInstance(models[0])) Modchu_Debug.mlDebug1("newModelCustom c.isInstance(models[0]) return s="+s);
+			return models;
+		}
+		//Modchu_Debug.mlDebug1("newModelCustom s="+s+" models[0].getClass()="+(models[0] != null ? models[0].getClass() : null));
+		if (models[0] != null
+				&& models[0] instanceof MultiModelBaseBiped); else {
+			Modchu_Debug.lDebug("newModelCustom !MultiModelBaseBiped return null !! models[0]="+models[0]);
+			return null;
+		}
+		if (models[1] != null
+				&& models[1] instanceof MultiModelBaseBiped); else {
+			Modchu_Debug.lDebug("newModelCustom !MultiModelBaseBiped return null !! models[1]="+models[1]);
+			return null;
+		}
+		if (models[2] != null
+				&& models[2] instanceof MultiModelBaseBiped); else {
+			Modchu_Debug.lDebug("newModelCustom !MultiModelBaseBiped return null !! models[2]="+models[2]);
+			return null;
+		}
+		Object[] newModels = new Object[3];
+		newModels[0] = Modchu_Reflect.newInstance(c, new Class[]{ float.class, MultiModelBaseBiped.class, String.class, HashMap.class }, new Object[]{ 0.0F, models[0], s, map});
+		//Modchu_Debug.lDebug("newModelCustom newModels[0]="+newModels[0]);
+		if (newModels[0] != null); else {
+			Modchu_Debug.lDebug("newModelCustom newInstance error !! newModels[0] == null !!");
+			return null;
+		}
+		if (models[1] != null) {
+			f1 = getArmorModelsSize(models[1]);
+			newModels[1] = Modchu_Reflect.newInstance(c, new Class[]{ float.class, MultiModelBaseBiped.class, String.class, HashMap.class }, new Object[]{ f1[0], models[1], s, map });
+		}
+		if (models[2] != null) {
+			f1 = getArmorModelsSize(models[2]);
+			newModels[2] = Modchu_Reflect.newInstance(c, new Class[]{ float.class, MultiModelBaseBiped.class, String.class, HashMap.class }, new Object[]{ f1[1], models[2], s, map });
+		}
+		//Modchu_Debug.lDebug("newModelCustom return newModels[0]="+newModels[0]);
+		return newModels;
+	}
+
+	public Object[] newOtherModel(String s) {
+		Object[] o = ModchuModel_TextureManagerBase.instance.otherModelDataMap.get(s);
+		if (o != null); else return null;
+		Map tempMap = (Map) o[0];
+		String tempOtherCustomModelClassName = Modchu_CastHelper.String(tempMap.get("tempOtherCustomModelClassName"));
+		String tempOtherCustomModelArmorClassName0 = Modchu_CastHelper.String(tempMap.containsKey("tempOtherCustomModelArmorClassName0") ? tempMap.get("tempOtherCustomModelArmorClassName0") : null);
+		String tempOtherCustomModelArmorClassName1 = Modchu_CastHelper.String(tempMap.containsKey("tempOtherCustomModelArmorClassName1") ? tempMap.get("tempOtherCustomModelArmorClassName1") : null);
+		Class[] tempOtherCustomOtherConstructor = Modchu_CastHelper.ClassArray(tempMap.containsKey("tempOtherCustomOtherConstructor") ? tempMap.get("tempOtherCustomOtherConstructor") : null);
+		Object[] tempOtherCustomOtherConstructorObject = Modchu_CastHelper.ObjectArray(tempMap.containsKey("tempOtherCustomOtherConstructorObject") ? tempMap.get("tempOtherCustomOtherConstructorObject") : null);
+		float[] tempOtherCustomModelSize = Modchu_CastHelper.FloatArray(tempMap.containsKey("tempOtherCustomModelSize") ? tempMap.get("tempOtherCustomModelSize") : new float[]{ 0.0F, 0.0F, 0.0F });
+		float[] tempOtherCustomModelPositionCorrection = Modchu_CastHelper.FloatArray(tempMap.containsKey("tempOtherCustomModelPositionCorrection") ? tempMap.get("tempOtherCustomModelPositionCorrection") : new float[]{ 0.0F, 0.0F, 0.0F });
+		float tempOtherCustomModelGuiViewScale = Modchu_CastHelper.Float(tempMap.containsKey("tempOtherCustomModelGuiViewScale") ? tempMap.get("tempOtherCustomModelGuiViewScale") : 1.0F);
+		boolean tempOtherCustomModelIsChild = Modchu_CastHelper.Boolean(tempMap.containsKey("tempOtherCustomModelIsChild") ? tempMap.get("tempOtherCustomModelIsChild") : true);
+
+		Object[] o1 =newOtherModel(tempOtherCustomModelClassName, tempOtherCustomModelArmorClassName0, tempOtherCustomModelArmorClassName1, tempOtherCustomOtherConstructor, tempOtherCustomOtherConstructorObject, tempOtherCustomModelSize, tempOtherCustomModelIsChild);
+		if (o1 != null); else {
+			Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance new model failure !! tempOtherCustomModelClassName="+tempOtherCustomModelClassName);
+			return null;
+		}
+		return o1;
+	}
+
+	public Object[] newOtherModel(String s, String s1, String s2, Class[] c, Object[] o, float[] f, boolean isChild) {
+		Object[] models = new Object[3];
+		float[] f1 = f != null ? f : new float[]{
+				0.0F, 0.5F, 1.0F
+		};
+		//Modchu_Debug.mDebug("newOtherModel s="+s);
+		models[0] = getNewInstanceOtherModel(s, c, o, f1[0]);
+		if (models[0] != null); else return null;
+		Modchu_AS.set(Modchu_AS.modelBaseIsChild, models[0], isChild);
+		models[1] = s1 != null
+				&& !s1.isEmpty() ? getNewInstanceOtherModel(s1, c, o, f1[1]) : null;
+		Modchu_AS.set(Modchu_AS.modelBaseIsChild, models[1], isChild);
+		models[2] = s2 != null
+				&& !s2.isEmpty() ? getNewInstanceOtherModel(s2, c, o, f1[2]) : null;
+		Modchu_AS.set(Modchu_AS.modelBaseIsChild, models[2], isChild);
+		return models;
+	}
+
+	public Object[] newMultiModelOtherModel(String s) {
+		Object[] o1 = newOtherModel(s);
+		if (o1 != null) {
+			Object[] o = ModchuModel_TextureManagerBase.instance.otherModelDataMap.get(s);
+			if (o != null) {
+				Map map = (Map) o[1];
+				return newMultiModelOtherModel(o1, (HashMap<String, Object>) map);
+			}
+		}
+		return null;
+	}
+
+	public MultiModelOtherModel[] newMultiModelOtherModel(Object[] models, HashMap<String, Object> map) {
+		MultiModelOtherModel[] newModels = new MultiModelOtherModel[3];
+		newModels[0] = new MultiModelOtherModel(0.0F, models[0], map);
+		float[] f1 = newModels[0].getArmorModelsSize();
+		newModels[1] = new MultiModelOtherModel(f1[0], models[1], map);
+		newModels[2] = new MultiModelOtherModel(f1[1], models[2], map);
+		return newModels;
+	}
+
+	public MultiModelLMMModel[] newMultiModelLMMModel(Object[] models) {
+		MultiModelLMMModel[] newModels = new MultiModelLMMModel[3];
+		newModels[0] = new MultiModelLMMModel(0.0F, models[0]);
+		float[] f1 = newModels[0].getArmorModelsSize();
+		newModels[1] = new MultiModelLMMModel(f1[0], models[1]);
+		newModels[2] = new MultiModelLMMModel(f1[1], models[2]);
+		return newModels;
+	}
+
+	private static Object getNewInstanceOtherModel(String s, Class[] c, Object[] o, float f) {
+		if (c != null) {
+			if (Modchu_Reflect.getConstructor(s, c, -1) != null) {
+				return Modchu_Reflect.newInstance(s, c, o);
+			}
+		}
+		int mode = Modchu_Reflect.getConstructor(s, new Class[]{ float.class }, -1) != null ? 0 : Modchu_Reflect.getConstructor(s, new Class[]{ float.class, boolean.class }, -1) != null ? 1 : -1;
+		switch (mode) {
+		case -1:
+			return Modchu_Reflect.newInstance(s);
+		case 0:
+			return Modchu_Reflect.newInstance(s, new Class[]{ float.class }, new Object[]{ f });
+		case 1:
+			return Modchu_Reflect.newInstance(s, new Class[]{ float.class, boolean.class }, new Object[]{ f, false });
+		}
+		return null;
+	}
+
+	public String getModelClassName(String s) {
+		//Modchu_Debug.mDebug("getModelClassName s="+s);
+		s = Modchu_Main.lastIndexProcessing(s, "_");
+		for (Entry<String, String> en : ((Map<String, String>) ModchuModel_TextureManagerBase.instance.modelClassNameMap).entrySet()) {
+			String key = en.getKey();
+			//Modchu_Debug.mDebug1("getModelClassName key="+key);
+			if (key.equals(s)) {
+				return en.getValue();
+			}
+		}
+		return s;
+	}
+
+	public float[] getArmorModelsSize(Object o) {
+		Object o1 = Modchu_Reflect.invokeMethod(o.getClass(), "getArmorModelsSize", o, -1);
+		return o1 != null ? Modchu_CastHelper.FloatArray(o1) : new float[]{ 0.1F, 0.5F };
+	}
+
 	public String getPackege(int i, int j) {
 		return getTextureBoxTextureName(getTextureManagerTextures(j));
 	}
@@ -1259,25 +1562,20 @@ public class ModchuModel_TextureManagerBase {
 	}
 
 	public Object[] getTextureModels(Object entity, String s, boolean b, boolean b1, Object[] option) {
-		if (b1) {
-			Object ltb = getTextureBox(s);
-			return Modchu_CastHelper.ObjectArray(Modchu_Reflect.getFieldObject(ltb.getClass(), "models", ltb));
-		} else {
-			return ModchuModel_Main.modelNewInstance(entity, s, b, true, option);
-		}
+		return modelNewInstance(entity, s, b, true, option);
 	}
 
-	public Object getTextureBox(int i) {
+	public ModchuModel_TextureBoxBase getTextureBox(int i) {
 		return getTextureManagerTextures(i);
 	}
 
 	public Object[] getTextureModels(Object entity, int i, Object[] option) {
-		return getTextureModels(entity, i, false, false, option);
+		return getTextureModels(entity, i, false, option);
 	}
 
-	public Object[] getTextureModels(Object entity, int i, boolean b, boolean b1, Object[] option) {
+	public Object[] getTextureModels(Object entity, int i, boolean b, Object[] option) {
 		Object ltb = getTextureManagerTextures(i);
-		return b1 ? Modchu_CastHelper.ObjectArray(Modchu_Reflect.getFieldObject(ltb.getClass(), "models", ltb)) : ModchuModel_Main.modelNewInstance(entity, getTextureBoxTextureName(ltb), b, true, option);
+		return ltb != null ? modelNewInstance(entity, getTextureBoxTextureName(ltb), b, true, option) : null;
 	}
 
 	public Object checkTexturePackege(String s, int i) {
@@ -1330,20 +1628,19 @@ public class ModchuModel_TextureManagerBase {
 
 	public String textureNameCheck(String s) {
 		if (s != null
-				&& s.lastIndexOf(ModchuModel_Main.addLmmModelString) > -1) return s;
-		String s1 = ModchuModel_TextureManagerBase.defaultModelName;
+				&& s.lastIndexOf(ModchuModel_ModelAddManager.addLmmModelString) > -1) return s;
 		if (s == null
 				| (s !=null
 				&& s.isEmpty())) {
-			if (s1 != null) {
-				s = "default_"+s1;
+			if (defaultModelName != null) {
+				s = "default_"+defaultModelName;
 				//s = "default";
 				Modchu_Debug.lDebug("ModchuModel_TextureManagerBase textureNameCheck default setting.");
 			}
 			else Modchu_Debug.lDebug("ModchuModel_TextureManagerBase textureNameCheck defaultModelName == null !!");
 		} else {
 			if (s.indexOf("_") < 0) {
-				if (s1 != null) s = s+"_"+s1;
+				if (defaultModelName != null) s = s+"_"+defaultModelName;
 			}
 		}
 		return s;
@@ -1395,10 +1692,9 @@ public class ModchuModel_TextureManagerBase {
 
 	public String textureManagerGetArmorPackege(String s, int i) {
 		//Modchu_Debug.mDebug("textureManagerGetArmorPackege s="+s+" i="+i);
-		String s1 = ModchuModel_TextureManagerBase.defaultModelName;
 		int index = -1;
 		String s2 = s;
-		int i2 = s != null && !s.isEmpty() ? s.lastIndexOf(s1) : -1;
+		int i2 = s != null && !s.isEmpty() ? s.lastIndexOf(defaultModelName) : -1;
 		if (i2 > -1) {
 			s2 = s.substring(0, i2 - 1);
 		}
@@ -1418,8 +1714,8 @@ public class ModchuModel_TextureManagerBase {
 			if (index >= textures.size()) index = 0;
 			if (index < 0) index = textures.size() - 1;
 			ltb = getTextureManagerTextures(index);
-			//ltb = i == 0 ? Modchu_Reflect.invokeMethod(MMM_TextureManager, "getNextArmorPackege", new Class[]{MMM_TextureBox}, textureManagerInstance, new Object[]{ltb}) :
-			//Modchu_Reflect.invokeMethod(MMM_TextureManager, "getPrevArmorPackege", new Class[]{MMM_TextureBox}, textureManagerInstance, new Object[]{ltb});
+			//ltb = i == 0 ? Modchu_Reflect.invokeMethod(ModchuModel_TextureManagerBase, "getNextArmorPackege", new Class[]{MMM_TextureBox}, textureManagerInstance, new Object[]{ltb}) :
+			//Modchu_Reflect.invokeMethod(ModchuModel_TextureManagerBase, "getPrevArmorPackege", new Class[]{MMM_TextureBox}, textureManagerInstance, new Object[]{ltb});
 			//Modchu_Debug.mDebug("textureManagerGetArmorPackege index for index="+index+" s="+(String) Modchu_Reflect.getFieldObject(ltb.getClass(), "fileName", ltb));
 			if (getTextureBoxHasArmor(ltb)) {
 				s = getTextureBoxFileName(ltb);
@@ -1433,7 +1729,7 @@ public class ModchuModel_TextureManagerBase {
 			}
 		}
 		if (!flag) Modchu_Debug.mDebug("textureManagerGetArmorPackege !flag !!");
-		i2 = s.lastIndexOf(s1);
+		i2 = s.lastIndexOf(defaultModelName);
 		if (i2 > -1) s = s.substring(0, i2);
 		//Modchu_Debug.mDebug("textureManagerGetArmorPackege return s="+s);
 		return s;
@@ -1453,12 +1749,12 @@ public class ModchuModel_TextureManagerBase {
 		}
 		return index;
 	}
-
+/*
 	public Object[] getTextureBoxModels(Object ltb) {
 		return ltb != null
 				&& ltb instanceof ModchuModel_TextureBoxBase ? ((ModchuModel_TextureBoxBase) ltb).models : null;
 	}
-
+*/
 	public boolean getTextureBoxHasArmor(Object ltb) {
 		return ltb != null
 				&& ltb instanceof ModchuModel_TextureBoxBase ? ((ModchuModel_TextureBoxBase) ltb).hasArmor() : false;
@@ -1491,5 +1787,36 @@ public class ModchuModel_TextureManagerBase {
 
 	public ModchuModel_TextureBoxBase getTextureManagerTextures(int i) {
 		return (ModchuModel_TextureBoxBase) Modchu_Main.getMapValue(textures, i);
+	}
+
+	public void worldEventLoad(Object event) {
+		if (entityModelMapData != null
+				&& !entityModelMapData.isEmpty()) {
+			for (Entry<Object, Map> en : ((Map<Object, Map>) entityModelMapData).entrySet()) {
+				for (Entry<String, Object[]> en1 : ((Map<String, Object[]>) en.getValue()).entrySet()) {
+					Object[] models = en1.getValue();
+					if (models != null); else continue;
+					for (Object model : models) {
+						if (model != null
+								&& model instanceof MultiModelBaseBiped) {
+							((MultiModelBaseBiped) model).worldEventLoad(event);
+						}
+					}
+				}
+			}
+		}
+		if (dummyModelMapData != null
+				&& !dummyModelMapData.isEmpty()) {
+			for (Entry<String, Object[]> en1 : ((Map<String, Object[]>) dummyModelMapData).entrySet()) {
+				Object[] models = en1.getValue();
+				if (models != null); else continue;
+				for (Object model : models) {
+					if (model != null
+							&& model instanceof MultiModelBaseBiped) {
+						((MultiModelBaseBiped) model).worldEventLoad(event);
+					}
+				}
+			}
+		}
 	}
 }

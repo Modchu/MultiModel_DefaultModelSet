@@ -30,7 +30,7 @@ public class MultiModelOtherModel extends MultiModelBaseBiped {
 	private String renderDummyEntityClassName;
 	private ArrayList<String> renderDummyEntityInvokeMethod;
 	private boolean initRenderDummyEntityFlag = false;
-
+/*
 	public MultiModelOtherModel() {
 		this(0.0F);
 	}
@@ -38,7 +38,7 @@ public class MultiModelOtherModel extends MultiModelBaseBiped {
 	public MultiModelOtherModel(float f) {
 		this(f, 0.0F);
 	}
-
+*/
 	public MultiModelOtherModel(float f, Object model1) {
 		this(f, 0.0F, model1);
 	}
@@ -69,6 +69,12 @@ public class MultiModelOtherModel extends MultiModelBaseBiped {
 
 	public MultiModelOtherModel(float f, float f1, int i, int j, Object model1, HashMap<String, Object> dataMap) {
 		super(f, f1, i < 0 ? 64 : i, j < 0 ? 32 : j);
+		if (model1 != null); else {
+			if (f == 0.0F) {
+				Modchu_Debug.systemLogDebug("new MultiModelOtherModel model1 == null !!");
+				Modchu_Debug.lCalledFrom();
+			}
+		}
 		model = model1;
 		mainFrame = new ModchuModel_ModelRenderer(this, "mainFrame");
 		if (dataMap != null
@@ -131,6 +137,7 @@ public class MultiModelOtherModel extends MultiModelBaseBiped {
 
 	@Override
 	public void render(ModchuModel_IEntityCaps entityCaps, float f, float f1, float f2, float pheadYaw, float pheadPitch, float f5, boolean pIsRender) {
+		//Modchu_Debug.mDebug("MultiModelOtherModel render model="+model);
 		if (model != null); else return;
 		if (renderDummyEntity != null) {
 			Modchu_AS.set(Modchu_AS.entityOnUpdate, renderDummyEntity);
@@ -153,7 +160,7 @@ public class MultiModelOtherModel extends MultiModelBaseBiped {
 		Object rightArm = Modchu_AS.get(Modchu_AS.modelRightArm, model);
 		if (rightArm != null
 				&& Arms[0] != null) {
-			List childModels = Modchu_AS.getList("ModelRenderer", "childModels", rightArm);
+			List childModels = Modchu_AS.getList("ModelRenderer", "childModels", rightArm, (Class[]) null);
 			if (childModels != null
 					&& !childModels.contains(Arms[0])) Modchu_AS.set("ModelRenderer", "addChild", rightArm, new Class[]{ Modchu_Reflect.loadClass("ModelRenderer") }, Arms[0]);
 		}

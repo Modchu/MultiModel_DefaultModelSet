@@ -3,6 +3,7 @@ package modchu.model;
 import java.util.HashMap;
 
 import modchu.lib.Modchu_AS;
+import modchu.lib.Modchu_Debug;
 import modchu.lib.Modchu_IEntityCapsBase;
 import modchu.lib.Modchu_ModelBipedMasterBasis;
 
@@ -49,6 +50,15 @@ public class ModchuModel_ModelBaseNihil extends Modchu_ModelBipedMasterBasis {
 	}
 
 	public static void setTexture(Object o) {
-		Modchu_AS.set(Modchu_AS.renderEngineBindTexture, o);
+/*
+		setTexture(o, Modchu_Main.getMinecraftVersion() < 160 ? Modchu_AS.get(Modchu_AS.renderManagerGetEntityRenderObject, Modchu_AS.get(Modchu_AS.minecraftThePlayer)) : null);
+	}
+
+	public static void setTexture(Object o, Object render) {
+*/
+		//if (Modchu_Main.getMinecraftVersion() > 159) 
+		//Modchu_Debug.mDebug("ModchuModel_ModelBaseNihil setTexture o="+o);
+			Modchu_AS.set(Modchu_AS.renderEngineBindTexture, o);
+		//else Modchu_AS.get(Modchu_AS.renderLoadDownloadableImageTexture, render, null, o);
 	}
 }
