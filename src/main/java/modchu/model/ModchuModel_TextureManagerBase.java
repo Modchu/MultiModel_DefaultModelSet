@@ -1491,6 +1491,15 @@ public class ModchuModel_TextureManagerBase {
 
 	public MultiModelLMMModel[] newMultiModelLMMModel(Object[] models) {
 		MultiModelLMMModel[] newModels = new MultiModelLMMModel[3];
+		//Modchu_Debug.mDebug("newMultiModelLMMModel models[0]="+models[0]);
+		Class ModchuLmmModel = ModchuModel_ModelAddManager.getModchuLmmModelClass();
+		// 逆輸入チェック
+		if (models[0] instanceof MultiModelBaseBiped
+				| ModchuLmmModel.isInstance(models[0])) {
+			if (models[0] instanceof MultiModelBaseBiped) Modchu_Main.setRuntimeException("newMultiModelLMMModel models[0] instanceof MultiModelBaseBiped error !! models[0]="+models[0]);
+			if (ModchuLmmModel.isInstance(models[0])) Modchu_Main.setRuntimeException("newMultiModelLMMModel ModchuLmmModel.isInstance(models[0]) error !! models[0]="+models[0]);
+			return null;
+		}
 		newModels[0] = new MultiModelLMMModel(0.0F, models[0]);
 		float[] f1 = newModels[0].getArmorModelsSize();
 		newModels[1] = new MultiModelLMMModel(f1[0], models[1]);

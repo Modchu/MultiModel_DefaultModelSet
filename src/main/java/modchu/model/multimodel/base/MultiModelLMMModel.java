@@ -128,10 +128,16 @@ public class MultiModelLMMModel extends MultiModelBaseBiped {
 		//f5 *= 0.4F;
 		setEntityCapsToModelAttributes(entityCaps);
 		Method method = Modchu_Reflect.getMethod(model.getClass(), "setRotationAngles", new Class[]{
-			float.class, float.class, float.class, float.class, float.class, float.class, iDummyEntityCapsClass  }, -1);
-		if (method != null) Modchu_Reflect.invoke(method, model, new Object[]{ f, f1, f2, pheadYaw, pheadPitch, f5, dummyEntityCaps });
-		else {
-			Modchu_Debug.lDebug1("MultiModelLMMModel setRotationAnglesLM else method == null !! model="+model);
+			float.class, float.class, float.class, float.class, float.class, float.class, iDummyEntityCapsClass }, -1);
+		try {
+			if (method != null) {
+				Modchu_Reflect.invoke(method, model, new Object[]{ f, f1, f2, pheadYaw, pheadPitch, f5, dummyEntityCaps });
+				//Modchu_Debug.lDebug1("MultiModelLMMModel setRotationAnglesLM method="+method+" model="+model);
+			} else {
+				Modchu_Debug.lDebug1("MultiModelLMMModel setRotationAnglesLM else method == null !! model="+model);
+			}
+		} catch (Exception e) {
+			Modchu_Debug.lDebug1("MultiModelLMMModel setRotationAnglesLM Exception !!", 2, e);
 		}
 	}
 
