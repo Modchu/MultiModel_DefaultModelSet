@@ -103,4 +103,18 @@ public interface ModchuModel_IEntityCaps extends Modchu_IEntityCapsBase {
 
 	public static final byte entityType_LMM = 1;
 	public static final byte entityType_PFLM = 2;
+	public static final byte entityType_ModchuLMM = 3;
+	public static final int skinMode_online										= 0;
+	public static final int skinMode_local 										= 1;
+	public static final int skinMode_offline 									= 3;
+	public static final int skinMode_Player										= 4;
+	public static final int skinMode_OthersSettingOffline 				= 5;
+	public static final int skinMode_PlayerOffline 							= 6;
+	public static final int skinMode_PlayerOnline 							= 7;
+	public static final int skinMode_PlayerLocalData						= 8;
+	public static final int skinMode_Random 									= 9;
+	public static final int skinMode_OthersIndividualSettingOffline 	= 10;
+	public Object getCapsValueModel(int pIndex, Object... pArg);
+	public boolean setCapsValueModel(int pIndex, Object... pArg);
+
 }

@@ -160,7 +160,7 @@ public class MultiModelOtherModel extends MultiModelBaseBiped {
 		Object rightArm = Modchu_AS.get(Modchu_AS.modelRightArm, model);
 		if (rightArm != null
 				&& Arms[0] != null) {
-			List childModels = Modchu_AS.getList("ModelRenderer", "childModels", rightArm, (Class[]) null);
+			List childModels = Modchu_AS.getList("ModelRenderer", "childModels", rightArm);
 			if (childModels != null
 					&& !childModels.contains(Arms[0])) Modchu_AS.set("ModelRenderer", "addChild", rightArm, new Class[]{ Modchu_Reflect.loadClass("ModelRenderer") }, Arms[0]);
 		}
@@ -191,6 +191,8 @@ public class MultiModelOtherModel extends MultiModelBaseBiped {
 			Object entity = renderDummyEntity != null ? renderDummyEntity : entityCaps.getCapsValue(entityCaps.caps_Entity);
 			Modchu_AS.set(Modchu_AS.modelBaseSetLivingAnimations, model, renderDummyEntity != null ? renderDummyEntity : entity, f, f1, renderPartialTicks);
 		} catch (Exception e) {
+			Modchu_Debug.lDebug1("MultiModelOtherModel setLivingAnimationsLM isVanillaModel Exception !! renderDummyEntity="+renderDummyEntity);
+			Modchu_Debug.lDebug1("MultiModelOtherModel setLivingAnimationsLM isVanillaModel Exception !! model="+model);
 			Modchu_Debug.lDebug1("MultiModelOtherModel setLivingAnimationsLM isVanillaModel Exception !!", 2, e);
 		}
 	}
@@ -260,7 +262,7 @@ public class MultiModelOtherModel extends MultiModelBaseBiped {
 		switch(parts) {
 		case 0:
 		case 1:
-			if ((parts == 1 
+			if ((parts == 1
 					&& index == 0) | (parts == 0
 					&& index == 1)) {
 				setArmorBipedRightLegShowModel(entityCaps, true);
@@ -326,7 +328,7 @@ public class MultiModelOtherModel extends MultiModelBaseBiped {
 	}
 
 	public void initRenderDummyEntity() {
-		boolean debug = false;
+		boolean debug = true;
 		initRenderDummyEntityFlag = true;
 		if (debug) Modchu_Debug.lDebug1("MultiModelOtherModel initRenderDummyEntity renderDummyEntityClassName="+renderDummyEntityClassName);
 		if (renderDummyEntityClassName != null

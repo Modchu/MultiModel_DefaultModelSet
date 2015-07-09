@@ -235,6 +235,9 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		if (render != null); else return;
 		// アイテムのレンダリング
 		Modchu_GlStateManager.pushMatrix();
+		Modchu_GlStateManager.enableAlpha();
+		Modchu_GlStateManager.enableBlend();
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		int tempTextureStateTextureName = 0;
 		if (version > 179) {
 			int activeTextureUnit = Modchu_CastHelper.Int(Modchu_Reflect.getFieldObject("net.minecraft.client.renderer.GlStateManager", "field_179162_o", "activeTextureUnit"));
@@ -290,7 +293,7 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 				Modchu_GlStateManager.color(r, g, b, 1.0F);
 				//Modchu_Debug.mDebug("renderItems r="+r+" g="+g+" b="+b);
 
-				if (Modchu_Reflect.loadClass("ItemDoublePlant").isInstance(item)) {
+				if (Modchu_Reflect.loadClass("ItemDoublePlant", -1).isInstance(item)) {
 					scale = scale * 1.1875F * 1.3F;
 					Modchu_GlStateManager.scale(scale, scale, scale);
 					f7 = 0.625F;
@@ -391,7 +394,7 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 					if (adjust) Modchu_GlStateManager.translate(0.0F, 0.1F, 0.0F);
 				}
 			} else if (item == Modchu_AS.get(Modchu_AS.getItem, "bow")) {
-				var6 = 0.625F;
+				var6 = 0.975F;
 				Modchu_GlStateManager.translate(0.0F, 0.0F, -0.2F);
 
 				//Modchu_GlStateManager.rotate(-20.0F, 0.0F, 1.0F, 0.0F);
@@ -399,7 +402,7 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 				Modchu_GlStateManager.rotate(0.0F, 1.0F, 0.0F, 0.0F);
 				//Modchu_GlStateManager.rotate(135.0F, 0.0F, 1.0F, 0.0F);
 			} else if (Modchu_AS.getBoolean(Modchu_AS.itemIsFull3D, item)) {
-				var6 = 0.975F;
+				var6 = 0.625F;
 
 				if (Modchu_AS.getBoolean(Modchu_AS.itemShouldRotateAroundWhenRendering, item)) {
 					Modchu_GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
@@ -424,9 +427,12 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 				//Modchu_GlStateManager.rotate(-100.0F, 1.0F, 0.0F, 0.0F);
 				//Modchu_GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
 			} else {
-				//var6 = 0.375F;
-				//Modchu_GlStateManager.translate(0.15F, 0.15F, -0.05F);
-				//Modchu_GlStateManager.scale(var6, var6, var6);
+				//Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems else");
+				var6 = 0.625F;
+				Modchu_GlStateManager.translate(0.0F, 0.1F, 0.0F);
+				//Modchu_GlStateManager.translate(Modchu_Debug.debaf1, Modchu_Debug.debaf2, Modchu_Debug.debaf3);
+				//Modchu_Debug.dDebug("x="+Modchu_Debug.debaf1+" y="+Modchu_Debug.debaf2+" z="+Modchu_Debug.debaf3);
+				Modchu_GlStateManager.scale(var6, var6, var6);
 				//Modchu_GlStateManager.rotate(60.0F, 0.0F, 0.0F, 1.0F);
 				//Modchu_GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
 				//Modchu_GlStateManager.rotate(20.0F, 0.0F, 0.0F, 1.0F);
@@ -622,7 +628,7 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 			// 152deleterender.func_110776_a(s1);
 			loadBlockTexture(render);
 			GL11.glEnable(GL11.GL_CULL_FACE);
-			Class BlockDoublePlant = Modchu_Reflect.loadClass("net.minecraft.block.BlockDoublePlant");
+			Class BlockDoublePlant = Modchu_Main.getMinecraftVersion() > 159 ? Modchu_Reflect.loadClass("net.minecraft.block.BlockDoublePlant", -1) : null;
 			if (BlockDoublePlant != null
 					&& BlockDoublePlant.isInstance(block)) {
 				float f1 = 1.8F;
@@ -692,7 +698,7 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 			float f1 = 2.0F;
 			Modchu_GlStateManager.scale(f1, f1, f1);
 			Object model = entityCaps.getCapsValue(entityCaps.caps_model, 0);
-			float height = model != null 
+			float height = model != null
 					&& model instanceof MultiModelBaseBiped ? ((MultiModelBaseBiped) model).getHeight(entityCaps) : 1.8F;
 			if (isGliding) {
 				//Modchu_GlStateManager.translate(Modchu_Debug.debaf1, Modchu_Debug.debaf2, Modchu_Debug.debaf3);
@@ -986,18 +992,17 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 	}
 
 	private boolean isBTWItem(Object item) {
-		Class c = Modchu_Reflect.loadClass("net.minecraft.src.forge.ITextureProvider");
-		if (c != null) ;
-		else Modchu_Reflect.loadClass("forge.ITextureProvider");
+		Class c = Modchu_Reflect.loadClass("net.minecraft.src.forge.ITextureProvider", -1);
+		if (c != null) ;else Modchu_Reflect.loadClass("forge.ITextureProvider", -1);
 		if (c != null) {
 			Class[] var3 = item.getClass().getInterfaces();
 			for (int var4 = 0; var4 < var3.length; ++var4) {
 				if (var3[var4] == c) return true;
 			}
 		} else {
-			c = Modchu_Reflect.loadClass("net.minecraft.src.FCItemMattock");
+			c = Modchu_Reflect.loadClass("net.minecraft.src.FCItemMattock", -1);
 			if (c != null && c.isInstance(item)) return true;
-			c = Modchu_Reflect.loadClass("FCItemMattock");
+			c = Modchu_Reflect.loadClass("FCItemMattock", -1);
 			if (c != null && c.isInstance(item)) return true;
 		}
 		return false;

@@ -60,6 +60,11 @@ public abstract class ModchuModel_ModelBaseMaster extends Modchu_ModelBaseMaster
 	}
 
 	@Override
+	public Object getCapsValueModel(int pIndex, Object... pArg) {
+		return getCapsValue(null, pIndex, pArg);
+	}
+
+	@Override
 	public boolean setCapsValue(int pIndex, Object... pArg) {
 		return setCapsValue(null, pIndex, pArg);
 	}
@@ -93,6 +98,11 @@ public abstract class ModchuModel_ModelBaseMaster extends Modchu_ModelBaseMaster
 			return true;
 		}
 		return super.setCapsValue(entityCaps, pIndex, pArg);
+	}
+
+	@Override
+	public boolean setCapsValueModel(int pIndex, Object... pArg) {
+		return setCapsValue(null, pIndex, pArg);
 	}
 
 	@Override

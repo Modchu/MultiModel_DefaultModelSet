@@ -5,14 +5,15 @@ import java.util.HashMap;
 import modchu.lib.Modchu_AS;
 import modchu.lib.Modchu_Debug;
 import modchu.lib.Modchu_IEntityCapsBase;
+import modchu.lib.Modchu_IModelCapsLink;
 import modchu.lib.Modchu_ModelBipedMasterBasis;
 
 public class ModchuModel_ModelBaseNihil extends Modchu_ModelBipedMasterBasis {
 	public boolean isAlphablend;
 	public boolean isModelAlphablend;
-	public Modchu_IEntityCapsBase capsLink;
+	public Modchu_IModelCapsLink capsLink;
 	public int lighting;
-	protected Modchu_IEntityCapsBase tempEntityCaps;
+	protected ModchuModel_ModelDataBase tempEntityCaps;
 	protected boolean isRendering;
 	/**
 	 * レンダリングが実行された回数。
@@ -28,7 +29,7 @@ public class ModchuModel_ModelBaseNihil extends Modchu_ModelBipedMasterBasis {
 		showAllParts(tempEntityCaps);
 	}
 
-	public void showAllParts(Modchu_IEntityCapsBase entityCaps) {
+	public void showAllParts(ModchuModel_ModelDataBase entityCaps) {
 	}
 
 	@Override
@@ -36,8 +37,8 @@ public class ModchuModel_ModelBaseNihil extends Modchu_ModelBipedMasterBasis {
 		renderCount++;
 	}
 
-	public Modchu_IEntityCapsBase getModchu_IEntityCapsBase(Object entityLivingBase) {
-		tempEntityCaps = (Modchu_IEntityCapsBase) (entityLivingBase instanceof ModchuModel_ModelDataBase ? entityLivingBase : ModchuModel_ModelDataMaster.instance.getPlayerData(entityLivingBase));
+	public ModchuModel_ModelDataBase getModchuModel_ModelDataBase(Object entityLivingBase) {
+		tempEntityCaps = (ModchuModel_ModelDataBase) (entityLivingBase instanceof ModchuModel_ModelDataBase ? entityLivingBase : ModchuModel_ModelDataMaster.instance.getPlayerData(entityLivingBase));
 		return tempEntityCaps;
 	}
 

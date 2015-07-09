@@ -10,16 +10,14 @@ import org.lwjgl.opengl.GL11;
 
 public class ModchuModel_ModelBaseSolo extends ModchuModel_ModelBaseNihil implements Modchu_IModelCapsLink {
 
-	public MultiModelBaseBiped model;
-	public Object[] textures;
-
 	public ModchuModel_ModelBaseSolo(HashMap<String, Object> map) {
 		super(map);
 	}
 
 	@Override
 	public void setLivingAnimations(Object entityLivingBase, float par2, float par3, float par4) {
-		ModchuModel_IEntityCaps entityCaps = getModchuModel_IEntityCaps(entityLivingBase);
+		ModchuModel_ModelDataBase entityCaps = getModchuModel_ModelDataBase(entityLivingBase);
+		MultiModelBaseBiped model = entityCaps.models[0];
 		if (model != null) {
 			model.setLivingAnimations(entityCaps, par2, par3, par4);
 		}
@@ -28,11 +26,13 @@ public class ModchuModel_ModelBaseSolo extends ModchuModel_ModelBaseNihil implem
 
 	@Override
 	public void render(Object entity, float par2, float par3, float par4, float par5, float par6, float par7) {
+		ModchuModel_ModelDataBase entityCaps = getModchuModel_ModelDataBase(entity);
+		MultiModelBaseBiped model = entityCaps.models[0];
+		Object[] textures = entityCaps.textures[0];
 		if (model == null) {
 			isAlphablend = false;
 			return;
 		}
-		ModchuModel_IEntityCaps entityCaps = getModchuModel_IEntityCaps(entity);
 		if (isAlphablend) {
 			if (isModelAlphablend) {
 				GL11.glEnable(GL11.GL_BLEND);
@@ -84,8 +84,9 @@ public class ModchuModel_ModelBaseSolo extends ModchuModel_ModelBaseNihil implem
 	@Override
 	public void setRotationAngles(float par1, float par2, float par3,
 			float par4, float par5, float par6, Object entity) {
+		ModchuModel_ModelDataBase entityCaps = getModchuModel_ModelDataBase(entity);
+		MultiModelBaseBiped model = entityCaps.models[0];
 		if (model != null) {
-			ModchuModel_IEntityCaps entityCaps = getModchuModel_IEntityCaps(entity);
 			model.setRotationAngles(par1, par2, par3, par4, par5, par6, entityCaps);
 		}
 	}
@@ -95,14 +96,16 @@ public class ModchuModel_ModelBaseSolo extends ModchuModel_ModelBaseNihil implem
 
 	@Override
 	public void renderItems(Object entity, Object render) {
+		ModchuModel_ModelDataBase entityCaps = getModchuModel_ModelDataBase(entity);
+		MultiModelBaseBiped model = entityCaps.models[0];
 		if (model != null) {
-			ModchuModel_IEntityCaps entityCaps = getModchuModel_IEntityCaps(entity);
 			model.renderItems(entityCaps);
 		}
 	}
 
 	@Override
 	public void showArmorParts(int pParts) {
+		MultiModelBaseBiped model = tempEntityCaps.models[0];
 		if (model != null) {
 			model.showArmorParts(tempEntityCaps, pParts, 0);
 		}
@@ -114,7 +117,7 @@ public class ModchuModel_ModelBaseSolo extends ModchuModel_ModelBaseNihil implem
 	 */
 	@Override
 	public void setEntityCaps(Modchu_IEntityCapsBase entityCaps) {
-		tempEntityCaps = entityCaps;
+		tempEntityCaps = (ModchuModel_ModelDataBase) entityCaps;
 	}
 
 	@Override
@@ -134,12 +137,14 @@ public class ModchuModel_ModelBaseSolo extends ModchuModel_ModelBaseNihil implem
 
 	@Override
 	public void showAllParts() {
+		MultiModelBaseBiped model = tempEntityCaps.models[0];
 		if (model != null) {
 			model.showAllParts(tempEntityCaps);
 		}
 	}
 
-	public void showAllParts(Modchu_IEntityCapsBase entityCaps) {
+	public void showAllParts(ModchuModel_ModelDataBase entityCaps) {
+		MultiModelBaseBiped model = entityCaps.models[0];
 		if (model != null) {
 			model.showAllParts(entityCaps);
 		}
@@ -147,6 +152,7 @@ public class ModchuModel_ModelBaseSolo extends ModchuModel_ModelBaseNihil implem
 
 	@Override
 	public Object getCapsValue(Modchu_IEntityCapsBase entityCaps, int pIndex, Object... pArg) {
+		MultiModelBaseBiped model = ((ModchuModel_ModelDataBase) entityCaps).models[0];
 		if (capsLink != null) {
 			capsLink.getCapsValue(entityCaps, pIndex, pArg);
 		}
@@ -155,6 +161,7 @@ public class ModchuModel_ModelBaseSolo extends ModchuModel_ModelBaseNihil implem
 
 	@Override
 	public boolean setCapsValue(Modchu_IEntityCapsBase entityCaps, int pIndex, Object... pArg) {
+		MultiModelBaseBiped model = ((ModchuModel_ModelDataBase) entityCaps).models[0];
 		if (capsLink != null) {
 			capsLink.setCapsValue(entityCaps, pIndex, pArg);
 		}
@@ -162,10 +169,6 @@ public class ModchuModel_ModelBaseSolo extends ModchuModel_ModelBaseNihil implem
 			return model.setCapsValue(entityCaps, pIndex, pArg);
 		}
 		return false;
-	}
-
-	public ModchuModel_IEntityCaps getModchuModel_IEntityCaps(Object entityLivingBase) {
-		return (ModchuModel_IEntityCaps) getModchu_IEntityCapsBase(entityLivingBase);
 	}
 
 }

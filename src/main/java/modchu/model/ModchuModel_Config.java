@@ -36,6 +36,7 @@ public class ModchuModel_Config extends Modchu_Config {
 
 	public static void saveShowModelParamater(File file) {
 		// Gui設定項目をcfgファイルに保存
+		boolean debug = false;
 		String textureName = null;
 		if (file.exists()
 				&& file.canRead()
@@ -49,7 +50,7 @@ public class ModchuModel_Config extends Modchu_Config {
 				StringBuilder sb = new StringBuilder();
 				int i1 = 0;
 				s = "showModel[],";
-				Modchu_Debug.mDebug("saveShowModelParamater showModel[] partsSaveFlag configPartsMap != null ? "+(configPartsMap != null));
+				if (debug) Modchu_Debug.mDebug("saveShowModelParamater showModel[] partsSaveFlag configPartsMap != null ? "+(configPartsMap != null));
 				for (Entry<String, ConcurrentHashMap> en : configPartsMap.entrySet()) {
 					String s2 = en.getKey();
 					ConcurrentHashMap<String, Boolean> map1 = en.getValue();
@@ -57,22 +58,22 @@ public class ModchuModel_Config extends Modchu_Config {
 							&& !map1.isEmpty()); else continue;
 					sb.delete(0, sb.length());
 					sb.append(s).append(s2);
-					Modchu_Debug.mDebug("saveShowModelParamater showModel[] partsSaveFlag configPartsMap != null ? "+(configPartsMap != null));
+					if (debug) Modchu_Debug.mDebug("saveShowModelParamater showModel[] partsSaveFlag configPartsMap != null ? "+(configPartsMap != null));
 					for (Entry<String, Boolean> en2 : map1.entrySet()) {
 						s2 = en2.getKey();
-						Modchu_Debug.mDebug("saveShowModelParamater showModel[] partsSaveFlag s2="+s2);
+						//if (debug) Modchu_Debug.mDebug("saveShowModelParamater showModel[] partsSaveFlag s2="+s2);
 						boolean b = en2.getValue();
 						sb.append(",");
 						sb.append("[").append(s2).append("]").append(b);
-						Modchu_Debug.mDebug("saveShowModelParamater showModel[] partsSaveFlag s2="+s2+" b="+b);
+						if (debug) Modchu_Debug.mDebug("saveShowModelParamater showModel[] partsSaveFlag s2="+s2+" b="+b);
 					}
-					Modchu_Debug.mDebug("saveShowModelParamater showModel[] partsSaveFlag lines.add="+sb.toString());
+					if (debug) Modchu_Debug.mDebug("saveShowModelParamater showModel[] partsSaveFlag lines.add="+sb.toString());
 					lines.add(sb.toString());
 				}
 				if (failureShowModelList != null
 						&& !failureShowModelList.isEmpty()) {
 					for(int i = 0; i < failureShowModelList.size(); i++) {
-						Modchu_Debug.mDebug("failureShowModelList.get("+i+") = "+failureShowModelList.get(i));
+						if (debug) Modchu_Debug.mDebug("failureShowModelList.get("+i+") = "+failureShowModelList.get(i));
 						lines.add(failureShowModelList.get(i));
 					}
 				}

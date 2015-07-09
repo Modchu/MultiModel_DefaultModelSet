@@ -8,11 +8,9 @@ import java.util.Random;
 import java.util.TreeMap;
 
 import modchu.lib.Modchu_AS;
-import modchu.lib.Modchu_EntityCapsHelper;
-import modchu.lib.Modchu_IEntityCapsBase;
+import modchu.lib.Modchu_Debug;
 import modchu.lib.Modchu_Main;
 import modchu.lib.Modchu_Reflect;
-import modchu.model.multimodel.base.MultiModelBaseBiped;
 
 public class ModchuModel_TextureBoxBase {
 
@@ -25,7 +23,7 @@ public class ModchuModel_TextureBoxBase {
 	public float modelYOffset;
 	public float modelMountedYOffset;
 */
-	public boolean isUpdateSize;
+	public boolean isUpdateSize = true;
 
 	/**
 	 * テクスチャパックの名称、モデル指定詞の前までの文字列。
@@ -149,7 +147,7 @@ public class ModchuModel_TextureBoxBase {
 		// indexは0x40,0x50番台
 		// lightも追加
 		if (armors.isEmpty() || itemStack == null) return null;
-		Object item = Modchu_AS.get(Modchu_AS.itemStackGetItem, itemStack);
+		Object item = itemStack != null ? Modchu_AS.get(Modchu_AS.itemStackGetItem, itemStack) : null;
 		if (!Modchu_Reflect.loadClass("ItemArmor").isInstance(item)) return null;
 
 		int l = 0;
@@ -163,9 +161,9 @@ public class ModchuModel_TextureBoxBase {
 
 	public Object getArmorTextureName(int pIndex, String pArmorPrefix, int pDamage) {
 		// indexは0x40,0x50番台
-		if (armors.isEmpty() || pArmorPrefix == null) return null;
+		if (armors.isEmpty()) return null;
 
-		Map<Integer, Object> m = armors.get(pArmorPrefix);
+		Map<Integer, Object> m = pArmorPrefix != null ? armors.get(pArmorPrefix) : null;
 		if (m == null) {
 			m = armors.get("default");
 			if (m == null) {
@@ -272,9 +270,9 @@ public class ModchuModel_TextureBoxBase {
 		case ModchuModel_TextureManagerBase.tx_armor2light:
 		case ModchuModel_TextureManagerBase.tx_oldarmor1:
 		case ModchuModel_TextureManagerBase.tx_oldarmor2:
-			//Modchu_Debug.mDebug("Modchu_TextureBoxBase addTexture pLocation="+pLocation);
+			Modchu_Debug.tDebug("Modchu_TextureBoxBase addTexture pLocation="+pLocation);
 			ls = pLocation.substring(pLocation.lastIndexOf("/") + 1, pLocation.lastIndexOf("_"));
-			//Modchu_Debug.mDebug("Modchu_TextureBoxBase addTexture ls="+ls);
+			Modchu_Debug.tDebug("Modchu_TextureBoxBase addTexture ls="+ls);
 			Map<Integer, Object> lmap;
 			if (armors.containsKey(ls)) {
 				lmap = armors.get(ls);

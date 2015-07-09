@@ -72,6 +72,10 @@ public class modc_ModchuModel {
 		ModchuModel_Main.modsLoaded();
 	}
 
+	public void addRenderer(Object map) {
+		ModchuModel_Main.addRenderer(map);
+	}
+
 	public static Object getModsLoadedLoadScreen() {
 		return Modchu_Main.newResourceLocation("textures/gui/title/modchumodel_title.png");
 	}

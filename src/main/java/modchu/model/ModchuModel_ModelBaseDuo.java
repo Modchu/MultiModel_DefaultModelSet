@@ -19,28 +19,6 @@ import org.lwjgl.opengl.GL11;
  */
 public class ModchuModel_ModelBaseDuo extends ModchuModel_ModelBaseNihil implements Modchu_IModelCapsLink {
 
-	public MultiModelBaseBiped modelOuter;
-	public MultiModelBaseBiped modelInner;
-	/**
-	 * 部位毎のアーマーテクスチャの指定。
-	 * 外側。
-	 */
-	public Object[] textureOuter;
-	/**
-	 * 部位毎のアーマーテクスチャの指定。
-	 * 内側。
-	 */
-	public Object[] textureInner;
-	/**
-	 * 部位毎のアーマーテクスチャの指定。
-	 * 外側・発光。
-	 */
-	public Object[] textureOuterLight;
-	/**
-	 * 部位毎のアーマーテクスチャの指定。
-	 * 内側・発光。
-	 */
-	public Object[] textureInnerLight;
 	/**
 	 * 描画されるアーマーの部位。
 	 * shouldRenderPassとかで指定する。
@@ -56,7 +34,11 @@ public class ModchuModel_ModelBaseDuo extends ModchuModel_ModelBaseNihil impleme
 
 	@Override
 	public void setLivingAnimations(Object entityLivingBase, float par2, float par3, float par4) {
-		ModchuModel_IEntityCaps entityCaps = getModchuModel_IEntityCaps(entityLivingBase);
+		ModchuModel_ModelDataBase entityCaps = getModchuModel_ModelDataBase(entityLivingBase);
+		if (((ModchuModel_ModelDataBase) entityCaps).models != null
+				&& ((ModchuModel_ModelDataBase) entityCaps).models.length > 1); else return;
+		MultiModelBaseBiped modelInner = entityCaps.models[1];
+		MultiModelBaseBiped modelOuter = entityCaps.models[2];
 		if (modelInner != null) {
 			modelInner.setLivingAnimations(entityCaps, par2, par3, par4);
 		}
@@ -68,9 +50,17 @@ public class ModchuModel_ModelBaseDuo extends ModchuModel_ModelBaseNihil impleme
 
 	@Override
 	public void render(Object entity, float par2, float par3, float par4, float par5, float par6, float par7) {
+		ModchuModel_ModelDataBase entityCaps = getModchuModel_ModelDataBase(entity);
+		if (((ModchuModel_ModelDataBase) entityCaps).models != null
+				&& ((ModchuModel_ModelDataBase) entityCaps).models.length > 1); else return;
 		GL11.glPushMatrix();
 		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-		ModchuModel_ModelDataBase entityCaps = ModchuModel_ModelDataMaster.instance.getPlayerData(entity);
+		MultiModelBaseBiped modelInner = entityCaps.models[1];
+		MultiModelBaseBiped modelOuter = entityCaps.models[2];
+		Object[] textureInner = entityCaps.textures[1];
+		Object[] textureOuter = entityCaps.textures[2];
+		Object[] textureInnerLight = entityCaps.textures[3];
+		Object[] textureOuterLight = entityCaps.textures[4];
 		renderBefore(entity, par2, par3, par4, par5, par6, par7, entityCaps, isRendering);
 		//Modchu_Debug.mDebug1("ModchuModel_ModelBaseDuoMaster render entityCaps="+entityCaps+" isAlphablend="+isAlphablend);
 		if (isAlphablend) {
@@ -172,12 +162,12 @@ public class ModchuModel_ModelBaseDuo extends ModchuModel_ModelBaseNihil impleme
 		GL11.glPopMatrix();
 	}
 
-	private void render(Object modelInner, Object entityCaps, float par2, float par3, float par4, float par5, float par6, float par7, boolean isRendering) {
-		if (modelInner instanceof MultiModelBaseBiped) {
-			((MultiModelBaseBiped) modelInner).render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
+	private void render(Object model, Object entityCaps, float par2, float par3, float par4, float par5, float par6, float par7, boolean isRendering) {
+		if (model instanceof MultiModelBaseBiped) {
+			((MultiModelBaseBiped) model).render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 			return;
 		}
-		Modchu_Reflect.invokeMethod(modelInner.getClass(), "render", new Class[]{ Modchu_Reflect.loadClass("ModchuModel_IEntityCaps"), float.class, float.class, float.class, float.class, float.class, float.class, boolean.class }, modelInner, new Object[]{ entityCaps, par2, par3, par4, par5, par6, par7, isRendering });
+		Modchu_Reflect.invokeMethod(model.getClass(), "render", new Class[]{ Modchu_Reflect.loadClass("ModchuModel_IEntityCaps"), float.class, float.class, float.class, float.class, float.class, float.class, boolean.class }, model, new Object[]{ entityCaps, par2, par3, par4, par5, par6, par7, isRendering });
 	}
 
 	private void renderBefore(Object entity, float par2, float par3, float par4, float par5, float par6, float par7, Object entityCaps, boolean isRendering) {
@@ -276,7 +266,11 @@ public class ModchuModel_ModelBaseDuo extends ModchuModel_ModelBaseNihil impleme
 
 	@Override
 	public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Object entity) {
-		ModchuModel_IEntityCaps entityCaps = getModchuModel_IEntityCaps(entity);
+		ModchuModel_ModelDataBase entityCaps = getModchuModel_ModelDataBase(entity);
+		if (((ModchuModel_ModelDataBase) entityCaps).models != null
+				&& ((ModchuModel_ModelDataBase) entityCaps).models.length > 1); else return;
+		MultiModelBaseBiped modelInner = entityCaps.models[1];
+		MultiModelBaseBiped modelOuter = entityCaps.models[2];
 		if (modelInner != null) {
 			modelInner.setRotationAngles(par1, par2, par3, par4, par5, par6, entityCaps);
 		}
@@ -288,14 +282,22 @@ public class ModchuModel_ModelBaseDuo extends ModchuModel_ModelBaseNihil impleme
 	// IModelModchuModel追加分
 	@Override
 	public void renderItems(Object entity, Object render) {
+		ModchuModel_ModelDataBase entityCaps = getModchuModel_ModelDataBase(entity);
+		if (((ModchuModel_ModelDataBase) entityCaps).models != null
+				&& ((ModchuModel_ModelDataBase) entityCaps).models.length > 1); else return;
+		MultiModelBaseBiped modelInner = entityCaps.models[1];
+		MultiModelBaseBiped modelOuter = entityCaps.models[2];
 		if (modelInner != null) {
-			ModchuModel_IEntityCaps entityCaps = getModchuModel_IEntityCaps(entity);
 			modelInner.renderItems(entityCaps);
 		}
 	}
 
 	@Override
 	public void showArmorParts(int pParts) {
+		if (((ModchuModel_ModelDataBase) tempEntityCaps).models != null
+				&& ((ModchuModel_ModelDataBase) tempEntityCaps).models.length > 1); else return;
+		MultiModelBaseBiped modelInner = tempEntityCaps.models[1];
+		MultiModelBaseBiped modelOuter = tempEntityCaps.models[2];
 		if (modelInner != null) {
 			modelInner.showArmorParts(tempEntityCaps, pParts, 0);
 		}
@@ -306,7 +308,7 @@ public class ModchuModel_ModelBaseDuo extends ModchuModel_ModelBaseNihil impleme
 
 	@Override
 	public void setEntityCaps(Modchu_IEntityCapsBase entityCaps) {
-		tempEntityCaps = entityCaps;
+		tempEntityCaps = (ModchuModel_ModelDataBase) entityCaps;
 	}
 
 	@Override
@@ -325,7 +327,11 @@ public class ModchuModel_ModelBaseDuo extends ModchuModel_ModelBaseNihil impleme
 	}
 
 	@Override
-	public void showAllParts(Modchu_IEntityCapsBase entityCaps) {
+	public void showAllParts(ModchuModel_ModelDataBase entityCaps) {
+		if (((ModchuModel_ModelDataBase) entityCaps).models != null
+				&& ((ModchuModel_ModelDataBase) entityCaps).models.length > 1); else return;
+		MultiModelBaseBiped modelInner = entityCaps.models[1];
+		MultiModelBaseBiped modelOuter = entityCaps.models[2];
 		if (modelInner != null) {
 			modelInner.showAllParts(entityCaps);
 		}
@@ -336,11 +342,17 @@ public class ModchuModel_ModelBaseDuo extends ModchuModel_ModelBaseNihil impleme
 
 	@Override
 	public Object getCapsValue(Modchu_IEntityCapsBase entityCaps, int pIndex, Object... pArg) {
+		MultiModelBaseBiped modelInner = ((ModchuModel_ModelDataBase) entityCaps).models != null
+				&& ((ModchuModel_ModelDataBase) entityCaps).models.length > 0 ? ((ModchuModel_ModelDataBase) entityCaps).models[1] : null;
 		return modelInner == null ? null : modelInner.getCapsValue(entityCaps, pIndex, pArg);
 	}
 
 	@Override
 	public boolean setCapsValue(Modchu_IEntityCapsBase entityCaps, int pIndex, Object... pArg) {
+		MultiModelBaseBiped modelInner = ((ModchuModel_ModelDataBase) entityCaps).models != null
+				&& ((ModchuModel_ModelDataBase) entityCaps).models.length > 0 ? ((ModchuModel_ModelDataBase) entityCaps).models[1] : null;
+		MultiModelBaseBiped modelOuter = ((ModchuModel_ModelDataBase) entityCaps).models != null
+				&& ((ModchuModel_ModelDataBase) entityCaps).models.length > 1 ? ((ModchuModel_ModelDataBase) entityCaps).models[2] : null;
 		if (modelOuter != null) {
 			modelOuter.setCapsValue(entityCaps, pIndex, pArg);
 		}
@@ -351,7 +363,7 @@ public class ModchuModel_ModelBaseDuo extends ModchuModel_ModelBaseNihil impleme
 	}
 
 	public ModchuModel_IEntityCaps getModchuModel_IEntityCaps(Object entityLivingBase) {
-		return (ModchuModel_IEntityCaps) getModchu_IEntityCapsBase(entityLivingBase);
+		return (ModchuModel_IEntityCaps) getModchuModel_ModelDataBase(entityLivingBase);
 	}
 
 }
