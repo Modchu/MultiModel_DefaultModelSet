@@ -92,23 +92,13 @@ package modchu.model.multimodel.base;import java.util.HashMap;import java.uti
 		if (customModel != null) {
 			mainFrame.render(f5);
 			//Modchu_Debug.mDebug("superRender mainFrame.render");
-/*
-			Object renderMainframe = customModel.mainModel != null ? Modchu_Reflect.getFieldObject(MultiModelBaseBiped.class, "mainFrame", customModel.mainModel) : mainFrame;
-			if (renderMainframe != null) {
-				Modchu_Reflect.invokeMethod(renderMainframe.getClass(), "render", new Class[]{ float.class }, renderMainframe, new Object[]{ f5 });
-				//Modchu_Debug.mDebug("superRender ");
-			} else {
-				Modchu_Debug.mDebug("superrender renderMainframe == null !!");
-			}
-*/
 		} else {
 			Modchu_Debug.mDebug("superRender customModel == null !!");
 		}
 	}	@Override
 	public void setLivingAnimations(ModchuModel_IEntityCaps entityCaps, float f, float f1, float renderPartialTicks) {
-		super.setLivingAnimations(entityCaps, f, f1, renderPartialTicks);
 		customModel.setLivingAnimations(entityCaps, f, f1, renderPartialTicks);
-	}	@Override
+	}	public void superSetLivingAnimations(ModchuModel_IEntityCaps entityCaps, float f, float f1, float renderPartialTicks) {		super.setLivingAnimations(entityCaps, f, f1, renderPartialTicks);	}	@Override	public void setLivingAnimations(Object entityLivingBase, float par2, float par3, float par4) {		super.setLivingAnimations(entityLivingBase, par2, par3, par4);	}	@Override
 	public void setLivingAnimationsLM(ModchuModel_IEntityCaps entityCaps, float f, float f1, float renderPartialTicks) {
 		customModel.setLivingAnimationsLM(entityCaps, f, f1, renderPartialTicks);
 	}	public void superSetLivingAnimationsLM(ModchuModel_IEntityCaps entityCaps, float f, float f1, float renderPartialTicks) {
@@ -765,10 +755,6 @@ package modchu.model.multimodel.base;import java.util.HashMap;import java.uti
 		super.setRotationAngles(par1, par2, par3, par4, par5, par6, entity);
 	}	public void superSetRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Object entity) {
 		super.setRotationAngles(par1, par2, par3, par4, par5, par6, entity);
-	}	@Override
-	public void setLivingAnimations(Object entityLivingBase, float par2, float par3, float par4) {
-		super.setLivingAnimations(entityLivingBase, par2, par3, par4);
-	}	public void superSetLivingAnimations(Object entityLivingBase, float par2, float par3, float par4) {
 	}	@Override
 	public Object getCapsValue(int pIndex, Object... pArg) {
 		return super.getCapsValue(pIndex, pArg);

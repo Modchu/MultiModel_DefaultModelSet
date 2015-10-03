@@ -6,6 +6,9 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+
 import modchu.lib.Modchu_AS;
 import modchu.lib.Modchu_CastHelper;
 import modchu.lib.Modchu_EntityCapsHelper;
@@ -16,9 +19,6 @@ import modchu.lib.Modchu_Main;
 import modchu.lib.Modchu_ModelPlateMaster;
 import modchu.lib.Modchu_Reflect;
 import modchu.model.multimodel.base.MultiModelBaseBiped;
-
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
 
 public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 
@@ -1162,7 +1162,8 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 
 	public void setFreeVariable(String s, Object o) {
 		if (freeVariableMap != null); else freeVariableMap = new ConcurrentHashMap();
-		freeVariableMap.put(s, o);
+		if (o != null) freeVariableMap.put(s, o);
+		else removeFreeVariable(s);
 	}
 
 	public void removeFreeVariable(String s) {

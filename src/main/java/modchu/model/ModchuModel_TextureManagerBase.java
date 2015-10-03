@@ -37,6 +37,7 @@ public class ModchuModel_TextureManagerBase {
 	public String nameTextureIndex = "config/mod_ModchuModel_textureList.cfg";
 	public String defaultModelName = "Orign";
 	public String modelClassName = "MultiModel";
+	public String defaultModelMaidBoneName = "maidbone";
 	public String defaultUsingTexture;
 
 	public static final int tx_oldwild		= 0x10; //16;
@@ -91,6 +92,7 @@ public class ModchuModel_TextureManagerBase {
 
 	public void init() {
 		modelClassNameMap.put(defaultModelName, "modchu.model.multimodel.base.MultiModel");
+		modelClassNameMap.put(defaultModelMaidBoneName, "modchu.model.multimodel.base.MultiModelMaidBone");
 		loadTextures();
 		// 必須モデルのロード
 		Modchu_Debug.lDebug("ModchuModel_TextureManagerBase init() MultiModel load.");
@@ -201,70 +203,36 @@ public class ModchuModel_TextureManagerBase {
 	}
 
 	public boolean loadTextures() {
-		Modchu_Debug.tDebug("loadTexturePacks.");
+		Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures");
 		// アーマーのファイル名を識別するための文字列を獲得する
 		if (!Modchu_Main.isServer) {
 			getArmorPrefix();
 		}
 
 		// ファイルを解析してテクスチャを追加
-		// jar内のテクスチャを追加
-		Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures jar load.");
 		List<File> jarList = Modchu_FileManager.getMinecraftJarList();
-		if (jarList.isEmpty()) {
-			Modchu_Debug.tDebug("getTexture-append-jar-file not founded.");
-		} else {
-			for (Object[] lss : searchPrefix) {
-				String[] s1 = (String[]) lss[0];
-				String[] s2 = (String[]) lss[1];
-				String[] s3 = (String[]) lss[2];
-				for (String s4 : s1) {
-					for (String s5 : s2) {
-						for (String s6 : s3) {
-							String[] lst = new String[]{ s4, s5, s6 };
-							Modchu_Debug.tDebug("getTexture minecraftJar [%s] [%s] [%s]", s4, s5, s6);
-							for (File file : jarList) {
-								addTexturesJar(file, lst);
-							}
-						}
-					}
-				}
-			}
-		}
-		Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures jar load end.");
-		// jar内のテクスチャを追加
-		if (jarList.isEmpty()) Modchu_Debug.tDebug("getTexture-append-jar-file not founded.");
-		Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures mods load.");
+		File assetsDir = new File(".", "assets");
 		for (Object[] lss : searchPrefix) {
 			String[] s1 = (String[]) lss[0];
 			String[] s2 = (String[]) lss[1];
 			String[] s3 = (String[]) lss[2];
+
+			// jar
+			if (jarList.isEmpty()) {
+				Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures jarList.isEmpty() error !!");
+			} else {
+				loadTextures(lss[0], lss[1], lss[2], jarList);
+			}
+
 			// mods
 			for (String fileName : s1) {
-				for (File lf : Modchu_FileManager.getFileList(fileName)) {
-					for (String s4 : s1) {
-						for (String s5 : s2) {
-							for (String s6 : s3) {
-								String[] lst = new String[]{ s4, s5, s6 };
-								Modchu_Debug.tDebug("getTexture [%s] [%s] [%s]", s4, s5, s6);
-								boolean lflag;
-								//Modchu_Debug.mDebug("ModchuModel_TextureManagerBase loadTextures lf="+lf);
-								if (lf.isDirectory()) {
-									// ディレクトリ
-									lflag = addTexturesDir(lf, lst);
-								} else {
-									// zip
-									//Modchu_Debug.mDebug("ModchuModel_TextureManagerBase loadTextures zip");
-									lflag = addTexturesZip(lf, lst);
-								}
-								Modchu_Debug.tDebug("getTexture-append-%s-%s.", lf.getName(), lflag ? "done" : "fail");
-							}
-						}
-					}
-				}
+				Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures mods load Modchu_FileManager.getFileList("+fileName+")="+Modchu_FileManager.getFileList(fileName));
+				loadTextures(lss[0], lss[1], lss[2], Modchu_FileManager.getFileList(fileName));
 			}
+
+			// assets
+			loadTextures(lss[0], lss[1], lss[2], assetsDir);
 		}
-		Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures mods load end.");
 		buildCrafterTexture();
 		setModels();
 
@@ -277,6 +245,43 @@ public class ModchuModel_TextureManagerBase {
 		}
 */
 		return false;
+	}
+
+	private void loadTextures(Object o, Object o1, Object o2, List<File> list) {
+		for (File file : list) {
+			loadTextures(o, o1, o2, file);
+		}
+	}
+
+	private void loadTextures(Object o, Object o1, Object o2, File file) {
+		String[] s1 = (String[]) o;
+		String[] s2 = (String[]) o1;
+		String[] s3 = (String[]) o2;
+		boolean lflag = false;
+		for (String s4 : s1) {
+			for (String s5 : s2) {
+				for (String s6 : s3) {
+					String[] lst = new String[]{ s4, s5, s6 };
+					Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures [%s] [%s] [%s]", s4, s5, s6);
+					Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures file="+file);
+					if (file.isDirectory()) {
+						// ディレクトリ
+						lflag = addTexturesDir(file, lst);
+					} else {
+						if (file.isFile()) {
+							// zip
+							//Modchu_Debug.mDebug("ModchuModel_TextureManagerBase loadTextures zip");
+							if (addTexturesZip(file, lst)) {
+								Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures-file-done.");
+							} else {
+								Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures-file-fail.");
+							}
+						}
+					}
+					Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures %s-%s.", file.getName(), lflag ? "done" : "fail");
+				}
+			}
+		}
 	}
 
 	public void setModels() {
@@ -512,17 +517,14 @@ public class ModchuModel_TextureManagerBase {
 			return;
 		}
 		getSearchSettledList().add(s);
-		if (!fname.startsWith("/")) {
-			fname = (new StringBuilder()).append("/").append(fname).toString();
-		} else {
+		if (!fname.startsWith("/")) fname = (new StringBuilder()).append("/").append(fname).toString();
 
-		}
-
-		if (fname.startsWith(pSearch[1])) {
-			//Modchu_Debug.tDebug("ModchuModel_TextureManagerBase addTextureName fname="+fname);
+		int i1 = fname.indexOf(pSearch[1]);
+		if (i1 > -1) {
+			Modchu_Debug.tDebug("ModchuModel_TextureManagerBase addTextureName fname="+fname);
 			int i = fname.lastIndexOf("/");
 			if (pSearch[1].length() < i) {
-				String pn = fname.substring(pSearch[1].length(), i);
+				String pn = fname.substring(pSearch[1].length() + i1, i);
 				pn = pn.replace('/', '.');
 				String fn = fname.substring(i);
 				int lindex = getIndex(fn);
@@ -544,11 +546,13 @@ public class ModchuModel_TextureManagerBase {
 					if (lts == null) {
 						lts = new ModchuModel_TextureBoxBase(pn, pSearch);
 						textures.put(pn, lts);
-						Modchu_Debug.tDebug("addTextureName-append-texturePack-%s", pn);
+						Modchu_Debug.tDebug("ModchuModel_TextureManagerBase addTextureName texturePack-%s", pn);
 					}
 					lts.addTexture(lindex, fname);
 				}
 			}
+		} else {
+			Modchu_Debug.tDebug("ModchuModel_TextureManagerBase addTextureName else fname="+fname);
 		}
 	}
 
@@ -588,42 +592,8 @@ public class ModchuModel_TextureManagerBase {
 		}
 	}
 
-	public void addTexturesJar(File file, String[] pSearch) {
-		if (file.isFile()) {
-			Modchu_Debug.tDebug("addTextureJar-zip.");
-			if (addTexturesZip(file, pSearch)) {
-				Modchu_Debug.tDebug("getTexture-append-jar-done.");
-			} else {
-				Modchu_Debug.tDebug("getTexture-append-jar-fail.");
-			}
-		}
-
-		if (file.isDirectory()) {
-			Modchu_Debug.tDebug("addTextureJar-file.");
-			boolean lflag = false;
-
-			for (File t : file.listFiles()) {
-				if (t.isDirectory()) {
-					lflag |= addTexturesDir(t, pSearch);
-				}
-			}
-			if (lflag) {
-				Modchu_Debug.tDebug("getTexture-append-jar-done.");
-			} else {
-				Modchu_Debug.tDebug("getTexture-append-jar-fail.");
-			}
-
-			if (addTexturesDir(file, pSearch)) {
-				Modchu_Debug.tDebug("getTexture-append-jar-done.");
-			} else {
-				Modchu_Debug.tDebug("getTexture-append-jar-fail.");
-			}
-
-		}
-	}
-
 	public boolean addTexturesDir(File file, String[] lst) {
-		return addTexturesDir(file, lst, false);
+		return addTexturesDir(file, lst, true);
 	}
 
 	public boolean addTexturesDir(File file, String[] lst, boolean debug) {
@@ -645,14 +615,15 @@ public class ModchuModel_TextureManagerBase {
 						int i = s.indexOf(lst[1]);
 						if (i > -1) {
 							// 対象はテクスチャディレクトリ
-							addTextureName(s.substring(i), lst);
+							//addTextureName(s.substring(i), lst);
+							addTextureName(s, lst);
 						}
 					}
 				}
 			}
 			return true;
 		} catch (Exception e) {
-			Modchu_Debug.lDebug("addTextureDebug-Exception.", 2, e);
+			Modchu_Debug.lDebug("ModchuModel_TextureManagerBase addTexturesDir Exception.", 2, e);
 			return false;
 		}
 	}
@@ -1263,7 +1234,7 @@ public class ModchuModel_TextureManagerBase {
 	public Object[] modelNewInstance(String s, boolean useCustom, Object[] option) {
 		if (s != null
 				&& !s.isEmpty()); else return null;
-		boolean debug = false;
+		boolean debug = true;
 		Object[] models = new Object[3];
 /*
 		String s1 = s != null ? Modchu_Main.lastIndexProcessing(s, "_") : s;
@@ -1277,7 +1248,8 @@ public class ModchuModel_TextureManagerBase {
 		Class c = null;
 		if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-1 s="+s);
 		if (s.lastIndexOf(ModchuModel_ModelAddManager.addLmmModelString) < 0) {
-			c = Modchu_Reflect.loadClass(getModelClassName(s), -1);
+			String s1 = getModelClassName(s);
+			c = s1 != null && !s1.isEmpty() ? Modchu_Reflect.loadClass(s1, -1) : null;
 			if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-2 s="+s+" c="+c);
 		}
 		if (c != null) {
@@ -1343,7 +1315,8 @@ public class ModchuModel_TextureManagerBase {
 					if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-11 mlm == null !!");
 				}
 			}
-			else if (s4.startsWith("Custom")) {
+			else if (s4 != null
+					&& s4.startsWith("Custom")) {
 				Object[] o1 = newMultiModelOtherModel(s4);
 				if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-12 c == null o1="+o1);
 				if (o1 != null) {
@@ -1674,9 +1647,10 @@ public class ModchuModel_TextureManagerBase {
 			}
 			else Modchu_Debug.lDebug1("ModchuModel_TextureManagerBase textureNameCheck defaultModelName == null !!");
 		} else {
-			if (s.indexOf("_") < 0) {
-				if (defaultModelName != null) s = s+"_"+defaultModelName;
-			}
+			if (s.indexOf("_") < 0
+					&& defaultModelName != null
+					&& instance.modelClassNameMap != null
+					&& !instance.modelClassNameMap.containsKey(s)) s = s+"_"+defaultModelName;
 		}
 		return s;
 	}
