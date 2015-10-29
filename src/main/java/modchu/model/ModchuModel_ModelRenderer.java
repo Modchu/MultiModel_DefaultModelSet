@@ -1171,6 +1171,11 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		if (freeVariableMap.containsKey(s)) freeVariableMap.remove(s);
 	}
 
+	public boolean freeVariableContainsKey(String s) {
+		if (freeVariableMap != null); else return false;
+		 return freeVariableMap.containsKey(s);
+	}
+
 	//SmartMoving関連↓
 	public void reset() {
 		rotatePriority = XYZ;

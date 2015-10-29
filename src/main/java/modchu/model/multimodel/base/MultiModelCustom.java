@@ -1,21 +1,19 @@
-package modchu.model.multimodel.base;import java.util.HashMap;import java.util.Random;import modchu.lib.Modchu_Debug;import modchu.lib.Modchu_EntityCapsHelper;import modchu.lib.Modchu_IEntityCapsBase;import modchu.model.ModchuModel_CustomModel;import modchu.model.ModchuModel_IEntityCaps;import modchu.model.ModchuModel_ModelRenderer;public class MultiModelCustom extends MultiModel {	public ModchuModel_CustomModel customModel;
+package modchu.model.multimodel.base;import java.util.HashMap;import java.util.Random;import modchu.lib.Modchu_CastHelper;import modchu.lib.Modchu_Debug;import modchu.lib.Modchu_EntityCapsHelper;import modchu.lib.Modchu_IEntityCapsBase;import modchu.lib.Modchu_Main;import modchu.model.ModchuModel_ConfigData;import modchu.model.ModchuModel_CustomModel;import modchu.model.ModchuModel_IEntityCaps;import modchu.model.ModchuModel_ModelRenderer;public class MultiModelCustom extends MultiModel {	public ModchuModel_CustomModel customModel;
 	public ModchuModel_ModelRenderer dummy;
 	public String modelName;	public MultiModelCustom() {
 		this(0.0F);
 	}	public MultiModelCustom(float f) {
 		this(f, 0.0F);
 	}	public MultiModelCustom(float f, float f1) {
-		this(null, f, f1 , 64, 32);
+		this(f, f1 , 64, 32);
 	}	public MultiModelCustom(float f, float f1, int i, int j) {
-		this(null, f, f1, i, j);
-	}	public MultiModelCustom(String s, float f, float f1, int i, int j) {
-		super(f, f1, i < 0 ? 64 : i, j < 0 ? 32 : j);
-		if (s != null); else s = "1";
-		modelName = s;
+		this(f, f1, i, j, (Object[]) null);
+	}	public MultiModelCustom(float f, float f1, int i, int j, Object... o) {
+		super(f, f1, i < 0 ? 64 : i, j < 0 ? 32 : j, (Object[]) o);
+		modelName = o != null				&& o.length > 0 ? Modchu_CastHelper.String(o[0]) : "1";
 		init(f, f1);
-		Modchu_Debug.mlDebug1("public MultiModelCustom s="+s);
-		//Modchu_Debug.mlDebug("public MultiModelCustom modelSize="+modelSize);
-		customModel = new ModchuModel_CustomModel(this, s, null, null, f, 0.0F, null);
+		Modchu_Debug.mlDebug1("public MultiModelCustom modelName="+modelName);		//Modchu_Debug.mlDebug("public MultiModelCustom modelSize="+modelSize);
+		customModel = new ModchuModel_CustomModel(this, modelName, null, null, f, 0.0F, null);
 	}	public MultiModelCustom(float f, MultiModelBaseBiped multiModelBaseBiped, String textureName) {
 		this(f, multiModelBaseBiped, textureName, null);
 	}	public MultiModelCustom(float f, MultiModelBaseBiped multiModelBaseBiped, String textureName, HashMap map) {
@@ -86,10 +84,9 @@ package modchu.model.multimodel.base;import java.util.HashMap;import java.uti
 		if (customModel != null) customModel.skirtFloatsInit(f, f1);
 	}	@Override
 	public void render(ModchuModel_IEntityCaps entityCaps, float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5, boolean pIsRender) {
-		setRotationAngles(f, f1, ticksExisted, pheadYaw, pheadPitch, f5, entityCaps);
 		customModel.render(entityCaps, f, f1, ticksExisted, pheadYaw, pheadPitch, f5, pIsRender);
 	}    public void superRender(ModchuModel_IEntityCaps entityCaps, float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5) {
-		if (customModel != null) {
+		setRotationAngles(f, f1, ticksExisted, pheadYaw, pheadPitch, f5, entityCaps);		if (customModel != null) {
 			mainFrame.render(f5);
 			//Modchu_Debug.mDebug("superRender mainFrame.render");
 		} else {
@@ -888,4 +885,4 @@ package modchu.model.multimodel.base;import java.util.HashMap;import java.uti
 		return customModel != null ? customModel.canSpawnHear(world, pX, pY, pZ) : super.canSpawnHear(world, pX, pY, pZ);
 	}	public boolean superCanSpawnHear(Object world, int pX, int pY, int pZ) {
 		return super.canSpawnHear(world, pX, pY, pZ);
-	}}
+	}	@Override	protected double getSkirtFloatsMotionY(ModchuModel_ModelRenderer modelRenderer) {		return customModel != null ? customModel.getSkirtFloatsMotionY(modelRenderer) : super.getSkirtFloatsMotionY(modelRenderer);	}	public double superGetSkirtFloatsMotionY(ModchuModel_ModelRenderer modelRenderer) {		return super.getSkirtFloatsMotionY(modelRenderer);	}	@Override	protected double getBreastFloatsMotionY(ModchuModel_ModelRenderer modelRenderer) {		return customModel != null ? customModel.getBreastFloatsMotionY(modelRenderer) : super.getBreastFloatsMotionY(modelRenderer);	}	public double superGetBreastFloatsMotionY(ModchuModel_ModelRenderer modelRenderer) {		return super.getBreastFloatsMotionY(modelRenderer);	}}

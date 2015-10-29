@@ -260,7 +260,12 @@ public class ModchuModel_TextureBoxBase {
 		if (pLocation.startsWith(ls)) {
 			pLocation = pLocation.substring(ls.length());
 		} else {
-//			pLocation = "../.." + pLocation;
+			ls = "assets/minecraft/";
+			if (pLocation.startsWith(ls)) {
+				pLocation = pLocation.substring(ls.length());
+			} else {
+//				pLocation = "../.." + pLocation;
+			}
 		}
 		boolean lflag = false;
 		switch ((pIndex & 0xfff0)) {

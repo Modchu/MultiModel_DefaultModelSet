@@ -32,9 +32,7 @@ public class ModchuModel_ModelAddManager {
 	static void addCustomModel() {
 		Modchu_Debug.mDebug("ModchuModel_Main addCustomModel()");
 		File cfgdir = new File(Modchu_AS.getFile(Modchu_AS.minecraftMcDataDir), "/config/CustomModel/");
-		File file = null;
 		ModchuModel_CustomModel.sampleCfgCopy();
-		file = cfgdir != null ? new File(cfgdir, "CustomModel_1.cfg") : null;
 		if (!cfgdir.exists()) {
 			Modchu_Debug.systemLogDebug("ModchuModel_Main addCustomModel() cfgdir not found !! cfgdir="+cfgdir);
 			return;
@@ -68,11 +66,13 @@ public class ModchuModel_ModelAddManager {
 			ModchuModel_TextureManagerBase.instance.textures.put(s1, mtb2);
 			ModchuModel_TextureManagerBase.instance.modelClassNameMap.put("Custom"+name, MultiModelCustom.class.getName());
 			Modchu_Debug.mlDebug("addPflmTextureManagerModel modelMap.put modelName=Custom"+name);
+			if (!addLMMModelFlag()) return;
 			MultiModelBaseBiped[] mlm2 = new MultiModelBaseBiped[3];
-			mlm2[0] = new MultiModelCustom(name, 0.0F, 0.0F, 64, 32);
+			Object[] o0 = new Object[]{ name };
+			mlm2[0] = new MultiModelCustom(0.0F, 0.0F, 64, 32, o0);
 			float[] lsize2 = mlm2[0].getArmorModelsSize();
-			mlm2[1] = new MultiModelCustom(name, lsize2[0], 0.0F, 64, 32);
-			mlm2[2] = new MultiModelCustom(name, lsize2[1], 0.0F, 64, 32);
+			mlm2[1] = new MultiModelCustom(lsize2[0], 0.0F, 64, 32, o0);
+			mlm2[2] = new MultiModelCustom(lsize2[1], 0.0F, 64, 32, o0);
 			Modchu_Debug.mDebug("ModchuModel_Main addPflmAndLmmCustomModel() mlm2[0]="+mlm2[0]);
 			String s0 = "Custom"+name;
 			addLmmTextureManagerModel(s0, MultiModelCustom.class, mlm2);

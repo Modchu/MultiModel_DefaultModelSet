@@ -9,8 +9,8 @@ package modchu.model.multimodel.base;import modchu.lib.Modchu_EntityCapsHelper
 		this(f, 0.0F);
 	}	public MultiModel(float f, float f1) {
 		this(f, f1, 64, 32);
-	}	public MultiModel(float f, float f1, int i, int j) {
-		super(f, f1, i < 0 ? 64 : i, j < 0 ? 32 : j);
+	}	public MultiModel(float f, float f1, int i, int j, Object... o) {
+		super(f, f1, i < 0 ? 64 : i, j < 0 ? 32 : j, (Object[]) o);
 	}	@Override
 	public void initModel(float f, float f1, boolean isAfterInit) {		super.initModel(f, f1, false);		bipedHead.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, f);
 		bipedHeadwear.setTextureOffset(24, 0);

@@ -1,7 +1,6 @@
 package modchu.model.multimodel.base;
 
 import modchu.lib.Modchu_AS;
-import modchu.lib.Modchu_Debug;
 import modchu.lib.Modchu_EntityCapsHelper;
 import modchu.lib.Modchu_Main;
 import modchu.model.ModchuModel_IEntityCaps;
@@ -15,6 +14,8 @@ public class MultiModelMaidBone extends MultiModelSkirtFloats {
 	public ModchuModel_ModelRenderer SkirtRight;
 	public ModchuModel_ModelRenderer SkirtLeft;
 	public ModchuModel_ModelRenderer SkirtBack;
+	private ModchuModel_ModelRenderer test;
+	private ModchuModel_ModelRenderer test2;
 
 	public MultiModelMaidBone() {
 		this(0.0F);
@@ -28,8 +29,8 @@ public class MultiModelMaidBone extends MultiModelSkirtFloats {
 		this(f, f1, 64, 32);
 	}
 
-	public MultiModelMaidBone(float f, float f1, int i, int j) {
-		super(f, f1, i < 0 ? 64 : i, j < 0 ? 32 : j);
+	public MultiModelMaidBone(float f, float f1, int i, int j, Object... o) {
+		super(f, f1, i < 0 ? 64 : i, j < 0 ? 32 : j, (Object[]) o);
 	}
 
 	@Override
@@ -51,7 +52,26 @@ public class MultiModelMaidBone extends MultiModelSkirtFloats {
 		mainFrame = new ModchuModel_ModelRenderer(this, "mainFrame");
 		mainFrame.setRotationPoint(0F, 8F, 0F);
 
-		if (isAfterInit) afterInit(f, f1);
+		if (isAfterInit) {
+			afterInit(f, f1);
+			bipedHead.addBox(0.0F, 0.0F, 0.0F, 0, 0, 0, 0.0F);
+			bipedHeadwear.addBox(0.0F, 0.0F, 0.0F, 0, 0, 0, 0.0F);
+			bipedBody.addBox(0.0F, 0.0F, 0.0F, 0, 0, 0, 0.0F);
+			bipedRightArm.addBox(0.0F, 0.0F, 0.0F, 0, 0, 0, 0.0F);
+			bipedLeftArm.addBox(0.0F, 0.0F, 0.0F, 0, 0, 0, 0.0F);
+			bipedRightLeg.addBox(0.0F, 0.0F, 0.0F, 0, 0, 0, 0.0F);
+			bipedLeftLeg.addBox(0.0F, 0.0F, 0.0F, 0, 0, 0, 0.0F);
+			Skirt.addBox(0.0F, 0.0F, 0.0F, 0, 0, 0, 0.0F);
+			mainFrame.addBox(0.0F, 0.0F, 0.0F, 0, 0, 0, 0.0F);
+/*
+			test = new ModchuModel_ModelRenderer(this, "test");
+			test.setTextureOffset(0, 0);
+			test.addBox(-4.0F, -15.0F, 1.0F, 8, 9, 3, f + 13.0F);
+			test2 = new ModchuModel_ModelRenderer(this, "test2");
+			test2.setTextureOffset(0, 0);
+			//test2.addBox(-4.0F, -15.0F, 1.0F, 8, 9, 3, f + 13.0F);
+*/
+		}
 	}
 
 	@Override
@@ -205,6 +225,12 @@ public class MultiModelMaidBone extends MultiModelSkirtFloats {
 		setCapsValue(null, caps_visible, rightArm, b);
 		setCapsValue(null, caps_visible, leftLeg, b);
 		setCapsValue(null, caps_visible, rightLeg, b);
+
+		if (test != null) {
+			bipedHead.addChild(test);
+			test.clearChildModels();
+			if (test2 != null) test.addChild(test2);
+		}
 	}
 
 	@Override

@@ -5,7 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+
 import modchu.lib.Modchu_AS;
+import modchu.lib.Modchu_Debug;
 import modchu.lib.Modchu_GlStateManager;
 import modchu.lib.Modchu_IModelBox;
 import modchu.lib.Modchu_Main;
@@ -13,9 +17,6 @@ import modchu.lib.Modchu_ModelBaseMaster;
 import modchu.lib.Modchu_ModelBox;
 import modchu.lib.Modchu_ModelBoxMaster;
 import modchu.lib.Modchu_Reflect;
-
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
 
 public class ModchuModel_ModelRendererBase {
 
@@ -171,7 +172,7 @@ public class ModchuModel_ModelRendererBase {
 		if (childModels == null) {
 			childModels = new ArrayList();
 		}
-		childModels.add(modelRenderer);
+		if (!childModels.contains(modelRenderer)) childModels.add(modelRenderer);
 	}
 
 	public ModchuModel_ModelRendererBase setTextureOffset(int pOffsetX, int pOffsetY) {
@@ -294,6 +295,8 @@ public class ModchuModel_ModelRendererBase {
 		displayList = Modchu_AS.getInt(Modchu_AS.gLAllocationGenerateDisplayLists, 1);
 		GL11.glNewList(displayList, GL11.GL_COMPILE);
 		//Object tessellator = Modchu_AS.get(Modchu_AS.tessellatorInstance);
+		if (cubeList != null
+				&& !cubeList.isEmpty())
 		for (Modchu_IModelBox modchu_IModelBox : cubeList) {
 			//Modchu_Debug.mDebug1("compileDisplayList modchu_IModelBoxgetClass()="+modchu_IModelBoxgetClass());
 			modchu_IModelBox.render(par1);
@@ -430,6 +433,19 @@ public class ModchuModel_ModelRendererBase {
 		if (childModels != null) {
 			for (int i = 0; i < childModels.size(); i++) {
 				childModels.get(i).render(par1, b);
+			}
+		}
+		if (childModels != null
+				&& !childModels.isEmpty()); else {
+			List cubeList = getCubeList();
+			boolean flag = cubeList != null
+					&& cubeList.size() > 0;
+			if (!flag) {
+				Modchu_GlStateManager.rotate(Modchu_Debug.debaf1 * radFactor, 0.0F, 1.0F, 0.0F);
+				//Modchu_Debug.dDebug(""+Modchu_Debug.debaf1);
+				//Modchu_Debug.mDebug1("ModchuModel_ModelRendererBase renderObject rotate getBoxName()="+getBoxName()+" displayList="+displayList);
+			} else {
+				//Modchu_Debug.mDebug1("ModchuModel_ModelRendererBase renderObject !rotate getBoxName()="+getBoxName()+" displayList="+displayList);
 			}
 		}
 	}

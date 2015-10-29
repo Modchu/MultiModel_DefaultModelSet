@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.TreeMap;
+import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -91,6 +93,39 @@ public class ModchuModel_TextureManagerBase {
 	public static HashMap<String, Object[]> dummyModelMapData = new HashMap();
 
 	public void init() {
+		if (ModchuModel_Main.isDev) {
+			try {
+/*
+				//String s0 = getClass().getName()+".class";
+				//Modchu_Debug.lDebug("ModchuModel_TextureManagerBase init() isDev s0="+s0);
+				//ClassLoader classLoader = ModchuModel_TextureManagerBase.class.getClassLoader();
+				URL url = getJarFileURL(this);
+				//Modchu_Debug.lDebug("ModchuModel_TextureManagerBase init() isDev url="+url);
+				String s1 = url != null ? url.toString() : null;
+				if (s1 != null) {
+					if (s1.startsWith("file:/")) {
+						s1 = s1.substring(6);
+					}
+					if (s1.startsWith("file:\\")) {
+						s1 = s1.substring(6);
+					}
+					if (s1.startsWith("file:")) {
+						s1 = s1.substring(5);
+					}
+				}
+				//Modchu_Debug.lDebug("ModchuModel_TextureManagerBase init() isDev s1="+s1);
+				Modchu_FileManager.addMinecraftJar(new File(s1));
+*/
+				List<File> list = Modchu_FileManager.getClassPathFileList("MultiModel");
+				for (File file : list) {
+					Modchu_FileManager.addMinecraftJar(file);
+				}
+			} catch(Exception e) {
+				Modchu_Debug.systemLogDebug("ModchuModel_TextureManagerBase init() isDev Exception !!");
+				Modchu_Debug.systemLogDebug("", e);
+				e.printStackTrace();
+			}
+		}
 		modelClassNameMap.put(defaultModelName, "modchu.model.multimodel.base.MultiModel");
 		modelClassNameMap.put(defaultModelMaidBoneName, "modchu.model.multimodel.base.MultiModelMaidBone");
 		loadTextures();
@@ -115,6 +150,22 @@ public class ModchuModel_TextureManagerBase {
 			e.printStackTrace();
 		}
 		Modchu_Debug.lDebug("ModchuModel_TextureManagerBase init() MultiModel load end.");
+	}
+
+	public static final URL getJarFileURL(Object object) {
+		try {
+			final ClassLoader loader = object.getClass().getClassLoader();
+			final String name = object.getClass().getName().replace('.', '/') + ".class";
+			final URL url = loader.getResource(name);
+			final Pattern p = Pattern.compile("^jar\\:(.+?\\.jar)\\!\\/(.*)");
+			final Matcher m = p.matcher(url.toString());
+			if (m.matches()) {
+				final MatchResult res = m.toMatchResult();
+				return new URL(res.group(1));
+			}
+		} catch (Exception e) {
+		}
+		return null;
 	}
 
 	public String[] getSearch(String pName) {
@@ -158,7 +209,6 @@ public class ModchuModel_TextureManagerBase {
 		//Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getTextureBox pName="+pName);
 		if (pName != null
 				&& !pName.isEmpty()); else return null;
-		if (pName.indexOf("_") < 0) pName = new StringBuilder().append(pName).append("_").append(ModchuModel_TextureManagerBase.instance.defaultModelName).toString();
 		pName = textureNameCheck(pName);
 		if (pName != null
 				&& !pName.isEmpty()); else return null;
@@ -221,6 +271,7 @@ public class ModchuModel_TextureManagerBase {
 			if (jarList.isEmpty()) {
 				Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures jarList.isEmpty() error !!");
 			} else {
+				Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures jarList="+jarList);
 				loadTextures(lss[0], lss[1], lss[2], jarList);
 			}
 
@@ -269,9 +320,13 @@ public class ModchuModel_TextureManagerBase {
 						lflag = addTexturesDir(file, lst);
 					} else {
 						if (file.isFile()) {
+							// jar
+							Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures file.toString()="+file.toString());
+							if (file.toString().lastIndexOf(".jar") > -1) {
+								addTexturesJar(file, lst);
+							}
 							// zip
-							//Modchu_Debug.mDebug("ModchuModel_TextureManagerBase loadTextures zip");
-							if (addTexturesZip(file, lst)) {
+							else if (addTexturesZip(file, lst)) {
 								Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures-file-done.");
 							} else {
 								Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures-file-fail.");
@@ -517,7 +572,14 @@ public class ModchuModel_TextureManagerBase {
 			return;
 		}
 		getSearchSettledList().add(s);
-		if (!fname.startsWith("/")) fname = (new StringBuilder()).append("/").append(fname).toString();
+		if (Modchu_Main.isDev) {
+			if (fname.startsWith("/")
+					| fname.startsWith("\\")) fname = fname.substring(1);
+			if (pSearch[1].startsWith("/")
+					| pSearch[1].startsWith("\\")) pSearch[1] = pSearch[1].substring(1);
+		} else {
+			if (!fname.startsWith("/")) fname = (new StringBuilder()).append("/").append(fname).toString();
+		}
 
 		int i1 = fname.indexOf(pSearch[1]);
 		if (i1 > -1) {
@@ -592,8 +654,42 @@ public class ModchuModel_TextureManagerBase {
 		}
 	}
 
+	public void addTexturesJar(File file, String[] pSearch) {
+		if (file.isFile()) {
+			Modchu_Debug.tDebug("addTextureJar-zip.");
+			if (addTexturesZip(file, pSearch)) {
+				Modchu_Debug.tDebug("getTexture-append-jar-done.");
+			} else {
+				Modchu_Debug.tDebug("getTexture-append-jar-fail.");
+			}
+		}
+
+		if (file.isDirectory()) {
+			Modchu_Debug.tDebug("addTextureJar-file.");
+			boolean lflag = false;
+
+			for (File t : file.listFiles()) {
+				if (t.isDirectory()) {
+					lflag |= addTexturesDir(t, pSearch);
+				}
+			}
+			if (lflag) {
+				Modchu_Debug.tDebug("getTexture-append-jar-done.");
+			} else {
+				Modchu_Debug.tDebug("getTexture-append-jar-fail.");
+			}
+
+			if (addTexturesDir(file, pSearch)) {
+				Modchu_Debug.tDebug("getTexture-append-jar-done.");
+			} else {
+				Modchu_Debug.tDebug("getTexture-append-jar-fail.");
+			}
+
+		}
+	}
+
 	public boolean addTexturesDir(File file, String[] lst) {
-		return addTexturesDir(file, lst, true);
+		return addTexturesDir(file, lst, false);
 	}
 
 	public boolean addTexturesDir(File file, String[] lst, boolean debug) {
@@ -1247,10 +1343,16 @@ public class ModchuModel_TextureManagerBase {
 		//Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance s3="+s3);
 		Class c = null;
 		if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-1 s="+s);
+		String s1 = Modchu_Main.lastIndexProcessing(s, "_");
+		if (s1.indexOf("Custom") == 0) {
+			 s1 = s1.substring(6);
+			option = new Object[]{ s1 };
+			if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-1_2 Custom s1="+s1);
+		}
 		if (s.lastIndexOf(ModchuModel_ModelAddManager.addLmmModelString) < 0) {
-			String s1 = getModelClassName(s);
-			c = s1 != null && !s1.isEmpty() ? Modchu_Reflect.loadClass(s1, -1) : null;
-			if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-2 s="+s+" c="+c);
+			String s2 = getModelClassName(s);
+			c = s2 != null && !s2.isEmpty() ? Modchu_Reflect.loadClass(s2, -1) : null;
+			if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-2 s1="+s2+" c="+c);
 		}
 		if (c != null) {
 			Object o = modelNewInstance(c, new Class[]{ float.class, float.class, int.class, int.class, Object[].class }, new Object[]{ 0.0F, 0.0F, -1, -1, option });
@@ -1331,11 +1433,12 @@ public class ModchuModel_TextureManagerBase {
 					s4 = Modchu_Main.lastIndexProcessing(s4, "Custom");
 					if (s4 != null
 							&& !s4.isEmpty()) {
-						models[0] = new MultiModelCustom(s4, 0.0F, 0.0F, 64, 32);
+						Object[] o0 = new Object[]{ s4 };
+						models[0] = new MultiModelCustom(0.0F, 0.0F, 64, 32, o0);
 						if (models[0] != null) {
 							float[] lsize = ((MultiModelCustom) models[0]).getArmorModelsSize();
-							models[1] = new MultiModelCustom(s4, lsize[0], 0.0F, 64, 32);
-							models[2] = new MultiModelCustom(s4, lsize[1], 0.0F, 64, 32);
+							models[1] = new MultiModelCustom(lsize[0], 0.0F, 64, 32, o0);
+							models[2] = new MultiModelCustom(lsize[1], 0.0F, 64, 32, o0);
 						}
 						if (debug) Modchu_Debug.lDebug("ModchuModel_TextureManagerBase modelNewInstance 2-14 c == null MultiModelCustom models="+models);
 					} else {
@@ -1647,10 +1750,19 @@ public class ModchuModel_TextureManagerBase {
 			}
 			else Modchu_Debug.lDebug1("ModchuModel_TextureManagerBase textureNameCheck defaultModelName == null !!");
 		} else {
-			if (s.indexOf("_") < 0
-					&& defaultModelName != null
+			if (defaultModelName != null
 					&& instance.modelClassNameMap != null
-					&& !instance.modelClassNameMap.containsKey(s)) s = s+"_"+defaultModelName;
+					&& !instance.modelClassNameMap.containsKey(s)) {
+				if (s.indexOf("_") < 0) s = new StringBuilder().append(s).append("_").append(defaultModelName).toString();
+				else {
+					String s1 = Modchu_Main.lastIndexProcessing(s, "_");
+					if (s1 != null
+							&& !s.isEmpty()); else {
+						s = new StringBuilder().append(s).append(defaultModelName).toString();
+						//Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getTextureBox pName="+pName);
+					}
+				}
+			}
 		}
 		return s;
 	}
@@ -1703,7 +1815,7 @@ public class ModchuModel_TextureManagerBase {
 	public String textureManagerGetArmorPackege(String s, int i) {
 		//Modchu_Debug.mDebug("textureManagerGetArmorPackege s="+s+" i="+i);
 		int index = -1;
-		String s2 = s;
+		String s2 = textureNameCheck(s);
 		int i2 = s != null && !s.isEmpty() ? s.lastIndexOf(defaultModelName) : -1;
 		if (i2 > -1) {
 			s2 = s.substring(0, i2 - 1);
@@ -1781,7 +1893,7 @@ public class ModchuModel_TextureManagerBase {
 			case 2:
 				break;
 			}
-			//Modchu_Debug.mDebug("PFLM_Main setTexturePackege s="+s);
+			//Modchu_Debug.mDebug("ModchuModel_TextureManagerBase setTexturePackege 1 s="+s);
 			if (s != null
 					&& !s.isEmpty()); else return null;
 			textureName = s;
@@ -1791,6 +1903,7 @@ public class ModchuModel_TextureManagerBase {
 				if (s1 != null
 						&& !s1.isEmpty()) textureArmorName = s1;
 			}
+			//Modchu_Debug.mDebug("ModchuModel_TextureManagerBase setTexturePackege 2 s="+s);
 		} else {
 			textureArmorName = prevNextNormal == 0 ? instance.textureManagerGetPrevArmorPackege(textureArmorName) : instance.textureManagerGetNextArmorPackege(textureArmorName);
 		}
