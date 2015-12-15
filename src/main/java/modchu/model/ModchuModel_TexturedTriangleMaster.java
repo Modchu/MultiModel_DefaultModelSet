@@ -5,6 +5,7 @@ import java.util.HashMap;
 import modchu.lib.Modchu_AS;
 import modchu.lib.Modchu_ITexturedQuad;
 import modchu.lib.Modchu_ITexturedQuadMaster;
+import modchu.lib.Modchu_Main;
 import modchu.lib.Modchu_Reflect;
 
 import org.lwjgl.opengl.GL11;
@@ -113,20 +114,29 @@ public class ModchuModel_TexturedTriangleMaster implements Modchu_ITexturedQuadM
 		}
 
 		GL11.glShadeModel(GL11.GL_SMOOTH);
-		byte by = 6;
+		int i2 = 6;
 
 		if (nVertices % 4 == 0) {
-			by = 7;
+			i2 = 7;
 		}
 
-		Modchu_AS.set(Modchu_AS.tessellatorStartDrawing, tessellator, by);
+		if (Modchu_Main.getMinecraftVersion() > 180) {
+			Modchu_AS.set(Modchu_AS.tessellatorStartDrawingQuads, tessellator, i2, Modchu_AS.get("DefaultVertexFormats", "field_181703_c"));
+		} else {
+			Modchu_AS.set(Modchu_AS.tessellatorStartDrawingQuads, tessellator);
+		}
 
 		for (int i1 = 0; i1 < nVertices; ++i1) {
+			if (vec3[i1] != null); else continue;
+			float fx = (float) Modchu_AS.getDouble(Modchu_AS.vec3XCoord, vec3[i1]);
+			float fy = (float) Modchu_AS.getDouble(Modchu_AS.vec3YCoord, vec3[i1]);
+			float fz = (float) Modchu_AS.getDouble(Modchu_AS.vec3ZCoord, vec3[i1]);
 			if (invertNormal) {
-				Modchu_AS.set(Modchu_AS.tessellatorSetNormal, tessellator, -(float) Modchu_AS.getDouble(Modchu_AS.vec3XCoord, vec3[i1]), -(float) Modchu_AS.getDouble(Modchu_AS.vec3YCoord, vec3[i1]), -(float) Modchu_AS.getDouble(Modchu_AS.vec3ZCoord, vec3[i1]));
-			} else {
-				Modchu_AS.set(Modchu_AS.tessellatorSetNormal, tessellator, (float) Modchu_AS.getDouble(Modchu_AS.vec3XCoord, vec3[i1]), (float) Modchu_AS.getDouble(Modchu_AS.vec3YCoord, vec3[i1]), (float) Modchu_AS.getDouble(Modchu_AS.vec3ZCoord, vec3[i1]));
+				fx = -fx;
+				fy = -fy;
+				fz = -fz;
 			}
+			Modchu_AS.set(Modchu_AS.tessellatorSetNormal, tessellator, fx, fy, fz);
 
 			Object vertexPosition = vertexPositions[i1];
 			Object vertexPositionVec3 = Modchu_AS.get(Modchu_AS.positionTextureVertexVector3D, vertexPosition);
@@ -135,7 +145,8 @@ public class ModchuModel_TexturedTriangleMaster implements Modchu_ITexturedQuadM
 					(double) (((float) Modchu_AS.getDouble(Modchu_AS.vec3YCoord, vertexPositionVec3)) * f),
 					(double) (((float) Modchu_AS.getDouble(Modchu_AS.vec3ZCoord, vertexPositionVec3)) * f),
 					(double) Modchu_AS.getFloat(Modchu_AS.positionTextureVertexTexturePositionX, vertexPosition),
-					(double) Modchu_AS.getFloat(Modchu_AS.positionTextureVertexTexturePositionY, vertexPosition));
+					(double) Modchu_AS.getFloat(Modchu_AS.positionTextureVertexTexturePositionY, vertexPosition),
+					fx, fy, fz);
 		}
 
 		Modchu_AS.set(Modchu_AS.tessellatorDraw, tessellator);

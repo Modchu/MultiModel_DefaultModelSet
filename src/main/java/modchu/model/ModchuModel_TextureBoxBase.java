@@ -275,9 +275,9 @@ public class ModchuModel_TextureBoxBase {
 		case ModchuModel_TextureManagerBase.tx_armor2light:
 		case ModchuModel_TextureManagerBase.tx_oldarmor1:
 		case ModchuModel_TextureManagerBase.tx_oldarmor2:
-			Modchu_Debug.tDebug("Modchu_TextureBoxBase addTexture pLocation="+pLocation);
+			Modchu_Debug.tDebug("ModchuModel_TextureBoxBase addTexture pLocation="+pLocation);
 			ls = pLocation.substring(pLocation.lastIndexOf("/") + 1, pLocation.lastIndexOf("_"));
-			Modchu_Debug.tDebug("Modchu_TextureBoxBase addTexture ls="+ls);
+			Modchu_Debug.tDebug("ModchuModel_TextureBoxBase addTexture ls="+ls);
 			Map<Integer, Object> lmap;
 			if (armors.containsKey(ls)) {
 				lmap = armors.get(ls);

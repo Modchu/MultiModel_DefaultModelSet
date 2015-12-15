@@ -370,12 +370,18 @@ public class MultiModelMaidBone extends MultiModelSkirtFloats {
 				bipedLeftArm.rotateAngleZ = 0.4F;
 			} else {
 				// 呼吸 腕等
+				//Modchu_Debug.mDebug("MultiModelMaidBone setRotationAnglesLM 1 bipedRightArm.rotateAngleX="+bipedRightArm.rotateAngleX);
 				bipedRightArm.rotateAngleZ += 0.5F;
 				bipedLeftArm.rotateAngleZ -= 0.5F;
 				bipedRightArm.rotateAngleZ += Modchu_AS.getFloat(Modchu_AS.mathHelperCos, f2 * 0.09F) * 0.05F + 0.05F;
 				bipedLeftArm.rotateAngleZ -= Modchu_AS.getFloat(Modchu_AS.mathHelperCos, f2 * 0.09F) * 0.05F + 0.05F;
 				bipedRightArm.rotateAngleX += Modchu_AS.getFloat(Modchu_AS.mathHelperSin, f2 * 0.067F) * 0.05F;
 				bipedLeftArm.rotateAngleX -= Modchu_AS.getFloat(Modchu_AS.mathHelperSin, f2 * 0.067F) * 0.05F;
+				//Modchu_Debug.mDebug("MultiModelMaidBone setRotationAnglesLM 2 f2="+f2);
+				//Modchu_Debug.mDebug("MultiModelMaidBone setRotationAnglesLM 2 f2 * 0.067F="+(f2 * 0.067F));
+				//Modchu_Debug.mDebug("MultiModelMaidBone setRotationAnglesLM 2 Modchu_AS.getFloat(Modchu_AS.mathHelperSin, f2 * 0.067F)="+Modchu_AS.getFloat(Modchu_AS.mathHelperSin, f2 * 0.067F));
+				//Modchu_Debug.mDebug("MultiModelMaidBone setRotationAnglesLM 2 Modchu_AS.getFloat(Modchu_AS.mathHelperSin, f2 * 0.067F) * 0.05F="+Modchu_AS.getFloat(Modchu_AS.mathHelperSin, f2 * 0.067F) * 0.05F);
+				//Modchu_Debug.mDebug("MultiModelMaidBone setRotationAnglesLM 2 bipedRightArm.rotateAngleX="+bipedRightArm.rotateAngleX);
 			}
 		}
 		setRotationAnglesGulliverAfter(f, f1, f2, f3, f4, f5, entityCaps);

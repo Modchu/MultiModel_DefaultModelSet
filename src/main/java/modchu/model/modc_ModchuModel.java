@@ -33,12 +33,14 @@ public class modc_ModchuModel {
 			ModchuModel_Main.load();
 		} catch(Error e) {
 			errorString = "ModchuModel_Main load() Error !!";
-			Modchu_Debug.lDebug(errorString, 2, e);
+			Modchu_Debug.lDebug(errorString);
+			Modchu_Debug.lDebug("", 2, e);
 			e.printStackTrace();
 			errorFlag = true;
 		} catch(Exception e) {
 			errorString = "ModchuModel_Main load() Exception !!";
-			Modchu_Debug.lDebug(errorString, 2, e);
+			Modchu_Debug.lDebug(errorString);
+			Modchu_Debug.lDebug("", 2, e);
 			e.printStackTrace();
 			errorFlag = true;
 		}

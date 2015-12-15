@@ -46,8 +46,8 @@ package modchu.model.multimodel.base;import modchu.lib.Modchu_EntityCapsHelper
 		SideTailL = new ModchuModel_ModelRenderer(this, 58, 21, "SideTailL");
 		SideTailL.mirror = true;
 		SideTailL.addBox(4.5F, -6.8F, 0.9F, 1, 8, 2, f);
-		SideTailL.setRotationPoint(0.0F, 0.0F, 0.0F);		if (isAfterInit) afterInit(f, f1);
-	}	@Override
+		SideTailL.setRotationPoint(0.0F, 0.0F, 0.0F);				//ModelBase modelBase = new ModelBiped();		//test = new ModelRenderer(modelBase);		//test.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, f);		if (isAfterInit) afterInit(f, f1);
+	}	@Override	public void render(ModchuModel_IEntityCaps entityCaps, float f, float f1, float f2, float pheadYaw, float pheadPitch, float f5, boolean pIsRender) {		super.render(entityCaps, f, f1, f2, pheadYaw, pheadPitch, f5, pIsRender);		//test.render(f5);	}	@Override
 	public void actionPartsInit(float f, float f1) {		super.actionPartsInit(f, f1);
 		rightArm.setTextureOffset(48, 0);
 		rightArm.addBox(-1.0F, 0.0F, -1.0F, 2, 4, 2, f);

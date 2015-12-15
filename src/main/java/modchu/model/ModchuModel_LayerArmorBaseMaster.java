@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import modchu.lib.Modchu_AS;
 import modchu.lib.Modchu_CastHelper;
+import modchu.lib.Modchu_GlStateManager;
 import modchu.lib.Modchu_LayerArmorBaseMasterBasis;
 import modchu.lib.Modchu_Main;
 import modchu.lib.Modchu_Reflect;
@@ -42,30 +43,30 @@ public class ModchuModel_LayerArmorBaseMaster extends Modchu_LayerArmorBaseMaste
 			int i1 = Modchu_CastHelper.Int(Modchu_Reflect.invokeMethod(render.getClass(), "setArmorModel", new Class[]{ Object.class, Object.class, int.class, float.class, int.class }, render, new Object[]{ null, entityLivingBase, i, f6, 0 }));
 			if (i1 < 0
 					| Modchu_CastHelper.Int(Modchu_Reflect.invokeMethod(render.getClass(), "shouldRenderPass", new Class[]{ Modchu_Reflect.loadClass("EntityLivingBase"), int.class, float.class }, render, new Object[]{ entityLivingBase, i, f6 })) < 0) continue;
-			if (modelInner != null) {
-				modelInner.setLivingAnimations(entityLivingBase, f, f1, f2);
-				modelInner.setModelAttributes(modelData.models[0]);
-				if (modelData.textures[1][i] != null) Modchu_AS.set(Modchu_AS.renderBindTexture, render, modelData.textures[1][i]);
-				modelInner.render(modelData, f, f1, f3, f4, f5, f6, modelData.textures[1][i] != null ? modelFATT.isRendering : false);
-				//Modchu_Debug.mDebug("PFLM_LayerArmorBaseMaster doRenderLayer modelInner modelData.textures[1]["+i+"]="+modelData.textures[1][i]);
-				//Modchu_Debug.mDebug("PFLM_LayerArmorBaseMaster doRenderLayer isRendering="+modelFATT.isRendering);
-				//Modchu_Debug.mDebug("PFLM_LayerArmorBaseMaster doRenderLayer modelInner="+modelInner);
-				//Modchu_Debug.mDebug("PFLM_LayerArmorBaseMaster doRenderLayer modelInner.bipedBody.showModel="+modelInner.bipedBody.showModel);
-			}
-			if (modelOuter != null) {
-				modelOuter.setLivingAnimations(entityLivingBase, f, f1, f2);
-				modelOuter.setModelAttributes(modelData.models[0]);
-				if (modelData.textures[2][i] != null) Modchu_AS.set(Modchu_AS.renderBindTexture, render, modelData.textures[2][i]);
-				modelOuter.render(modelData, f, f1, f3, f4, f5, f6, modelData.textures[2][i] != null ? modelFATT.isRendering : false);
-				//Modchu_Debug.mDebug("PFLM_LayerArmorBaseMaster doRenderLayer modelOuter modelData.textures[2]["+i+"]="+modelData.textures[2][i]);
-				//Modchu_Debug.mDebug("PFLM_LayerArmorBaseMaster doRenderLayer modelOuter="+modelOuter);
-			}
+			renderArmor(modelData, modelFATT, render, modelInner, i, 1, entityLivingBase, f, f1, f2, f3, f4, f5, f6);
+			renderArmor(modelData, modelFATT, render, modelOuter, i, 2, entityLivingBase, f, f1, f2, f3, f4, f5, f6);
 		}
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glPopAttrib();
 		GL11.glPopMatrix();
 		//Modchu_Debug.mDebug("PFLM_LayerArmorBaseMaster doRenderLayer e----------------------------");
+	}
+
+	private void renderArmor(ModchuModel_ModelDataBase modelData, ModchuModel_ModelBaseNihil modelFATT, Object render, MultiModelBaseBiped multiModelBaseBiped, int i, int i1, Object entityLivingBase, float f, float f1, float f2, float f3, float f4, float f5, float f6) {
+		multiModelBaseBiped.setLivingAnimations(entityLivingBase, f, f1, f2);
+		multiModelBaseBiped.setModelAttributes(modelData.models[0]);
+		Object texture = modelData.textures[i1][i];
+		if (texture != null) Modchu_AS.set(Modchu_AS.renderBindTexture, render, texture);
+		float[] armorColors = Modchu_CastHelper.FloatArray(modelData.getCapsValue(modelData.caps_freeVariable, "itemArmorColorFloat"+i));
+		if (armorColors != null) {
+			Modchu_GlStateManager.color(1.0F * armorColors[0], 1.0F * armorColors[1], 1.0F * armorColors[2], 1.0F);
+		}
+		multiModelBaseBiped.render(modelData, f, f1, f3, f4, f5, f6, texture != null ? modelFATT.isRendering : false);
+		//Modchu_Debug.mDebug("PFLM_LayerArmorBaseMaster renderArmor texture="+texture);
+		//Modchu_Debug.mDebug("PFLM_LayerArmorBaseMaster renderArmor isRendering="+modelFATT.isRendering);
+		//Modchu_Debug.mDebug("PFLM_LayerArmorBaseMaster renderArmor multiModelBaseBiped="+multiModelBaseBiped);
+		//Modchu_Debug.mDebug("PFLM_LayerArmorBaseMaster renderArmor multiModelBaseBiped.bipedBody.showModel="+multiModelBaseBiped.bipedBody.showModel);
 	}
 /*
 	private void func_177182_a(Object entityLivingBase, float f, float f1, float f2, float f3, float f4, float f5, float f6, int i) {
@@ -102,4 +103,5 @@ public class ModchuModel_LayerArmorBaseMaster extends Modchu_LayerArmorBaseMaste
 		}
 	}
 */
+
 }

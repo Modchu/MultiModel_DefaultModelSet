@@ -379,7 +379,7 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 			}
 			if (adjust) Modchu_GlStateManager.translate(-0.0625F, 0.4375F, 0.0625F);
 			if (Modchu_Reflect.loadClass("EntityPlayer").isInstance(entityLiving)
-					&& Modchu_AS.get(Modchu_AS.entityPlayerFishEntity, entityLiving) != null) itemstack = Modchu_Reflect.newInstance("ItemStack", new Class[]{}, new Object[]{ Modchu_AS.get(Modchu_AS.getItem, "fishing_rod"), 0 });
+					&& Modchu_AS.get(Modchu_AS.entityPlayerFishEntity, entityLiving) != null) itemstack = Modchu_Reflect.newInstance("ItemStack", new Class[]{ Modchu_Reflect.loadClass("Item"), int.class }, new Object[]{ Modchu_AS.get(Modchu_AS.getItem, "fishing_rod"), 0 });
 			float var6 = 1.0F;
 			if (Modchu_Reflect.loadClass("ItemBlock").isInstance(item)) {
 				int renderType = Modchu_AS.getInt(Modchu_AS.blockGetRenderType, Modchu_AS.get(Modchu_AS.blockGetBlockFromItem, item));
@@ -442,7 +442,7 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 				if (adjust) Modchu_GlStateManager.translate(0.0F, 0.1F, 0.0F);
 			}
 		}
-		int itemDamage = Modchu_AS.getInt(Modchu_AS.itemStackGetItemDamage, itemstack);
+		//int itemDamage = itemstack != null ? Modchu_AS.getInt(Modchu_AS.itemStackGetItemDamage, itemstack) : -1;
 		// アイテムに色付け
 		int renderPasses = Modchu_AS.getBoolean(Modchu_AS.itemRequiresMultipleRenderPasses, item) ? 1 : 0;
 		type = Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeTHIRD_PERSON);
@@ -732,7 +732,11 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		//RenderBlocks.renderBlockDoublePlant
 		if (Modchu_Main.getMinecraftVersion() < 170) return false;
 		Object tessellator = Modchu_AS.get(Modchu_AS.tessellatorInstance);
-		Modchu_AS.set(Modchu_AS.tessellatorStartDrawingQuads, tessellator);
+		if (Modchu_Main.getMinecraftVersion() > 180) {
+			Modchu_AS.set(Modchu_AS.tessellatorStartDrawingQuads, tessellator, 7, Modchu_AS.get("DefaultVertexFormats", "field_181707_g"));
+		} else {
+			Modchu_AS.set(Modchu_AS.tessellatorStartDrawingQuads, tessellator);
+		}
 		Modchu_AS.set(Modchu_AS.tessellatorSetNormal, tessellator, 0.0F, -1.0F, 0.0F);
 		Object theWorld = Modchu_AS.get(Modchu_AS.minecraftTheWorld);
 		int brightness = Modchu_AS.getInt(Modchu_AS.blockDoublePlantGetMixedBrightnessForBlock, blockDoublePlant, theWorld, x, y + 2, z);
@@ -798,19 +802,19 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 			double d16 = 0.5D + -0.5D * d3 + -0.05D * d4;
 			double d17 = 0.5D + -0.05D * d3 - 0.5D * d4;
 			double d18 = 0.5D + 0.5D * d3 + -0.05D * d4;
-			Modchu_AS.set(Modchu_AS.tessellatorAddVertexWithUV, tessellator, x2 + d15, y2 + 1.0D, z2 + d16, d5, d8);
-			Modchu_AS.set(Modchu_AS.tessellatorAddVertexWithUV, tessellator, x2 + d17, y2 + 1.0D, z2 + d18, d7, d8);
-			Modchu_AS.set(Modchu_AS.tessellatorAddVertexWithUV, tessellator, x2 + d11, y2 + 0.0D, z2 + d12, d7, d6);
-			Modchu_AS.set(Modchu_AS.tessellatorAddVertexWithUV, tessellator, x2 + d13, y2 + 0.0D, z2 + d14, d5, d6);
+			Modchu_AS.set(Modchu_AS.tessellatorAddVertexWithUV, tessellator, x2 + d15, y2 + 1.0D, z2 + d16, d5, d8, f, f1, f2, 255);
+			Modchu_AS.set(Modchu_AS.tessellatorAddVertexWithUV, tessellator, x2 + d17, y2 + 1.0D, z2 + d18, d7, d8, f, f1, f2, 255);
+			Modchu_AS.set(Modchu_AS.tessellatorAddVertexWithUV, tessellator, x2 + d11, y2 + 0.0D, z2 + d12, d7, d6, f, f1, f2, 255);
+			Modchu_AS.set(Modchu_AS.tessellatorAddVertexWithUV, tessellator, x2 + d13, y2 + 0.0D, z2 + d14, d5, d6, f, f1, f2, 255);
 			Object iicon2 = Modchu_AS.getObjectArray(Modchu_AS.blockDoublePlantSunflowerIcons, blockDoublePlant)[1];
 			d5 = Modchu_AS.getDouble(Modchu_AS.iIconGetMinU, iicon2);
 			d6 = Modchu_AS.getDouble(Modchu_AS.iIconGetMinV, iicon2);
 			d7 = Modchu_AS.getDouble(Modchu_AS.iIconGetMaxU, iicon2);
 			d8 = Modchu_AS.getDouble(Modchu_AS.iIconGetMaxV, iicon2);
-			Modchu_AS.set(Modchu_AS.tessellatorAddVertexWithUV, tessellator, x2 + d17, y2 + 1.0D, z2 + d18, d5, d8);
-			Modchu_AS.set(Modchu_AS.tessellatorAddVertexWithUV, tessellator, x2 + d15, y2 + 1.0D, z2 + d16, d7, d8);
-			Modchu_AS.set(Modchu_AS.tessellatorAddVertexWithUV, tessellator, x2 + d13, y2 + 0.0D, z2 + d14, d7, d6);
-			Modchu_AS.set(Modchu_AS.tessellatorAddVertexWithUV, tessellator, x2 + d11, y2 + 0.0D, z2 + d12, d5, d6);
+			Modchu_AS.set(Modchu_AS.tessellatorAddVertexWithUV, tessellator, x2 + d17, y2 + 1.0D, z2 + d18, d5, d8, f, f1, f2, 255);
+			Modchu_AS.set(Modchu_AS.tessellatorAddVertexWithUV, tessellator, x2 + d15, y2 + 1.0D, z2 + d16, d7, d8, f, f1, f2, 255);
+			Modchu_AS.set(Modchu_AS.tessellatorAddVertexWithUV, tessellator, x2 + d13, y2 + 0.0D, z2 + d14, d7, d6, f, f1, f2, 255);
+			Modchu_AS.set(Modchu_AS.tessellatorAddVertexWithUV, tessellator, x2 + d11, y2 + 0.0D, z2 + d12, d5, d6, f, f1, f2, 255);
 		}
 		Modchu_AS.set(Modchu_AS.tessellatorDraw, tessellator);
 
