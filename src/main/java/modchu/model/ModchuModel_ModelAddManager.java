@@ -21,6 +21,7 @@ import modchu.lib.Modchu_FileManager;
 import modchu.lib.Modchu_LMMManager;
 import modchu.lib.Modchu_Main;
 import modchu.lib.Modchu_Reflect;
+import modchu.lib.Modchu_Version;
 import modchu.model.multimodel.base.MultiModel;
 import modchu.model.multimodel.base.MultiModelBaseBiped;
 import modchu.model.multimodel.base.MultiModelCustom;
@@ -37,7 +38,7 @@ public class ModchuModel_ModelAddManager {
 			Modchu_Debug.systemLogDebug("ModchuModel_Main addCustomModel() cfgdir not found !! cfgdir="+cfgdir);
 			return;
 		}
-		ArrayList<File> list = Modchu_FileManager.listFiles(cfgdir.getAbsolutePath(), "*.cfg", null, "CustomModel_");
+		ArrayList<File> list = Modchu_FileManager.listFiles(cfgdir.getAbsolutePath(), "*.cfg", null, "CustomModel_", true);
 		if (list != null
 				&& !list.isEmpty()) {
 			Modchu_Debug.mDebug("ModchuModel_Main addCustomModel() list != null");
@@ -82,8 +83,8 @@ public class ModchuModel_ModelAddManager {
 	}
 
 	private static void addOtherCustomModel() {
-		File modsDir = new File(Modchu_AS.getFile(Modchu_AS.minecraftMcDataDir), "/mods/");
-		ArrayList<File> list = Modchu_FileManager.listFiles(modsDir.getAbsolutePath(), "*.zip", null, "MultiModelOtherCustomModel");
+		ArrayList<File> list = Modchu_FileManager.listFiles(Modchu_Main.modsDir.getAbsolutePath(), "*.zip", null, "MultiModelOtherCustomModel", false);
+		list.addAll(Modchu_FileManager.listFiles(new File(Modchu_Main.modsDir, Modchu_Version.getMinecraftVersionString()).getAbsolutePath(), "*.zip", null, "MultiModelOtherCustomModel", true));
 		if (list != null
 				&& !list.isEmpty()) {
 			ZipFile zipFile = null;

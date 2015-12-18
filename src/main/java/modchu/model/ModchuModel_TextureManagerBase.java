@@ -576,7 +576,7 @@ public class ModchuModel_TextureManagerBase {
 				+ (pSearch != null
 						&& pSearch.length > 1 ? pSearch[1] : "");
 		if (getSearchSettledList().contains(s)) {
-			Modchu_Debug.tDebug("ModchuModel_TextureManagerBase addTextureName getSearchSettledList().contains return.");
+			Modchu_Debug.tDebug1("ModchuModel_TextureManagerBase addTextureName getSearchSettledList().contains return.");
 			return false;
 		}
 		Modchu_Debug.tDebug("ModchuModel_TextureManagerBase addTextureName 1 fname="+fname);

@@ -14,7 +14,7 @@ public class ModchuModel_ModelBaseNihil extends Modchu_ModelBipedMasterBasis {
 	public Modchu_IModelCapsLink capsLink;
 	public int lighting;
 	protected ModchuModel_ModelDataBase tempEntityCaps;
-	protected boolean isRendering;
+	protected boolean isRendering = true;
 	/**
 	 * レンダリングが実行された回数。
 	 * ダメージ時などの対策。
