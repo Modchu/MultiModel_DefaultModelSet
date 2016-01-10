@@ -732,8 +732,9 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		//RenderBlocks.renderBlockDoublePlant
 		if (Modchu_Main.getMinecraftVersion() < 170) return false;
 		Object tessellator = Modchu_AS.get(Modchu_AS.tessellatorInstance);
-		if (Modchu_Main.getMinecraftVersion() > 180) {
-			Modchu_AS.set(Modchu_AS.tessellatorStartDrawingQuads, tessellator, 7, Modchu_AS.get("DefaultVertexFormats", "field_181707_g"));
+		int version = Modchu_Main.getMinecraftVersion();
+		if (version > 180) {
+			Modchu_AS.set(Modchu_AS.tessellatorStartDrawingQuads, tessellator, 7, Modchu_AS.get("DefaultVertexFormats", version > 188 ? "POSITION_TEX" : "field_181707_g"));
 		} else {
 			Modchu_AS.set(Modchu_AS.tessellatorStartDrawingQuads, tessellator);
 		}

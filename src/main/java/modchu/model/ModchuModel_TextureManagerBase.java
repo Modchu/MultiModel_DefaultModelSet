@@ -570,16 +570,17 @@ public class ModchuModel_TextureManagerBase {
 
 	public boolean addTextureName(String fname, String[] pSearch) {
 		// パッケージにテクスチャを登録
+		boolean debug = false;
 		String s = fname
 				+ (pSearch != null
 				&& pSearch.length > 0 ? pSearch[0] : "")
 				+ (pSearch != null
 						&& pSearch.length > 1 ? pSearch[1] : "");
 		if (getSearchSettledList().contains(s)) {
-			Modchu_Debug.tDebug1("ModchuModel_TextureManagerBase addTextureName getSearchSettledList().contains return.");
+			if (debug) Modchu_Debug.tDebug1("ModchuModel_TextureManagerBase addTextureName getSearchSettledList().contains return.");
 			return false;
 		}
-		Modchu_Debug.tDebug("ModchuModel_TextureManagerBase addTextureName 1 fname="+fname);
+		if (debug) Modchu_Debug.tDebug("ModchuModel_TextureManagerBase addTextureName 1 fname="+fname);
 		boolean b = false;
 		getSearchSettledList().add(s);
 		if (Modchu_Main.isDev) {
@@ -593,7 +594,7 @@ public class ModchuModel_TextureManagerBase {
 
 		int i1 = fname.indexOf(pSearch[1]);
 		if (i1 > -1) {
-			Modchu_Debug.tDebug("ModchuModel_TextureManagerBase addTextureName 2 pSearch[1]="+pSearch[1]+" ok. fname="+fname);
+			if (debug) Modchu_Debug.tDebug("ModchuModel_TextureManagerBase addTextureName 2 pSearch[1]="+pSearch[1]+" ok. fname="+fname);
 			int i = fname.lastIndexOf("/");
 			if (pSearch[1].length() < i) {
 				String pn = fname.substring(pSearch[1].length() + i1, i);
@@ -625,7 +626,7 @@ public class ModchuModel_TextureManagerBase {
 				}
 			}
 		} else {
-			Modchu_Debug.tDebug("ModchuModel_TextureManagerBase addTextureName else fname="+fname);
+			if (debug) Modchu_Debug.tDebug("ModchuModel_TextureManagerBase addTextureName else fname="+fname);
 		}
 		return b;
 	}

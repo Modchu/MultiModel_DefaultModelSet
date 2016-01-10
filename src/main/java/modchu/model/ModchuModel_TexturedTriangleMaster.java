@@ -120,8 +120,9 @@ public class ModchuModel_TexturedTriangleMaster implements Modchu_ITexturedQuadM
 			i2 = 7;
 		}
 
-		if (Modchu_Main.getMinecraftVersion() > 180) {
-			Modchu_AS.set(Modchu_AS.tessellatorStartDrawingQuads, tessellator, i2, Modchu_AS.get("DefaultVertexFormats", "field_181703_c"));
+		int version = Modchu_Main.getMinecraftVersion();
+		if (version > 180) {
+			Modchu_AS.set(Modchu_AS.tessellatorStartDrawingQuads, tessellator, i2, Modchu_AS.get("DefaultVertexFormats", version > 188 ? "OLDMODEL_POSITION_TEX_NORMAL" : "field_181703_c"));
 		} else {
 			Modchu_AS.set(Modchu_AS.tessellatorStartDrawingQuads, tessellator);
 		}
