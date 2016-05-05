@@ -414,7 +414,7 @@ public class ModchuModel_ModelAddManager {
 		Modchu_LMMManager.setTextureBoxModels(ltb, o1);
 /*
 		if (Modchu_Main.getMinecraftVersion() > 169
-				&& !ModchuModel_Main.isLMMX) {
+				&& !Modchu_LMMManager.isLMMX) {
 			Map textures = Modchu_CastHelper.Map(getLmmTextureManagerTextures());
 			if (textures != null) {
 				textures.put(mtb.fileName, ltb);
@@ -451,7 +451,8 @@ public class ModchuModel_ModelAddManager {
 		// PFLM側にLMMテクスチャ登録
 		if (debug) Modchu_Debug.lDebug("lmmTextureManagerInit() LMM to PFLM textures models="+models);
 		if (Modchu_Main.getMinecraftVersion() > 169
-				&& !ModchuModel_Main.isLMMX) {
+				&& !Modchu_LMMManager.isLMR
+				&& !Modchu_LMMManager.isLMMX) {
 			Map textures = Modchu_CastHelper.Map(Modchu_LMMManager.getLmmTextureManagerTextures());
 			if (debug) Modchu_Debug.lDebug("lmmTextureManagerInit() LMM to PFLM textures="+textures);
 			if (textures != null
@@ -699,7 +700,7 @@ public class ModchuModel_ModelAddManager {
 		if (debug) Modchu_Debug.lDebug("lmmTextureManagerInit() PFLM to LMM model start");
 		// LMM側にPFLMモデル登録
 		if (Modchu_Main.getMinecraftVersion() > 169
-				&& !ModchuModel_Main.isLMMX) {
+				&& !Modchu_LMMManager.isLMMX) {
 			Map modelNames = Modchu_LMMManager.getLmmTextureManagerModelNames();
 			Class ModchuLmmModel = Modchu_LMMManager.getModchuLmmModelClass();
 			if (ModchuLmmModel != null) {
@@ -719,10 +720,9 @@ public class ModchuModel_ModelAddManager {
 						Modchu_Debug.lDebug("lmmTextureManagerInit() PFLM to LMM model model == null !! className="+className);
 						continue;
 					}
+					if (debug) Modchu_Debug.lDebug("lmmTextureManagerInit() PFLM to LMM className="+className);
 					String name = Modchu_Main.lastIndexProcessing(className, "_");
-					if (name.indexOf("_") > -1) {
-						name = Modchu_Main.lastIndexProcessing(name, "_");
-					} else {
+					if (name.equals(className)) {
 						if (debug) Modchu_Debug.lDebug("lmmTextureManagerInit() PFLM to LMM model not put !indexOf name="+name);
 						continue;
 					}
@@ -807,7 +807,7 @@ public class ModchuModel_ModelAddManager {
 			Object modelFATT = Modchu_Main.newModchuCharacteristicObject("Modchu_LMMModelBaseDuo", ModchuModel_ModelBaseDuo.class, render);
 			Modchu_Debug.lDebug("ModelBaseDuo replace modelFATT="+modelFATT);
 			boolean isModelAlphablend = Modchu_CastHelper.Boolean(Modchu_Reflect.getFieldObject(Modchu_LMMManager.getMMMLibClass(), "cfg_isModelAlphaBlend"));
-			Class c = Modchu_Reflect.loadClass(ModchuModel_Main.isLMMX ? "mmmlibx.lib.multiModel.model.mc162.ModelBaseNihil" : "MMM_ModelBaseNihil");
+			Class c = Modchu_Reflect.loadClass(Modchu_LMMManager.isLMMX ? "mmmlibx.lib.multiModel.model.mc162.ModelBaseNihil" : "MMM_ModelBaseNihil");
 			Modchu_Reflect.setFieldObject(c, "isModelAlphablend", modelFATT, isModelAlphablend);
 			Modchu_Reflect.setFieldObject(c, "isRendering", modelFATT, true);
 			Modchu_Reflect.setFieldObject(render.getClass(), "modelFATT", render, modelFATT);
@@ -844,7 +844,8 @@ public class ModchuModel_ModelAddManager {
 		ArrayList<String> list = new ArrayList();
 		boolean debug = false;
 		if (Modchu_Main.getMinecraftVersion() > 169
-				&& !ModchuModel_Main.isLMMX) {
+				&& !Modchu_LMMManager.isLMR
+				&& !Modchu_LMMManager.isLMMX) {
 			Map textures = Modchu_CastHelper.Map(Modchu_LMMManager.getLmmTextureManagerTextures());
 			//if (debug) Modchu_Debug.lDebug("getLmmTextureManagerModelNameToTextureName textures="+textures);
 			if (textures != null
@@ -921,13 +922,14 @@ public class ModchuModel_ModelAddManager {
 		}
 		String name = Modchu_Reflect.getFieldObject(mlm[0].getClass(), "master", mlm[0]).getClass().getName();
 		//if (Modchu_Main.getMinecraftVersion() < 170
-				//|ModchuModel_Main.isLMMX)
+				//|Modchu_LMMManager.isLMMX)
 		modelName = Modchu_Main.lastIndexProcessing(modelName, "_");
 		models.put(modelName, mlm);
 		Modchu_LMMManager.setLmmTextureManagerModels(models);
 		Modchu_Debug.lDebug("addLmmTextureManagerModel() modelName="+modelName);
 		if (Modchu_Main.getMinecraftVersion() > 169
-				&& !ModchuModel_Main.isLMMX) {
+				&& !Modchu_LMMManager.isLMR
+				&& !Modchu_LMMManager.isLMMX) {
 			Map modelNames = Modchu_LMMManager.getLmmTextureManagerModelNames();
 			if (modelNames != null); else return;
 			modelNames.put(modelName, name);
@@ -936,7 +938,8 @@ public class ModchuModel_ModelAddManager {
 	}
 
 	private static boolean addLMMModelFlag() {
-		return ModchuModel_Main.isLMM
+		Modchu_Debug.mDebug("addLMMModelFlag Modchu_LMMManager.isLMM="+Modchu_LMMManager.isLMM);
+		return Modchu_LMMManager.isLMM
 				&& ModchuModel_ConfigData.modelForLittleMaidMob;
 				//&& Modchu_CastHelper.Int(Modchu_Reflect.getFieldObject("net.minecraftforge.common.ForgeVersion", "buildVersion")) < 954;
 	}
@@ -947,7 +950,8 @@ public class ModchuModel_ModelAddManager {
 		Object instance = Modchu_LMMManager.getLmmTextureManagerInstance();
 		if (instance != null); else return;
 		if (Modchu_Main.getMinecraftVersion() > 169
-				&& !ModchuModel_Main.isLMMX) {
+				&& !Modchu_LMMManager.isLMR
+				&& !Modchu_LMMManager.isLMMX) {
 			Map textures = Modchu_CastHelper.Map(Modchu_LMMManager.getLmmTextureManagerTextures());
 			if (textures != null
 					&& !textures.isEmpty()); else {
@@ -1079,7 +1083,8 @@ public class ModchuModel_ModelAddManager {
 		Class ModchuLmmModel = Modchu_LMMManager.getModchuLmmModelClass();
 		if (ModchuLmmModel != null); else return;
 		if (Modchu_Main.getMinecraftVersion() > 169
-				&& !ModchuModel_Main.isLMMX) {
+				&& !Modchu_LMMManager.isLMR
+				&& !Modchu_LMMManager.isLMMX) {
 			Map textures = Modchu_CastHelper.Map(Modchu_LMMManager.getLmmTextureManagerTextures());
 			if (textures != null
 					&& !textures.isEmpty()); else {

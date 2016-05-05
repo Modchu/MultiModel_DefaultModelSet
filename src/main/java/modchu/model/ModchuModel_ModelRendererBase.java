@@ -214,7 +214,7 @@ public class ModchuModel_ModelRendererBase {
 	}
 
 	public ModchuModel_ModelRendererBase addParts(Class pModelBoxBaseMaster, Object... pArg) {
-		pArg = Modchu_Main.addObjectArray(pArg, true, pModelBoxBaseMaster, this, textureOffsetX, textureOffsetY);
+		pArg = Modchu_Main.addObjectArray(true, pArg, pModelBoxBaseMaster, this, textureOffsetX, textureOffsetY);
 		//Modchu_Debug.mDebugObjectArray("addParts s------", pArg, "addParts e-----");
 		addCubeList(new Modchu_ModelBox(Modchu_Main.getNewModchuCharacteristicMap(pArg)));
 		return this;

@@ -85,14 +85,8 @@ package modchu.model.multimodel.base;import java.util.HashMap;import java.uti
 	}	@Override
 	public void render(ModchuModel_IEntityCaps entityCaps, float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5, boolean pIsRender) {
 		customModel.render(entityCaps, f, f1, ticksExisted, pheadYaw, pheadPitch, f5, pIsRender);
-	}    public void superRender(ModchuModel_IEntityCaps entityCaps, float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5) {
-		setRotationAngles(f, f1, ticksExisted, pheadYaw, pheadPitch, f5, entityCaps);		if (customModel != null) {
-			mainFrame.render(f5);
-			//Modchu_Debug.mDebug("superRender mainFrame.render");
-		} else {
-			Modchu_Debug.mDebug("superRender customModel == null !!");
-		}
-	}	@Override
+	}    public void superRender(ModchuModel_IEntityCaps entityCaps, float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5, boolean pIsRender) {		super.render(entityCaps, f, f1, ticksExisted, pheadYaw, pheadPitch, f5, pIsRender);	}	@Override	public void modelRender(ModchuModel_IEntityCaps entityCaps, float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5, boolean pIsRender) {		customModel.modelRender(entityCaps, f, f1, ticksExisted, pheadYaw, pheadPitch, f5, pIsRender);	}    public void superModelRender(ModchuModel_IEntityCaps entityCaps, float f, float f1, float ticksExisted, float pheadYaw, float pheadPitch, float f5, boolean pIsRender) {
+		super.modelRender(entityCaps, f, f1, ticksExisted, pheadYaw, pheadPitch, f5, pIsRender);	}	@Override
 	public void setLivingAnimations(ModchuModel_IEntityCaps entityCaps, float f, float f1, float renderPartialTicks) {
 		customModel.setLivingAnimations(entityCaps, f, f1, renderPartialTicks);
 	}	public void superSetLivingAnimations(ModchuModel_IEntityCaps entityCaps, float f, float f1, float renderPartialTicks) {		super.setLivingAnimations(entityCaps, f, f1, renderPartialTicks);	}	@Override	public void setLivingAnimations(Object entityLivingBase, float par2, float par3, float par4) {		super.setLivingAnimations(entityLivingBase, par2, par3, par4);	}	@Override
@@ -270,10 +264,10 @@ package modchu.model.multimodel.base;import java.util.HashMap;import java.uti
 	}	public void superRenderFirstPersonHand(ModchuModel_IEntityCaps entityCaps, float f, int i) {
 		super.renderFirstPersonHand(entityCaps, f, i);
 	}	@Override
-	public void setRotationAnglesfirstPerson(float f, float f1, float f2, float f3, float f4, float f5, ModchuModel_IEntityCaps entityCaps) {
-		if (customModel != null) customModel.setRotationAnglesfirstPerson(f, f1, f2, f3, f4, f5, entityCaps);
-	}	public void superSetRotationAnglesfirstPerson(float f, float f1, float f2, float f3, float f4, float f5, ModchuModel_IEntityCaps entityCaps) {
-		super.setRotationAnglesfirstPerson(f, f1, f2, f3, f4, f5, entityCaps);
+	public void setRotationAnglesfirstPerson(float f, float f1, float f2, float f3, float f4, float f5, ModchuModel_IEntityCaps entityCaps, int renderArmIndex) {
+		if (customModel != null) customModel.setRotationAnglesfirstPerson(f, f1, f2, f3, f4, f5, entityCaps, renderArmIndex);
+	}	public void superSetRotationAnglesfirstPerson(float f, float f1, float f2, float f3, float f4, float f5, ModchuModel_IEntityCaps entityCaps, int dominantArm) {
+		super.setRotationAnglesfirstPerson(f, f1, f2, f3, f4, f5, entityCaps, dominantArm);
 	}	@Override
 	public int showArmorParts(ModchuModel_IEntityCaps entityCaps, int i, int i2) {
 		int i1 = -1;

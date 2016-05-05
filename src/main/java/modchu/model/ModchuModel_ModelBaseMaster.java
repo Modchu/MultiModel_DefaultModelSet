@@ -1,7 +1,11 @@
 package modchu.model;
 
+import modchu.lib.Modchu_AS;
+import modchu.lib.Modchu_CastHelper;
 import modchu.lib.Modchu_IEntityCapsBase;
+import modchu.lib.Modchu_Main;
 import modchu.lib.Modchu_ModelBaseMaster;
+import modchu.lib.Modchu_Reflect;
 
 import org.lwjgl.opengl.GL11;
 
@@ -239,4 +243,69 @@ public abstract class ModchuModel_ModelBaseMaster extends Modchu_ModelBaseMaster
 	private ModchuModel_IEntityCaps getModchuModel_ModelDataBase(Object entityLivingBase) {
 		return (ModchuModel_IEntityCaps) (entityLivingBase instanceof ModchuModel_ModelDataBase ? entityLivingBase : ModchuModel_ModelDataMaster.instance.getPlayerData(entityLivingBase));
 	}
+
+	public boolean isTicksElytraFlying(ModchuModel_IEntityCaps entityCaps) {
+		int version = Modchu_Main.getMinecraftVersion();
+		if (version < 190) return false;
+		Object entity = entityCaps.getCapsValue(entityCaps.caps_Entity);
+		return Modchu_Reflect.loadClass("EntityLivingBase").isInstance(entity)
+				&& Modchu_AS.getInt("EntityLivingBase", "getTicksElytraFlying", entity) > 4;
+	}
+
+	public float getTicksElytraFlyingCorrection(ModchuModel_IEntityCaps entityCaps) {
+		return getTicksElytraFlyingCorrection(entityCaps, isTicksElytraFlying(entityCaps));
+	}
+
+	public float getTicksElytraFlyingCorrection(ModchuModel_IEntityCaps entityCaps, boolean isTicksElytraFlying) {
+		float f = 1.0F;
+		int version = Modchu_Main.getMinecraftVersion();
+		if (version < 190
+				| !isTicksElytraFlying) return f;
+		Object entity = entityCaps.getCapsValue(entityCaps.caps_Entity);
+		double motionX = Modchu_AS.getDouble(Modchu_AS.entityMotionX, entity);
+		double motionY = Modchu_AS.getDouble(Modchu_AS.entityMotionY, entity);
+		double motionZ = Modchu_AS.getDouble(Modchu_AS.entityMotionZ, entity);
+		f = (float)(motionX * motionX + motionY * motionY + motionZ * motionZ);
+		f = f / 0.2F;
+		f = f * f * f;
+		if (f < 1.0F) f = 1.0F;
+		return f;
+	}
+
+	public boolean isDominantArmRight(ModchuModel_IEntityCaps entityCaps) {
+		Object entity = entityCaps.getCapsValue(entityCaps.caps_Entity);
+		int version = Modchu_Main.getMinecraftVersion();
+		return (version > 189
+				&& Modchu_AS.getEnum("EntityLivingBase", "getPrimaryHand", entity) == Modchu_AS.getEnum("EnumHandSide", "RIGHT"))
+				| (version < 190
+				&& dominantArm == 0);
+	}
+
+	public boolean isDominantArmLeft(ModchuModel_IEntityCaps entityCaps) {
+		Object entity = entityCaps.getCapsValue(entityCaps.caps_Entity);
+		int version = Modchu_Main.getMinecraftVersion();
+		return (version > 189
+				&& Modchu_AS.getEnum("EntityLivingBase", "getPrimaryHand", entity) == Modchu_AS.getEnum("EnumHandSide", "LEFT"))
+				| (version < 190
+				&& dominantArm == 1);
+	}
+
+	public int isFirstPersonCheckItem(ModchuModel_IEntityCaps entityCaps, int dominantArm) {
+		Object[] itemStacks = Modchu_CastHelper.ObjectArray(entityCaps.getCapsValue(entityCaps.caps_Items));
+		int i1 = isDominantArmRight(entityCaps) ? 0 : 1;
+		if (itemStacks != null) {
+			if (itemStacks.length > i1
+				&& itemStacks[i1] != null) {
+				//利き手に所持
+				return 1;
+			}
+			if (itemStacks.length > (1 - i1)
+				&& itemStacks[1 - i1] != null) {
+				//利き手じゃない方に所持
+				return 2;
+			}
+		}
+		return 0;
+	}
+
 }

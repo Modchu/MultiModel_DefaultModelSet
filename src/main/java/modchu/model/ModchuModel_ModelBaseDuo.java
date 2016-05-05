@@ -2,8 +2,10 @@ package modchu.model;
 
 import java.util.HashMap;
 
+import modchu.lib.Modchu_AS;
 import modchu.lib.Modchu_CastHelper;
 import modchu.lib.Modchu_Debug;
+import modchu.lib.Modchu_GlStateManager;
 import modchu.lib.Modchu_IEntityCapsBase;
 import modchu.lib.Modchu_IModelCapsLink;
 import modchu.lib.Modchu_Main;
@@ -27,6 +29,8 @@ public class ModchuModel_ModelBaseDuo extends ModchuModel_ModelBaseNihil impleme
 
 	public float[] textureLightColor;
 
+	public int shouldRenderPass;
+
 	public ModchuModel_ModelBaseDuo(HashMap<String, Object> map) {
 		super(map);
 		renderParts = 0;
@@ -46,6 +50,7 @@ public class ModchuModel_ModelBaseDuo extends ModchuModel_ModelBaseNihil impleme
 			modelOuter.setLivingAnimations(entityCaps, par2, par3, par4);
 		}
 		isAlphablend = true;
+		renderCount = 0;
 	}
 
 	@Override
@@ -61,9 +66,13 @@ public class ModchuModel_ModelBaseDuo extends ModchuModel_ModelBaseNihil impleme
 		Object[] textureOuter = entityCaps.textures[2];
 		Object[] textureInnerLight = entityCaps.textures[3];
 		Object[] textureOuterLight = entityCaps.textures[4];
+		Object[] textureInnerOverlay = entityCaps.textures[5];
+		Object[] textureOuterOverlay = entityCaps.textures[6];
 		renderBefore(entity, par2, par3, par4, par5, par6, par7, entityCaps, isRendering);
+		//Modchu_Debug.mDebug("ModchuModel_ModelBaseDuoMaster render renderCount="+renderCount);
 		//Modchu_Debug.mDebug1("ModchuModel_ModelBaseDuoMaster render entityCaps="+entityCaps+" isAlphablend="+isAlphablend);
-		if (isAlphablend) {
+		if (isAlphablend
+				&& renderCount == 0) {
 			if (isModelAlphablend) {
 				GL11.glAlphaFunc(GL11.GL_GREATER, 0.0f);
 				GL11.glEnable(GL11.GL_ALPHA_TEST);
@@ -74,12 +83,19 @@ public class ModchuModel_ModelBaseDuo extends ModchuModel_ModelBaseNihil impleme
 			}
 		}
 		//Modchu_Debug.mDebug1("ModchuModel_ModelBaseDuoMaster render modelInner="+modelInner);
+		Object itemStack = getArmorItemStack(entity, renderParts);
+		//Modchu_Debug.mDebug("ModchuModel_ModelBaseDuoMaster render shouldRenderPass="+shouldRenderPass);
 		if (modelInner != null) {
 			//Modchu_Debug.mDebug1("ModchuModel_ModelBaseDuoMaster render modelInner entityCaps="+entityCaps);
 			if (textureInner != null) {
-				if (textureInner[renderParts] != null) {
+				if ((renderCount == 0
+						| (shouldRenderPass & 16) == 16)
+						&& textureInner[renderParts] != null) setTexture(textureInner[renderParts]);
+				if ((renderCount == 0
+						&& textureInner[renderParts] != null)
+						//| renderCount != 0
+						) {
 					// 通常パーツ
-					setTexture(textureInner[renderParts]);
 					//Modchu_Debug.mDebug1("ModchuModel_ModelBaseDuoMaster render modelInner isRendering="+isRendering+" textureInner[renderParts]="+textureInner[renderParts]);
 					render(modelInner, entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 				}
@@ -87,6 +103,16 @@ public class ModchuModel_ModelBaseDuo extends ModchuModel_ModelBaseNihil impleme
 				// ほぼエンチャントエフェクト用
 				render(modelInner, entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 			}
+/*
+			if (itemStack != null
+					&& Modchu_AS.getBoolean("ItemStack", "hasEffect", itemStack)) {
+				boolean isRendering = true;
+				//boolean isRendering = textureInnerOverlay[renderParts] != null;
+				//if (isRendering) setTexture(textureInnerOverlay[renderParts]);
+				//Modchu_Debug.mDebug("ModchuModel_ModelBaseDuo textureInnerOverlay["+renderParts+"]="+textureInnerOverlay[renderParts]);
+				renderEnchantedGlint(entityCaps, entity, modelInner, par2, par3, par4, par5, par6, par7, isRendering);
+			}
+*/
 			if (textureInnerLight != null && renderCount == 0) {
 				// 発光テクスチャ表示処理
 				if (textureInnerLight[renderParts] != null) {
@@ -119,14 +145,29 @@ public class ModchuModel_ModelBaseDuo extends ModchuModel_ModelBaseNihil impleme
 		if (modelOuter != null) {
 			if (textureOuter != null) {
 				// 通常パーツ
-				if (textureOuter[renderParts] != null) {
-					setTexture(textureOuter[renderParts]);
+				if ((renderCount == 0
+						| (shouldRenderPass & 16) == 16)
+						&& textureOuter[renderParts] != null) setTexture(textureOuter[renderParts]);
+				if ((renderCount == 0
+						&& textureOuter[renderParts] != null)
+						| renderCount != 0) {
+					if (renderCount == 0) setTexture(textureOuter[renderParts]);
 					render(modelOuter, entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 				}
 			} else {
 				// ほぼエンチャントエフェクト用
 				render(modelOuter, entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 			}
+/*
+			if (itemStack != null
+					&& Modchu_AS.getBoolean("ItemStack", "hasEffect", itemStack)) {
+				boolean isRendering = true;
+				//boolean isRendering = textureOuterOverlay[renderParts] != null;
+				//if (isRendering) setTexture(textureOuterOverlay[renderParts]);
+				//Modchu_Debug.mDebug("ModchuModel_ModelBaseDuo textureOuterOverlay["+renderParts+"]="+textureOuterOverlay[renderParts]);
+				renderEnchantedGlint(entityCaps, entity, modelOuter, par2, par3, par4, par5, par6, par7, isRendering);
+			}
+*/
 			if (textureOuterLight != null && renderCount == 0) {
 				// 発光テクスチャ表示処理
 				if (textureOuterLight[renderParts] != null) {
@@ -160,6 +201,52 @@ public class ModchuModel_ModelBaseDuo extends ModchuModel_ModelBaseNihil impleme
 		renderAfter(entity, par2, par3, par4, par5, par6, par7, entityCaps, isRendering);
 		GL11.glPopAttrib();
 		GL11.glPopMatrix();
+	}
+
+	protected void renderEnchantedGlint(ModchuModel_ModelDataBase modelData, Object entityLivingBase, MultiModelBaseBiped multiModelBaseBiped, float f, float f1, float f3, float f4, float f5, float f6, boolean isRendering) {
+		float renderPartialTicks = Modchu_AS.getFloat("Timer", "renderPartialTicks", Modchu_AS.get("Minecraft", "timer", Modchu_AS.get(Modchu_AS.minecraftGetMinecraft)));
+		float f7 = (float) Modchu_AS.getInt(Modchu_AS.entityTicksExisted , entityLivingBase) + renderPartialTicks;
+		int version = Modchu_Main.getMinecraftVersion();
+		Object textureGlint = Modchu_AS.get("RendererLivingEntity", "RES_ITEM_GLINT");
+		if (textureGlint != null) setTexture(textureGlint);
+
+		Modchu_GlStateManager.enableBlend();
+		Modchu_GlStateManager.depthFunc(514);
+		Modchu_GlStateManager.depthMask(false);
+
+		float f8 = 0.5F;
+		Modchu_GlStateManager.color(f8, f8, f8, 1.0F);
+
+		for (int i2 = 0; i2 < 2; ++i2) {
+			Modchu_GlStateManager.disableLighting();
+			Modchu_GlStateManager.blendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
+			float f9 = 0.76F;
+			Modchu_GlStateManager.color(0.5F * f9, 0.25F * f9, 0.8F * f9, 1.0F);
+			Modchu_GlStateManager.matrixMode(5890);
+			Modchu_GlStateManager.loadIdentity();
+
+			float f10 = 0.33333334F;
+			Modchu_GlStateManager.scale(f10, f10, f10);
+/*
+			Modchu_GlStateManager.rotate(30.0F - (float) i2 * 60.0F, 0.0F, 0.0F, 1.0F);
+			Modchu_GlStateManager.translate(0.0F, f7 * (0.001F + (float) i2 * 0.003F) * 20.0F, 0.0F);
+*/
+			Modchu_GlStateManager.matrixMode(5888);
+			multiModelBaseBiped.render(modelData, f, f1, f3, f4, f5, f6, isRendering);
+		}
+
+		Modchu_GlStateManager.matrixMode(5890);
+		Modchu_GlStateManager.loadIdentity();
+		Modchu_GlStateManager.matrixMode(5888);
+		Modchu_GlStateManager.enableLighting();
+		Modchu_GlStateManager.depthMask(true);
+		Modchu_GlStateManager.depthFunc(515);
+		Modchu_GlStateManager.disableBlend();
+	}
+
+	public Object getArmorItemStack(Object entity, int i) {
+		return Modchu_Reflect.loadClass("EntityPlayer").isInstance(entity) ? Modchu_AS.get(Modchu_AS.entityPlayerInventoryPlayerArmorItemInSlot, entity, i) :
+			Modchu_Reflect.loadClass("EntityLiving").isInstance(entity) ? Modchu_AS.get(Modchu_AS.entityLivingGetCurrentArmor, entity, i) : null;
 	}
 
 	private void render(Object model, Object entityCaps, float par2, float par3, float par4, float par5, float par6, float par7, boolean isRendering) {

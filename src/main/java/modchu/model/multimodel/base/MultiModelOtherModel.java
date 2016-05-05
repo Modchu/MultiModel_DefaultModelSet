@@ -223,7 +223,7 @@ public class MultiModelOtherModel extends MultiModelBaseBiped {
 	}
 */
 	@Override
-	public void setRotationAnglesfirstPerson(float f, float f1, float f2, float f3, float f4, float f5, ModchuModel_IEntityCaps entityCaps) {
+	public void setRotationAnglesfirstPerson(float f, float f1, float f2, float f3, float f4, float f5, ModchuModel_IEntityCaps entityCaps, int renderArmIndex) {
 	}
 
 	@Override

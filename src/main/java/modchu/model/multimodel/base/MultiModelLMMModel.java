@@ -1,5 +1,6 @@
 package modchu.model.multimodel.base;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import modchu.lib.Modchu_AS;
@@ -13,6 +14,7 @@ import modchu.lib.Modchu_Main;
 import modchu.lib.Modchu_Reflect;
 import modchu.model.ModchuModel_IEntityCaps;
 import modchu.model.ModchuModel_ModelRenderer;
+import modchu.model.ModchuModel_ModelRendererBase;
 
 public class MultiModelLMMModel extends MultiModelBaseBiped {
 	public Object model;
@@ -58,6 +60,7 @@ public class MultiModelLMMModel extends MultiModelBaseBiped {
 	@Override
 	public void initModel(float psize, float pyoffset, Object... o) {
 		mainFrame = new ModchuModel_ModelRenderer(this, "mainFrame");
+		afterInit(psize, pyoffset);
 	}
 
 	@Override
@@ -66,10 +69,24 @@ public class MultiModelLMMModel extends MultiModelBaseBiped {
 
 	@Override
 	public void afterInit(float f, float f1) {
+		armsinit(f, f1);
 	}
 
 	@Override
 	public void armsinit(float f, float f1) {
+		if (!Modchu_LMMManager.isLMR) return;
+		// 手持ち
+		Arms[0] = new ModchuModel_ModelRenderer(this, "Arms0");
+		Arms[0].setRotationPoint(0.0F, 0.0F, 0.0F);
+		Arms[1] = new ModchuModel_ModelRenderer(this, "Arms1");
+		Arms[1].setRotationPoint(0.0F, 0.0F, 0.0F);
+		int version = Modchu_Main.getMinecraftVersion();
+		if (version < 190) Arms[1].isInvertX = true;
+		HeadMount = new ModchuModel_ModelRenderer(this, "HeadMount");
+		HeadMount.setRotationPoint(0.0F, 0.0F, 0.0F);
+		HeadTop = new ModchuModel_ModelRenderer(this, "HeadTop");
+		HeadTop.setRotationPoint(0.0F, 0.0F, 0.0F);
+		Modchu_Debug.mDebug("MultiModelLMMModel armsinit end.");
 	}
 
 	@Override
@@ -123,6 +140,9 @@ public class MultiModelLMMModel extends MultiModelBaseBiped {
 	public void setRotationAnglesLM(float f, float f1, float f2, float pheadYaw, float pheadPitch, float f5, ModchuModel_IEntityCaps entityCaps) {
 		Object dummyEntityCaps = getDummyEntityCaps(entityCaps);
 		if (dummyEntityCaps != null); else return;
+		Field fi = Modchu_Reflect.getField(model.getClass(), "heldItem");
+		if (fi != null) Modchu_Reflect.setFieldObject(fi, model, heldItem);
+		setDefaultPause(f, f1, f2, pheadYaw, pheadPitch, f5, entityCaps);
 		f *= 0.1F;
 		f1 *= 0.1F;
 		//f5 *= 0.4F;
@@ -138,6 +158,61 @@ public class MultiModelLMMModel extends MultiModelBaseBiped {
 			}
 		} catch (Exception e) {
 			Modchu_Debug.lDebug1("MultiModelLMMModel setRotationAnglesLM Exception !!", 2, e);
+		}
+		setRotationAnglesLMR(f, f1, f2, pheadYaw, pheadPitch, f5, entityCaps);
+	}
+
+	private void setRotationAnglesLMR(float f, float f1, float f2, float pheadYaw, float pheadPitch, float f5, ModchuModel_IEntityCaps entityCaps) {
+		//Modchu_Debug.mDebug("MultiModelLMMModel setRotationAnglesLMR");
+		if (!Modchu_LMMManager.isLMR) return;
+		//Modchu_Debug.mdDebug("heldItem[0]="+heldItem[0]);
+		//Modchu_Debug.mdDebug("heldItem[1]="+heldItem[1], 1);
+		Object[] itemstacks = Modchu_CastHelper.ObjectArray(entityCaps.getCapsValue(entityCaps.caps_Items));
+		if (heldItem[1] != 0
+				&& !Modchu_EntityCapsHelper.getCapsValueBoolean(this, entityCaps, caps_oldwalking)) {
+			if (itemstacks != null
+					&& itemstacks[1] != null) {
+				Object item = Modchu_AS.get(Modchu_AS.itemStackGetItem, itemstacks[1]);
+				if (item.equals(Modchu_AS.get(Modchu_AS.getItem, "shield"))) Arms[1].setRotationPoint(0.0F, -0.25F, 0.0F);
+			}
+			if (heldItem[1] == 3) {
+				if (!Modchu_EntityCapsHelper.getCapsValueBoolean(this, entityCaps, caps_aimedBow)) Arms[1].setRotateAngle(-0.36F, -0.64F, 2.95F);
+				//Arms[1].setRotateAngle(Modchu_Debug.debaf1, Modchu_Debug.debaf2, Modchu_Debug.debaf3);
+				//Modchu_Debug.mdDebug("setRotationAnglesLMR "+Modchu_Debug.debaf1+" "+Modchu_Debug.debaf2+" "+Modchu_Debug.debaf3+" ");
+			}
+		}
+		if (heldItem[0] != 0
+				&& !Modchu_EntityCapsHelper.getCapsValueBoolean(this, entityCaps, caps_oldwalking)) {
+			if (heldItem[0] == 3) {
+				Arms[0].setRotateAngle(-0.32F, -0.27F, 5.24F);
+				//Arms[0].setRotateAngle(Modchu_Debug.debaf1, Modchu_Debug.debaf2, Modchu_Debug.debaf3);
+				//Modchu_Debug.mdDebug("setRotationAnglesLMR "+Modchu_Debug.debaf1+" "+Modchu_Debug.debaf2+" "+Modchu_Debug.debaf3+" ");
+			}
+		}
+		if (itemstacks != null
+				&& itemstacks[1] != null) {
+			Object item = Modchu_AS.get(Modchu_AS.itemStackGetItem, itemstacks[1]);
+			if (item.equals(Modchu_AS.get(Modchu_AS.getItem, "bow"))) {
+				//Modchu_Debug.mDebug("MultiModelLMMModel setRotationAnglesLMR bow");
+				Arms[1].rotateAngleX = -3.14F;
+			}
+		}
+		//Arms[0].setRotateAngle(0.0F, 0.0F, 0.0F);
+		//Arms[1].setRotateAngle(0.0F, 0.0F, 0.0F);
+		//Arms[0].setRotateAngle(Modchu_Debug.debaf1, Modchu_Debug.debaf2, Modchu_Debug.debaf3);
+		//Modchu_Debug.debaf1 = 0.0F;
+		//Modchu_Debug.debaf2 = 0.0F;
+		//Modchu_Debug.debaf3 = 0.0F;
+	}
+
+	@Override
+	public void setDefaultPause(float par1, float par2, float pTicksExisted, float pHeadYaw, float pHeadPitch, float par6, ModchuModel_IEntityCaps entityCaps) {
+		int version = Modchu_Main.getMinecraftVersion();
+		if (version > 189) {
+			Arms[0].setRotationPoint(0.0F, 0.0F, 0.0F);
+			Arms[1].setRotationPoint(0.0F, 0.0F, 0.0F);
+			Arms[0].setRotateAngle(0.0F, 0.0F, 0.0F);
+			Arms[1].setRotateAngle(0.0F, 0.0F, 0.0F);
 		}
 	}
 
@@ -157,9 +232,33 @@ public class MultiModelLMMModel extends MultiModelBaseBiped {
 	public void renderItemsLM(ModchuModel_IEntityCaps entityCaps) {
 		// 手持ちの表示
 		Modchu_GlStateManager.pushMatrix();
-		Object dummyEntityCaps = getDummyEntityCaps(entityCaps);
-		if (dummyEntityCaps != null); else return;
-		if (Modchu_Reflect.getFieldObject(model.getClass(), "render", model) != null) Modchu_Reflect.invokeMethod(model.getClass(), "renderItems", new Class[]{ iDummyEntityCapsClass }, model, new Object[]{ dummyEntityCaps });
+		if (Modchu_LMMManager.isLMR) {
+			Object o = Modchu_Reflect.getFieldObject(model.getClass(), "Arms", model);
+			Object[] arms = Modchu_CastHelper.ObjectArray(o);
+			if (arms != null) {
+				// R
+				Modchu_Reflect.invokeMethod(arms[0].getClass(), "loadMatrix", arms[0]);
+				Modchu_GlStateManager.translate(0F, 0.05F, -0.05F);
+				Modchu_GlStateManager.translate(Arms[0].rotationPointX, Arms[0].rotationPointY, Arms[0].rotationPointZ);
+				Modchu_GlStateManager.rotate(Arms[0].rotateAngleX * ModchuModel_ModelRendererBase.radFactor, 1.0F, 0.0F, 0.0F);
+				Modchu_GlStateManager.rotate(Arms[0].rotateAngleY * ModchuModel_ModelRendererBase.radFactor, 0.0F, 1.0F, 0.0F);
+				Modchu_GlStateManager.rotate(Arms[0].rotateAngleZ * ModchuModel_ModelRendererBase.radFactor, 0.0F, 0.0F, 1.0F);
+				Arms[0].renderItems("Hand", this, entityCaps, false, 0);
+				// L
+				Modchu_Reflect.invokeMethod(arms[1].getClass(), "loadMatrix", arms[1]);
+				Modchu_GlStateManager.translate(0F, 0.05F, -0.05F);
+				Modchu_GlStateManager.translate(Arms[1].rotationPointX, Arms[1].rotationPointY, Arms[1].rotationPointZ);
+				Modchu_GlStateManager.rotate(180F, 0.0F, 0.0F, 1.0F);
+				Modchu_GlStateManager.rotate(Arms[1].rotateAngleX * ModchuModel_ModelRendererBase.radFactor, 1.0F, 0.0F, 0.0F);
+				Modchu_GlStateManager.rotate(Arms[1].rotateAngleY * ModchuModel_ModelRendererBase.radFactor, 0.0F, 1.0F, 0.0F);
+				Modchu_GlStateManager.rotate(Arms[1].rotateAngleZ * ModchuModel_ModelRendererBase.radFactor, 0.0F, 0.0F, 1.0F);
+				Arms[1].renderItems("Hand", this, entityCaps, false, 1);
+			}
+		} else {
+			Object dummyEntityCaps = getDummyEntityCaps(entityCaps);
+			if (dummyEntityCaps != null); else return;
+			if (Modchu_Reflect.getFieldObject(model.getClass(), "render", model) != null) Modchu_Reflect.invokeMethod(model.getClass(), "renderItems", new Class[]{ iDummyEntityCapsClass }, model, new Object[]{ dummyEntityCaps });
+		}
 		renderItemsHead(entityCaps);
 		renderItemsArmorHead(entityCaps);
 		Modchu_GlStateManager.popMatrix();
@@ -180,7 +279,7 @@ public class MultiModelLMMModel extends MultiModelBaseBiped {
 	}
 
 	@Override
-	public void setRotationAnglesfirstPerson(float f, float f1, float f2, float f3, float f4, float f5, ModchuModel_IEntityCaps entityCaps) {
+	public void setRotationAnglesfirstPerson(float f, float f1, float f2, float f3, float f4, float f5, ModchuModel_IEntityCaps entityCaps, int renderArmIndex) {
 	}
 
 	@Override
@@ -278,7 +377,7 @@ public class MultiModelLMMModel extends MultiModelBaseBiped {
 
 	@Override
 	public boolean isItemHolder(ModchuModel_IEntityCaps entityCaps) {
-		return false;
+		return true;
 	}
 
 	@Override

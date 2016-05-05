@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL11;
 
 import modchu.lib.Modchu_AS;
 import modchu.lib.Modchu_CastHelper;
+import modchu.lib.Modchu_Debug;
 import modchu.lib.Modchu_EntityCapsHelper;
 import modchu.lib.Modchu_GlStateManager;
 import modchu.lib.Modchu_IEntityCapsBase;
@@ -172,13 +173,16 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		Object[] enumActions = Modchu_CastHelper.ObjectArray(Modchu_EntityCapsHelper.getCapsValue(entityCaps, entityCaps.caps_Actions));
 		Object entity = entityCaps.getCapsValue(entityCaps.caps_Entity);
 
+		//Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems() pIndex="+pIndex);
+		//Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems() itemstacks="+itemstacks);
+		//Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems() itemstacks["+pIndex+"]="+(itemstacks.length > pIndex ? itemstacks[pIndex] : null));
 		renderItems(s, entity, pRealBlock, enumActions != null
 				&& enumActions.length > pIndex ? enumActions[pIndex] : null, itemstacks != null
-						&& itemstacks.length > pIndex ? itemstacks[pIndex] : null);
+						&& itemstacks.length > pIndex ? itemstacks[pIndex] : null, pIndex);
 		return true;
 	}
 
-	public void renderItems(String s, Object entityLiving, boolean pRealBlock, Object enumAction, Object itemStack1, float scale, int addSupport, Enum type) {
+	public void renderItems(String s, Object entityLiving, boolean pRealBlock, Object enumAction, Object itemStack1, float scale, int pIndex, int addSupport, Enum type) {
 		if (entityLiving != null); else return;
 		itemStack = itemStack1;
 		switch (addSupport) {
@@ -188,20 +192,20 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 			renderDecoBlock(entityLiving, pRealBlock, enumAction, scale, addSupport);
 			return;
 		}
-		renderItems(s, entityLiving, pRealBlock, enumAction, itemStack1, scale, type);
+		renderItems(s, entityLiving, pRealBlock, enumAction, itemStack1, scale, pIndex, type);
 	}
 
-	public void renderItems(String s, Object entityLiving, boolean pRealBlock, Object enumAction, Object itemStack1) {
+	public void renderItems(String s, Object entityLiving, boolean pRealBlock, Object enumAction, Object itemStack1, int pIndex) {
 		if (entityLiving != null); else return;
 		itemStack = itemStack1;
-		renderItems(s, entityLiving, pRealBlock, enumAction, itemStack1, 1.0F);
+		renderItems(s, entityLiving, pRealBlock, enumAction, itemStack1, 1.0F, pIndex);
 	}
 
-	public void renderItems(String s, Object entityLiving, boolean pRealBlock, Object enumAction, Object itemstack, float scale) {
-		renderItems(s, entityLiving, pRealBlock, enumAction, itemstack, scale, Modchu_Main.getMinecraftVersion() > 179 ? Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeTHIRD_PERSON) : null);
+	public void renderItems(String s, Object entityLiving, boolean pRealBlock, Object enumAction, Object itemstack, float scale, int pIndex) {
+		renderItems(s, entityLiving, pRealBlock, enumAction, itemstack, scale, pIndex, Modchu_Main.getMinecraftVersion() > 179 ? Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeTHIRD_PERSON) : null);
 	}
 
-	public void renderItems(String s, Object entityLiving, boolean pRealBlock, Object enumAction, Object itemstack, float scale, Enum type) {
+	public void renderItems(String s, Object entityLiving, boolean pRealBlock, Object enumAction, Object itemstack, float scale, int pIndex, Enum type) {
 		String eventName = "modchuModel_ModelRendererRenderItems".concat(s);
 		boolean isCanceled = false;
 		if (ModchuModel_Main.modchuLibEvent(eventName)) {
@@ -228,12 +232,51 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		//Modchu_Debug.mDebug("renderItems itemstack="+itemstack);
 		int version = Modchu_Main.getMinecraftVersion();
 		if (version < 180) {
-			oldRenderItems(entityLiving, pRealBlock, enumAction, itemstack, scale);
+			oldRenderItems_mc179(entityLiving, pRealBlock, enumAction, itemstack, scale);
 			return;
 		}
-		Object render = Modchu_Main.getRender(entityLiving);
-		if (render != null); else return;
+		Enum enum1 = Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeHEAD);
+		if (version < 190
+				| enum1 == type) {
+			oldRenderItems_mc189(entityLiving, pRealBlock, enumAction, itemstack, scale, type);
+			return;
+		}
+		Modchu_GlStateManager.pushMatrix();
+		//Modchu_GlStateManager.translate(0.05F, -0.5F, 0.0F);
+		Modchu_GlStateManager.translate(-0.1F, -0.5F, 0.05F);
+		Modchu_GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
+		Modchu_GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+
+		Enum enumactionBlock = Modchu_AS.getEnum(Modchu_AS.enumActionBlock);
+		//Modchu_Debug.mDebug("enumAction="+enumAction);
+		if (enumAction == enumactionBlock) {
+
+			Modchu_GlStateManager.rotate(4.2F, 1.0F, 0.0F, 0.0F);
+			Modchu_GlStateManager.rotate(-12.4F, 0.0F, 1.0F, 0.0F);
+			Modchu_GlStateManager.rotate(-18F, 0.0F, 0.0F, 1.0F);
+
+/*
+			Modchu_GlStateManager.rotate(Modchu_Debug.debaf1, 1.0F, 0.0F, 0.0F);
+			Modchu_GlStateManager.rotate(Modchu_Debug.debaf2, 0.0F, 1.0F, 0.0F);
+			Modchu_GlStateManager.rotate(Modchu_Debug.debaf3, 0.0F, 0.0F, 1.0F);
+			Modchu_Debug.mdDebug(""+Modchu_Debug.debaf1+" "+Modchu_Debug.debaf2+" "+Modchu_Debug.debaf3+" ");
+*/
+			Modchu_GlStateManager.translate(-0.15F, 0.0F, 0.08F);
+			//Modchu_GlStateManager.translate(Modchu_Debug.debaf1, Modchu_Debug.debaf2, Modchu_Debug.debaf3);
+			//Modchu_Debug.mdDebug(""+Modchu_Debug.debaf1+" "+Modchu_Debug.debaf2+" "+Modchu_Debug.debaf3+" ");
+		}
+		boolean flag = pIndex == 1;
+		Modchu_GlStateManager.translate(flag ? -0.0625F : -0.1125F, 0.125F, -0.625F);
+		type = flag ? Modchu_AS.getEnum("net.minecraft.client.renderer.block.model.ItemCameraTransforms$TransformType", "THIRD_PERSON_LEFT_HAND") : Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeTHIRD_PERSON);
+		//Modchu_Debug.mDebug("type="+type);
+		Object itemRenderer = Modchu_AS.get("Minecraft", "getItemRenderer", Modchu_AS.get(Modchu_AS.minecraftGetMinecraft));
+		Modchu_AS.set("ItemRenderer", "renderItemSide", new Class[]{ Modchu_Reflect.loadClass("EntityLivingBase"), Modchu_Reflect.loadClass("ItemStack"), Modchu_Reflect.loadClass("net.minecraft.client.renderer.block.model.ItemCameraTransforms$TransformType"), boolean.class }, itemRenderer, new Object[]{ entityLiving, itemstack, type, flag });
+		Modchu_GlStateManager.popMatrix();
+	}
+
+	private void oldRenderItems_mc189(Object entityLiving, boolean pRealBlock, Object enumAction, Object itemstack, float scale, Enum type) {
 		// アイテムのレンダリング
+		int version = Modchu_Main.getMinecraftVersion();
 		Modchu_GlStateManager.pushMatrix();
 		Modchu_GlStateManager.enableAlpha();
 		Modchu_GlStateManager.enableBlend();
@@ -273,6 +316,8 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 				if (Modchu_AS.getBoolean(Modchu_AS.isCamouflage, block)) Modchu_GlStateManager.disableAlpha();
 				//Modchu_AS.set(Modchu_AS.renderManagerItemRendererRenderItem, entityLiving, itemstack, type);
 				//Object blockRendererDispatcher = Modchu_AS.get(Modchu_AS.minecraftGetBlockRendererDispatcher);
+				Object render = Modchu_Main.getRender(entityLiving);
+				if (render != null); else return;
 				Modchu_AS.set(Modchu_AS.renderBindTexture, render, Modchu_AS.get(Modchu_AS.textureMapLocationBlocksTexture));
 				//Modchu_RenderEngine.instance.bindTexture(Modchu_AS.get(Modchu_AS.textureMapLocationBlocksTexture));
 				//Modchu_Debug.mDebug1("renderItems textureMapLocationBlocksTexture="+Modchu_AS.get(Modchu_AS.textureMapLocationBlocksTexture));
@@ -292,8 +337,12 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 				float b = (i1 & 255) / 255.0F;
 				Modchu_GlStateManager.color(r, g, b, 1.0F);
 				//Modchu_Debug.mDebug("renderItems r="+r+" g="+g+" b="+b);
-
-				if (Modchu_Reflect.loadClass("ItemDoublePlant", -1).isInstance(item)) {
+				Class BlockDoublePlant = Modchu_Reflect.loadClass("BlockDoublePlant", -1);
+				Class ItemDoublePlant = Modchu_Reflect.loadClass("ItemDoublePlant", -1);
+				if ((BlockDoublePlant != null
+						&& BlockDoublePlant.isInstance(block))
+						| (ItemDoublePlant != null
+								&& ItemDoublePlant.isInstance(item))) {
 					scale = scale * 1.1875F * 1.3F;
 					Modchu_GlStateManager.scale(scale, scale, scale);
 					f7 = 0.625F;
@@ -365,7 +414,8 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 					}
 				}
 				Modchu_GlStateManager.scale(scale, scale, scale);
-				Modchu_AS.set(Modchu_AS.tileEntitySkullRendererRenderSkull, -0.5F, 0.0F, -0.5F, Modchu_AS.getEnum(Modchu_AS.enumFacingUP), 180.0F, Modchu_AS.get(Modchu_AS.itemStackGetMetadata, itemstack), gameprofile, -1);
+				float f = 0.0F;
+				Modchu_AS.set(Modchu_AS.tileEntitySkullRendererRenderSkull, -0.5F, 0.0F, -0.5F, Modchu_AS.getEnum(Modchu_AS.enumFacingUP), 180.0F, Modchu_AS.get(Modchu_AS.itemStackGetMetadata, itemstack), gameprofile, -1, f);
 			}
 			renderItemsEndSetting(tempTextureStateTextureName);
 			return;
@@ -465,29 +515,7 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		renderItemsEndSetting(tempTextureStateTextureName);
 	}
 
-	private void renderItemsEndSetting(int i) {
-		Modchu_GlStateManager.disableCull();
-		Modchu_GlStateManager.enableAlpha();
-		Modchu_GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		Modchu_GlStateManager.popMatrix();
-		if (Modchu_Main.getMinecraftVersion() > 179) {
-			Modchu_GlStateManager.bindTexture(i);
-		}
-	}
-
-	public void blockRender(Object block, Object iBlockState, float f, boolean b) {
-		if (Modchu_Main.getMinecraftVersion() < 180) return;
-		Object blockRendererDispatcher = Modchu_AS.get(Modchu_AS.minecraftGetBlockRendererDispatcher);
-		int i = Modchu_AS.getInt(Modchu_AS.blockGetRenderType, block);
-		if (i == 3) {
-			Object iBakedModel = Modchu_AS.get(Modchu_AS.blockRendererDispatcherGetBakedModel, blockRendererDispatcher, iBlockState, null);
-			Modchu_AS.set(Modchu_AS.blockModelRendererRenderModelBrightness, Modchu_AS.get(Modchu_AS.blockRendererDispatcherGetBlockModelRenderer, blockRendererDispatcher), iBakedModel, iBlockState, f, b);
-		} else {
-			Modchu_AS.set(Modchu_AS.blockRendererDispatcherRenderBlockBrightness, blockRendererDispatcher, iBlockState, f);
-		}
-	}
-
-	private void oldRenderItems(Object entityLiving, boolean pRealBlock, Object enumAction, Object itemstack, float scale) {
+	private void oldRenderItems_mc179(Object entityLiving, boolean pRealBlock, Object enumAction, Object itemstack, float scale) {
 		Object render = Modchu_Main.getRender(entityLiving);
 		if (render != null); else return;
 		// アイテムのレンダリング
@@ -676,6 +704,28 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		}
 		Modchu_GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		Modchu_GlStateManager.popMatrix();
+	}
+
+	private void renderItemsEndSetting(int i) {
+		Modchu_GlStateManager.disableCull();
+		Modchu_GlStateManager.enableAlpha();
+		Modchu_GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		Modchu_GlStateManager.popMatrix();
+		if (Modchu_Main.getMinecraftVersion() > 179) {
+			Modchu_GlStateManager.bindTexture(i);
+		}
+	}
+
+	public void blockRender(Object block, Object iBlockState, float f, boolean b) {
+		if (Modchu_Main.getMinecraftVersion() < 180) return;
+		Object blockRendererDispatcher = Modchu_AS.get(Modchu_AS.minecraftGetBlockRendererDispatcher);
+		int i = Modchu_AS.getInt(Modchu_AS.blockGetRenderType, block);
+		if (i == 3) {
+			Object iBakedModel = Modchu_AS.get(Modchu_AS.blockRendererDispatcherGetBakedModel, blockRendererDispatcher, iBlockState, null);
+			Modchu_AS.set(Modchu_AS.blockModelRendererRenderModelBrightness, Modchu_AS.get(Modchu_AS.blockRendererDispatcherGetBlockModelRenderer, blockRendererDispatcher), iBakedModel, iBlockState, f, b);
+		} else {
+			Modchu_AS.set(Modchu_AS.blockRendererDispatcherRenderBlockBrightness, blockRendererDispatcher, iBlockState, f);
+		}
 	}
 
 	private void renderItemsGulliver(Object entityLiving, boolean pRealBlock, Object enumAction, Object itemstack, float scale) {

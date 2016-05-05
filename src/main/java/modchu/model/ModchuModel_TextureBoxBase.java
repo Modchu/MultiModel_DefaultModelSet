@@ -271,6 +271,8 @@ public class ModchuModel_TextureBoxBase {
 		switch ((pIndex & 0xfff0)) {
 		case ModchuModel_TextureManagerBase.tx_armor1:
 		case ModchuModel_TextureManagerBase.tx_armor2:
+		case ModchuModel_TextureManagerBase.tx_armoroverlay1:
+		case ModchuModel_TextureManagerBase.tx_armoroverlay2:
 		case ModchuModel_TextureManagerBase.tx_armor1light:
 		case ModchuModel_TextureManagerBase.tx_armor2light:
 		case ModchuModel_TextureManagerBase.tx_oldarmor1:
