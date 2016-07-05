@@ -268,6 +268,7 @@ public class ModchuModel_TextureBoxBase {
 			}
 		}
 		boolean lflag = false;
+		Modchu_Debug.tDebug("ModchuModel_TextureBoxBase addTexture pIndex="+pIndex);
 		switch ((pIndex & 0xfff0)) {
 		case ModchuModel_TextureManagerBase.tx_armor1:
 		case ModchuModel_TextureManagerBase.tx_armor2:
@@ -277,9 +278,9 @@ public class ModchuModel_TextureBoxBase {
 		case ModchuModel_TextureManagerBase.tx_armor2light:
 		case ModchuModel_TextureManagerBase.tx_oldarmor1:
 		case ModchuModel_TextureManagerBase.tx_oldarmor2:
-			Modchu_Debug.tDebug("ModchuModel_TextureBoxBase addTexture pLocation="+pLocation);
+			Modchu_Debug.tDebug("ModchuModel_TextureBoxBase addTexture armor pLocation="+pLocation);
 			ls = pLocation.substring(pLocation.lastIndexOf("/") + 1, pLocation.lastIndexOf("_"));
-			Modchu_Debug.tDebug("ModchuModel_TextureBoxBase addTexture ls="+ls);
+			Modchu_Debug.tDebug("ModchuModel_TextureBoxBase addTexture armor ls="+ls);
 			Map<Integer, Object> lmap;
 			if (armors.containsKey(ls)) {
 				lmap = armors.get(ls);
@@ -292,6 +293,7 @@ public class ModchuModel_TextureBoxBase {
 
 		default:
 			textures.put(pIndex, Modchu_Main.newResourceLocation(pLocation));
+			Modchu_Debug.tDebug("ModchuModel_TextureBoxBase addTexture texture pLocation="+pLocation);
 			return true;
 		}
 		return lflag;

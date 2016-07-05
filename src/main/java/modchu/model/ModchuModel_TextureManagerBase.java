@@ -208,13 +208,23 @@ public class ModchuModel_TextureManagerBase {
 	 * テクスチャ名称の一致する物を返す。
 	 */
 	public ModchuModel_TextureBoxBase getTextureBox(String pName) {
-		//Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getTextureBox pName="+pName);
+		boolean debug = false;
+		if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getTextureBox 1 pName="+pName);
 		if (pName != null
-				&& !pName.isEmpty()); else return null;
+				&& !pName.isEmpty()); else {
+			if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getTextureBox 2 pName == null. return null.");
+			return null;
+		}
 		pName = textureNameCheck(pName);
+		if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getTextureBox 3 pName="+pName);
 		if (pName != null
-				&& !pName.isEmpty()); else return null;
-		return textures.get(pName);
+				&& !pName.isEmpty()); else {
+			if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getTextureBox 4 pName == null. return null.");
+			return null;
+		}
+		ModchuModel_TextureBoxBase modchuModel_TextureBoxBase = textures.get(pName);
+		if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getTextureBox end. return modchuModel_TextureBoxBase="+modchuModel_TextureBoxBase);
+		return modchuModel_TextureBoxBase;
 	}
 
 	/**
@@ -621,9 +631,12 @@ public class ModchuModel_TextureManagerBase {
 					if (lts == null) {
 						lts = new ModchuModel_TextureBoxBase(pn, pSearch);
 						textures.put(pn, lts);
-						Modchu_Debug.tDebug("ModchuModel_TextureManagerBase addTextureName texturePack pn="+pn);
+						Modchu_Debug.tDebug("ModchuModel_TextureManagerBase addTextureName textures.put pn="+pn);
 					}
 					lts.addTexture(lindex, fname);
+					Modchu_Debug.tDebug("ModchuModel_TextureManagerBase addTextureName 3 fname="+fname);
+					//Modchu_Debug.tDebug("ModchuModel_TextureManagerBase addTextureName 4 lts="+lts);
+					//Modchu_Debug.tDebug("ModchuModel_TextureManagerBase addTextureName 5 lts.getTextureName(0)="+lts.getTextureName(0));
 					b = true;
 				}
 			}
@@ -1728,7 +1741,11 @@ public class ModchuModel_TextureManagerBase {
 	public Object textureManagerGetTexture(String s, int i) {
 		ModchuModel_TextureBoxBase ltb = getTextureBox(s);
 		//Modchu_Debug.mDebug("textureManagerGetTextureName s="+s+" i="+i+" ltb="+ltb);
-		if (ltb != null) return getTextureBoxTextureName(ltb, i);
+		if (ltb != null) {
+			Object o = getTextureBoxTextureName(ltb, i);
+			//Modchu_Debug.mDebug("textureManagerGetTextureName return. o="+o);
+			return o;
+		}
 		Modchu_Debug.Debug1("textureManagerGetTextureName null !! default change. s="+textureNameCheck(s)+" i="+i);
 		ltb = getTextureBox(textureNameCheck(null));
 		if (ltb != null) return getTextureBoxTextureName(ltb, i);
@@ -2010,6 +2027,7 @@ public class ModchuModel_TextureManagerBase {
 	}
 
 	public Object getTextureBoxTextureName(ModchuModel_TextureBoxBase ltb, int i) {
+		//Modchu_Debug.mDebug("getTextureBoxTextureName i="+i+" ltb="+ltb);
 		return ltb != null
 				&& ltb instanceof ModchuModel_TextureBoxBase ? ((ModchuModel_TextureBoxBase) ltb).getTextureName(i) : null;
 	}

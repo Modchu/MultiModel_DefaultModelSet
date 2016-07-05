@@ -236,6 +236,8 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 			return;
 		}
 		Enum enum1 = Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeHEAD);
+		//Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems type="+type);
+		//Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems enum1="+enum1);
 		if (version < 190
 				| enum1 == type) {
 			oldRenderItems_mc189(entityLiving, pRealBlock, enumAction, itemstack, scale, type);
@@ -794,7 +796,7 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		//Modchu_Debug.dDebug("brightness="+brightness);
 		Modchu_AS.set(Modchu_AS.tessellatorSetBrightness, tessellator, brightness);
 
-		int l = i != 2 && i != 3 ? Modchu_AS.getInt(Modchu_AS.blockDoublePlantColorMultiplier, blockDoublePlant, theWorld, x, y, z) : Modchu_AS.getInt(Modchu_AS.biomeGenBaseGetBiomeGrassColor, Modchu_AS.get(Modchu_AS.worldGetBiomeGenForCoords, theWorld, x, z), x, y, z);
+		int l = i != 2 && i != 3 ? Modchu_AS.getInt(Modchu_AS.blockDoublePlantColorMultiplier, blockDoublePlant, theWorld, x, y, z) : Modchu_AS.getInt(Modchu_AS.biomeGetBiomeGrassColor, Modchu_AS.get(Modchu_AS.worldGetBiomeGenForCoords, theWorld, x, z), x, y, z);
 		//Modchu_Debug.dDebug("l="+l+" x="+x+" y="+y+" z="+z+" i="+i);
 		float f = (l >> 16 & 255) / 255.0F;
 		float f1 = (l >> 8 & 255) / 255.0F;

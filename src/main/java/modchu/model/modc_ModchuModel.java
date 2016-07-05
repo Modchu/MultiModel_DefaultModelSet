@@ -67,7 +67,7 @@ public class modc_ModchuModel {
 	}
 
 	public boolean modEnabled() {
-		return true;
+		return !Modchu_Main.isServer;
 	}
 
 	public void modsLoaded() {

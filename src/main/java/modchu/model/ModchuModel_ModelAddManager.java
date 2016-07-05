@@ -31,41 +31,80 @@ public class ModchuModel_ModelAddManager {
 	public static final String addLmmModelString = ";lmmModel";
 
 	static void addCustomModel() {
-		Modchu_Debug.mDebug("ModchuModel_Main addCustomModel()");
-		File cfgdir = new File(Modchu_AS.getFile(Modchu_AS.minecraftMcDataDir), "/config/CustomModel/");
+		Modchu_Debug.mDebug("ModchuModel_ModelAddManager addCustomModel()");
+		File cfgCustomModelDir = new File(Modchu_AS.getFile(Modchu_AS.minecraftMcDataDir), "/config/CustomModel/");
 		ModchuModel_CustomModel.sampleCfgCopy();
-		if (!cfgdir.exists()) {
-			Modchu_Debug.systemLogDebug("ModchuModel_Main addCustomModel() cfgdir not found !! cfgdir="+cfgdir);
-			return;
-		}
-		ArrayList<File> list = Modchu_FileManager.listFiles(cfgdir.getAbsolutePath(), "*.cfg", null, "CustomModel_", true);
-		if (list != null
-				&& !list.isEmpty()) {
-			Modchu_Debug.mDebug("ModchuModel_Main addCustomModel() list != null");
-			for (File f : list) {
-				String name = Modchu_Main.lastIndexProcessing(f.getName(), "_");
-				addPflmAndLmmCustomModel(name);
+		String s1 = "CustomModel_";
+		if (cfgCustomModelDir.exists()) {
+			ArrayList<File> list = Modchu_FileManager.listFiles(cfgCustomModelDir.getAbsolutePath(), "*.cfg", null, s1, true);
+			ArrayList<File> list1 = Modchu_FileManager.listFiles(Modchu_Main.modsDir.getAbsolutePath(), "*.cfg", null, s1, true);
+			if (list1 != null
+					&& !list1.isEmpty()) {
+				list.addAll(list1);
 			}
+			if (list != null
+					&& !list.isEmpty()) {
+				Modchu_Debug.mDebug("ModchuModel_ModelAddManager addCustomModel() list != null");
+				for (File f : list) {
+					addPflmAndLmmCustomModel(f.getAbsolutePath());
+				}
+			}
+		} else {
+			Modchu_Debug.systemLogDebug("ModchuModel_ModelAddManager addCustomModel() cfgCustomModelDir not found !! cfgCustomModelDir="+cfgCustomModelDir);
+		}
+		List<ZipFile> zipList = Modchu_FileManager.getModsZipFileList();
+		if (zipList != null
+				&& !zipList.isEmpty()) {
+			for (ZipFile zipFile : zipList) {
+				String zipName = zipFile.getName();
+				Modchu_Debug.lDebug("ModchuModel_ModelAddManager addCustomModel() zipName="+zipName);
+				String s2 = zipName;
+				if (s2.indexOf("\\") > -1) s2 = Modchu_Main.lastIndexProcessing(s2, "\\");
+				if (s2.indexOf("/") > -1) s2 = Modchu_Main.lastIndexProcessing(s2, "/");
+				if (s2.indexOf(s1) < 0) continue;
+				Enumeration enumeration = zipFile.entries();
+				do {
+					if (!enumeration.hasMoreElements()) {
+						//Modchu_Debug.lDebug("ModchuModel_ModelAddManager addCustomModel() break");
+						break;
+					}
+					ZipEntry zipentry = zipFile.getEntry(enumeration.nextElement().toString());
+					String name = zipentry.getName();
+					Modchu_Debug.lDebug("ModchuModel_ModelAddManager addCustomModel() 1 name="+name);
+					if (name.indexOf(s1) > -1
+							&& name.lastIndexOf(".cfg") > -1) {
+						Modchu_Debug.lDebug("ModchuModel_ModelAddManager addCustomModel() 2 name="+name);
+						addPflmAndLmmCustomModel(zipName+";"+name);
+					}
+				} while (true);
+			}
+		} else {
+			Modchu_Debug.lDebug("ModchuModel_ModelAddManager addCustomModel() zipList == null zipList="+zipList);
 		}
 		addOtherCustomModel();
-		Modchu_Debug.mDebug("ModchuModel_Main addCustomModel() end.");
+		Modchu_Debug.mDebug("ModchuModel_ModelAddManager addCustomModel() end.");
 	}
 
-	private static void addPflmAndLmmCustomModel(String name) {
-		if (name != null
-				&& !name.isEmpty()); else return;
+	private static void addPflmAndLmmCustomModel(String path) {
+		if (path != null
+				&& !path.isEmpty()); else return;
 		try {
+			String name = Modchu_Main.lastIndexProcessing(path, "_");
 			int i1 = name.indexOf(".");
 			if (i1 > -1) name = name.substring(0, i1);
-			Modchu_Debug.mDebug("ModchuModel_Main addPflmAndLmmCustomModel() name="+name);
-			ModchuModel_TextureBoxBase mtb = ModchuModel_TextureManagerBase.instance.textures.get("default_Custom");
-			if (mtb != null); else return;
-			ModchuModel_TextureBoxBase mtb2 = mtb.duplicate();
+			Modchu_Debug.mDebug("ModchuModel_ModelAddManager addPflmAndLmmCustomModel() name="+name);
 			String s1 = "default_Custom"+name;
-			mtb2.fileName = s1;
-			mtb2.textureName = s1;
-			ModchuModel_TextureManagerBase.instance.textures.put(s1, mtb2);
+			ModchuModel_TextureBoxBase mtb = ModchuModel_TextureManagerBase.instance.textures.get(s1);
+			if (mtb != null); else {
+				mtb = ModchuModel_TextureManagerBase.instance.textures.get("default_Custom");
+				if (mtb != null); else return;
+				ModchuModel_TextureBoxBase mtb2 = mtb.duplicate();
+				mtb2.fileName = s1;
+				mtb2.textureName = s1;
+				ModchuModel_TextureManagerBase.instance.textures.put(s1, mtb2);
+			}
 			ModchuModel_TextureManagerBase.instance.modelClassNameMap.put("Custom"+name, MultiModelCustom.class.getName());
+			ModchuModel_CustomModel.cfgFilePathMap.put(name, path);
 			Modchu_Debug.mlDebug("addPflmTextureManagerModel modelMap.put modelName=Custom"+name);
 			if (!addLMMModelFlag()) return;
 			MultiModelBaseBiped[] mlm2 = new MultiModelBaseBiped[3];
@@ -74,7 +113,7 @@ public class ModchuModel_ModelAddManager {
 			float[] lsize2 = mlm2[0].getArmorModelsSize();
 			mlm2[1] = new MultiModelCustom(lsize2[0], 0.0F, 64, 32, o0);
 			mlm2[2] = new MultiModelCustom(lsize2[1], 0.0F, 64, 32, o0);
-			Modchu_Debug.mDebug("ModchuModel_Main addPflmAndLmmCustomModel() mlm2[0]="+mlm2[0]);
+			Modchu_Debug.mDebug("ModchuModel_ModelAddManager addPflmAndLmmCustomModel() mlm2[0]="+mlm2[0]);
 			String s0 = "Custom"+name;
 			addLmmTextureManagerModel(s0, MultiModelCustom.class, mlm2);
 		} catch(Exception e) {
@@ -99,11 +138,11 @@ public class ModchuModel_ModelAddManager {
 					try {
 						zipFile = new ZipFile(s);
 					} catch (Exception e) {
-						Modchu_Debug.lDebug("ModchuModel_Main addCustomModel() Exception !! s="+s, 2, e);
+						Modchu_Debug.lDebug("ModchuModel_ModelAddManager addCustomModel() Exception !! s="+s, 2, e);
 						e.printStackTrace();
 						continue;
 					}
-					//Modchu_Debug.mlDebug("ModchuModel_Main addCustomModel() zipFile="+zipFile);
+					//Modchu_Debug.mlDebug("ModchuModel_ModelAddManager addCustomModel() zipFile="+zipFile);
 					for (Enumeration<? extends ZipEntry> e = zipFile.entries(); e.hasMoreElements();) {
 						ZipEntry entry = e.nextElement();
 						String name = entry.getName();
