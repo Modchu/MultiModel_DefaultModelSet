@@ -243,6 +243,7 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 			oldRenderItems_mc189(entityLiving, pRealBlock, enumAction, itemstack, scale, type);
 			return;
 		}
+		//Modchu_GlStateManager.pushAttrib();
 		Modchu_GlStateManager.pushMatrix();
 		//Modchu_GlStateManager.translate(0.05F, -0.5F, 0.0F);
 		Modchu_GlStateManager.translate(-0.1F, -0.5F, 0.05F);
@@ -273,7 +274,70 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		//Modchu_Debug.mDebug("type="+type);
 		Object itemRenderer = Modchu_AS.get("Minecraft", "getItemRenderer", Modchu_AS.get(Modchu_AS.minecraftGetMinecraft));
 		Modchu_AS.set("ItemRenderer", "renderItemSide", new Class[]{ Modchu_Reflect.loadClass("EntityLivingBase"), Modchu_Reflect.loadClass("ItemStack"), Modchu_Reflect.loadClass("net.minecraft.client.renderer.block.model.ItemCameraTransforms$TransformType"), boolean.class }, itemRenderer, new Object[]{ entityLiving, itemstack, type, flag });
+
+/*
+		ItemRenderer itemRenderer = (ItemRenderer) Modchu_AS.get("Minecraft", "getItemRenderer", Modchu_AS.get(Modchu_AS.minecraftGetMinecraft));
+		Item item = (Item) Modchu_AS.get(Modchu_AS.itemStackGetItem, itemstack);
+		Block block = Block.getBlockFromItem(item);
+		GlStateManager.pushMatrix();
+		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
+		boolean flag1 = renderItem.shouldRenderItemIn3D((ItemStack) itemstack)
+				&& block != null && block.getBlockLayer() == BlockRenderLayer.TRANSLUCENT;
+
+		if (flag1) GlStateManager.depthMask(false);
+		IBakedModel ibakedmodel = renderItem.getItemModelWithOverrides((ItemStack) itemstack, ((Entity) entityLiving).worldObj, (EntityLivingBase) entityLiving);
+
+		if (item != null) {
+			TextureManager textureManager = (TextureManager) Modchu_AS.get(Modchu_AS.minecraftGetTextureManager);
+
+			textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+			textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.enableRescaleNormal();
+			GlStateManager.alphaFunc(516, 0.1F);
+			GlStateManager.enableBlend();
+			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+
+			GlStateManager.pushMatrix();
+			// TODO: check if negative scale is a thing
+			ibakedmodel = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(ibakedmodel, (TransformType) type, flag);
+			//Modchu_Debug.mDebug("type="+type);
+
+			renderItem.renderItem((ItemStack) itemstack, ibakedmodel);
+			GlStateManager.cullFace(GlStateManager.CullFace.BACK);
+			GlStateManager.popMatrix();
+			GlStateManager.disableRescaleNormal();
+			GlStateManager.disableBlend();
+
+			textureManager.bindTexture(TextureMap.LOCATION_MISSING_TEXTURE);
+			textureManager.getTexture(TextureMap.LOCATION_MISSING_TEXTURE).restoreLastBlurMipmap();
+
+		}
+
+		if (flag1) GlStateManager.depthMask(true);
+
+		GlStateManager.popMatrix();
+*/
 		Modchu_GlStateManager.popMatrix();
+
+		Object textureManager = Modchu_AS.get(Modchu_AS.minecraftGetTextureManager);
+		Object LOCATION_MISSING_TEXTURE = Modchu_AS.get("TextureMap", "LOCATION_MISSING_TEXTURE");
+		Modchu_AS.set(Modchu_AS.textureManagerBindTexture, textureManager, LOCATION_MISSING_TEXTURE);
+		Modchu_AS.set("ITextureObject", "restoreLastBlurMipmap", Modchu_AS.get(Modchu_AS.textureManagerGetTexture, LOCATION_MISSING_TEXTURE));
+
+		//Modchu_GlStateManager.popAttrib();
+		//Modchu_GlStateManager.depthMask(false);
+		//Modchu_GlStateManager.depthMask(true);
+		//Modchu_GlStateManager.enableRescaleNormal();
+		//Modchu_GlStateManager.disableBlend();
+		//Modchu_GlStateManager.cullFace(Modchu_GlStateManager.CullFace.BACK);
+		//Modchu_GlStateManager.disableDepth();
+		//Modchu_GlStateManager.enableDepth();
+		//Modchu_GlStateManager.enableCull();
+		//Modchu_GlStateManager.enableTexture2D();
+		//Object render = Modchu_Main.getRender(entityLiving);
+		//loadBlockTexture(render);
+
 	}
 
 	private void oldRenderItems_mc189(Object entityLiving, boolean pRealBlock, Object enumAction, Object itemstack, float scale, Enum type) {
