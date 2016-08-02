@@ -28,6 +28,12 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 	public List<Object> boneChildModels = new ArrayList();
 	public List<Object> boneSpecialChildModels = new ArrayList();
 	private ConcurrentHashMap<String, Object> freeVariableMap;
+	public float initRotateAngleX;
+	public float initRotateAngleY;
+	public float initRotateAngleZ;
+	public float initRotationPointX;
+	public float initRotationPointY;
+	public float initRotationPointZ;
 
 	//SmartMoving共通
 	public static final int XYZ = RotZYX;
@@ -110,9 +116,29 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		adjust = true;
 		matrix = BufferUtils.createFloatBuffer(16);
 		isInvertX = false;
+		initRotateAngleX = 0.0F;
+		initRotateAngleY = 0.0F;
+		initRotateAngleZ = 0.0F;
+		initRotationPointX = 0.0F;
+		initRotationPointY = 0.0F;
+		initRotationPointZ = 0.0F;
 /*//b181delete
 		cubeList = new ArrayList();
 *///b181delete
+	}
+
+	public ModchuModel_ModelRendererBase setInitRotationPoint(float pX, float pY, float pZ) {
+		initRotationPointX = pX;
+		initRotationPointY = pY;
+		initRotationPointZ = pZ;
+		return this;
+	}
+
+	public ModchuModel_ModelRendererBase setInitRotateAngle(float pX, float pY, float pZ) {
+		initRotateAngleX = pX;
+		initRotateAngleY = pY;
+		initRotateAngleZ = pZ;
+		return this;
 	}
 
 	@Override
@@ -130,7 +156,11 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 	}
 
 	public ModchuModel_ModelRenderer addPlate(float f, float f1, float f2, int i, int j, int k, float f3) {
-		addParts(Modchu_ModelPlateMaster.class, f, f1, f2, i, j, k, f3);
+		return addPlate(f, f1, f2, i, j, k, f3, 1.0F);
+	}
+
+	public ModchuModel_ModelRenderer addPlate(float f, float f1, float f2, int i, int j, int k, float f3, float f4) {
+		addParts(Modchu_ModelPlateMaster.class, f, f1, f2, i, j, k, f3, f4);
 		return this;
 	}
 
@@ -168,6 +198,10 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 	}
 
 	public boolean renderItems(String s, Object pModelMulti, Modchu_IEntityCapsBase entityCaps, boolean pRealBlock, int pIndex) {
+		return renderItems(s, pModelMulti, entityCaps, pRealBlock, 1.0F, pIndex);
+	}
+
+	public boolean renderItems(String s, Object pModelMulti, Modchu_IEntityCapsBase entityCaps, boolean pRealBlock, float scale, int pIndex) {
 		Object[] itemstacks = Modchu_CastHelper.ObjectArray(Modchu_EntityCapsHelper.getCapsValue(entityCaps, entityCaps.caps_Items));
 		if (itemstacks == null) return false;
 		Object[] enumActions = Modchu_CastHelper.ObjectArray(Modchu_EntityCapsHelper.getCapsValue(entityCaps, entityCaps.caps_Actions));
@@ -176,9 +210,10 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		//Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems() pIndex="+pIndex);
 		//Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems() itemstacks="+itemstacks);
 		//Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems() itemstacks["+pIndex+"]="+(itemstacks.length > pIndex ? itemstacks[pIndex] : null));
+		itemStack = itemstacks != null
+				&& itemstacks.length > pIndex ? itemstacks[pIndex] : null;
 		renderItems(s, entity, pRealBlock, enumActions != null
-				&& enumActions.length > pIndex ? enumActions[pIndex] : null, itemstacks != null
-						&& itemstacks.length > pIndex ? itemstacks[pIndex] : null, pIndex);
+				&& enumActions.length > pIndex ? enumActions[pIndex] : null, itemStack, scale, pIndex);
 		return true;
 	}
 
@@ -193,12 +228,6 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 			return;
 		}
 		renderItems(s, entityLiving, pRealBlock, enumAction, itemStack1, scale, pIndex, type);
-	}
-
-	public void renderItems(String s, Object entityLiving, boolean pRealBlock, Object enumAction, Object itemStack1, int pIndex) {
-		if (entityLiving != null); else return;
-		itemStack = itemStack1;
-		renderItems(s, entityLiving, pRealBlock, enumAction, itemStack1, 1.0F, pIndex);
 	}
 
 	public void renderItems(String s, Object entityLiving, boolean pRealBlock, Object enumAction, Object itemstack, float scale, int pIndex) {
@@ -222,14 +251,16 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 				if (o.length > 6) type = (Enum) o[6];
 			}
 		}
+		//scale = 4.0F;
+		//Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems scale="+scale);
 		if (isCanceled) return;
 		if (itemstack != null
 				&& entityLiving != null); else {
-			//if (itemstack != null); else Modchu_Debug.mDebug("renderItems itemstack == null.");
-			//if (entityLiving != null); else Modchu_Debug.mDebug("renderItems entityLiving == null.");
+			//if (itemstack != null); else Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems itemstack == null.");
+			//if (entityLiving != null); else Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems entityLiving == null.");
 			return;
 		}
-		//Modchu_Debug.mDebug("renderItems itemstack="+itemstack);
+		//Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems itemstack="+itemstack);
 		int version = Modchu_Main.getMinecraftVersion();
 		if (version < 180) {
 			oldRenderItems_mc179(entityLiving, pRealBlock, enumAction, itemstack, scale);
@@ -251,7 +282,7 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		Modchu_GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
 
 		Enum enumactionBlock = Modchu_AS.getEnum(Modchu_AS.enumActionBlock);
-		//Modchu_Debug.mDebug("enumAction="+enumAction);
+		//Modchu_Debug.mDebug("ModchuModel_ModelRenderer enumactionBlock="+enumactionBlock);
 		if (enumAction == enumactionBlock) {
 
 			Modchu_GlStateManager.rotate(4.2F, 1.0F, 0.0F, 0.0F);
@@ -270,6 +301,7 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		}
 		boolean flag = pIndex == 1;
 		Modchu_GlStateManager.translate(flag ? -0.0625F : -0.1125F, 0.125F, -0.625F);
+		Modchu_GlStateManager.scale(scale, scale, scale);
 		type = flag ? Modchu_AS.getEnum("net.minecraft.client.renderer.block.model.ItemCameraTransforms$TransformType", "THIRD_PERSON_LEFT_HAND") : Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeTHIRD_PERSON);
 		//Modchu_Debug.mDebug("type="+type);
 		Object itemRenderer = Modchu_AS.get("Minecraft", "getItemRenderer", Modchu_AS.get(Modchu_AS.minecraftGetMinecraft));
@@ -319,12 +351,10 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		GlStateManager.popMatrix();
 */
 		Modchu_GlStateManager.popMatrix();
-
 		Object textureManager = Modchu_AS.get(Modchu_AS.minecraftGetTextureManager);
 		Object LOCATION_MISSING_TEXTURE = Modchu_AS.get("TextureMap", "LOCATION_MISSING_TEXTURE");
 		Modchu_AS.set(Modchu_AS.textureManagerBindTexture, textureManager, LOCATION_MISSING_TEXTURE);
 		Modchu_AS.set("ITextureObject", "restoreLastBlurMipmap", Modchu_AS.get(Modchu_AS.textureManagerGetTexture, LOCATION_MISSING_TEXTURE));
-
 		//Modchu_GlStateManager.popAttrib();
 		//Modchu_GlStateManager.depthMask(false);
 		//Modchu_GlStateManager.depthMask(true);
@@ -1295,6 +1325,14 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 	public boolean freeVariableContainsKey(String s) {
 		if (freeVariableMap != null); else return false;
 		 return freeVariableMap.containsKey(s);
+	}
+
+	public void setDefaultRotationPoint() {
+		setRotationPoint(initRotationPointX, initRotationPointY, initRotationPointZ);
+	}
+
+	public void setDefaultRotateAngle() {
+		setRotateAngle(initRotateAngleX, initRotateAngleY, initRotateAngleZ);
 	}
 
 	//SmartMoving関連↓

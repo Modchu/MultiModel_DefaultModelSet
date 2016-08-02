@@ -86,11 +86,16 @@ public class ModchuModel_TextureManagerBase {
 	 * ローカルで保持しているテクスチャパック
 	 */
 	public Map<String, ModchuModel_TextureBoxBase> textures = new TreeMap();
+	/**
+	 * 部分使用用テクスチャパック
+	 */
+	public Map<String, ModchuModel_TextureBoxBase> partsTextures = new TreeMap();
 
 	public List<Object[]> searchPrefix = new ArrayList();
 	private LinkedList<String> searchSettledList = new LinkedList();
 
 	public static ArrayList<String> modelNewInstanceNgList = new ArrayList();
+	public static ArrayList<String> partsNameList = new ArrayList();
 	public static HashMap<Object, Map> entityModelMapData = new HashMap();
 	public static HashMap<String, Object[]> dummyModelMapData = new HashMap();
 
@@ -128,6 +133,7 @@ public class ModchuModel_TextureManagerBase {
 				e.printStackTrace();
 			}
 		}
+		partsNameList.add("_Custom");
 		modelClassNameMap.put(defaultModelName, "modchu.model.multimodel.base.MultiModel");
 		modelClassNameMap.put(defaultModelMaidBoneName, "modchu.model.multimodel.base.MultiModelMaidBone");
 		loadTextures();
@@ -207,7 +213,7 @@ public class ModchuModel_TextureManagerBase {
 	/**
 	 * テクスチャ名称の一致する物を返す。
 	 */
-	public ModchuModel_TextureBoxBase getTextureBox(String pName) {
+	public ModchuModel_TextureBoxBase getTextureBox(String pName, boolean b) {
 		boolean debug = false;
 		if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getTextureBox 1 pName="+pName);
 		if (pName != null
@@ -223,6 +229,11 @@ public class ModchuModel_TextureManagerBase {
 			return null;
 		}
 		ModchuModel_TextureBoxBase modchuModel_TextureBoxBase = textures.get(pName);
+		if (b) {
+			if (modchuModel_TextureBoxBase != null); else {
+				modchuModel_TextureBoxBase = partsTextures.get(pName);
+			}
+		}
 		if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getTextureBox end. return modchuModel_TextureBoxBase="+modchuModel_TextureBoxBase);
 		return modchuModel_TextureBoxBase;
 	}
@@ -627,10 +638,11 @@ public class ModchuModel_TextureManagerBase {
 						lindex = tx_wild + 12;
 					}
 					pn = textureNameCheck(pn);
-					ModchuModel_TextureBoxBase lts = getTextureBox(pn);
+					ModchuModel_TextureBoxBase lts = getTextureBox(pn, true);
 					if (lts == null) {
 						lts = new ModchuModel_TextureBoxBase(pn, pSearch);
-						textures.put(pn, lts);
+						if (checkPartsName(fname)) partsTextures.put(pn, lts);
+						else textures.put(pn, lts);
 						Modchu_Debug.tDebug("ModchuModel_TextureManagerBase addTextureName textures.put pn="+pn);
 					}
 					lts.addTexture(lindex, fname);
@@ -760,9 +772,9 @@ public class ModchuModel_TextureManagerBase {
 		return -1;
 	}
 
-	public ModchuModel_TextureBoxBase getNextPackege(ModchuModel_TextureBoxBase pNowBox, int pColor) {
+	public ModchuModel_TextureBoxBase getNextPackege(ModchuModel_TextureBoxBase pNowBox, int pColor, boolean b) {
 		// 次のテクスチャパッケージの名前を返す
-		boolean b = false;
+		boolean b1 = false;
 		ModchuModel_TextureBoxBase lreturn = null;
 /*
 		for (Entry<String, ModchuModel_TextureBoxBase> en : textures.entrySet()) {
@@ -770,49 +782,57 @@ public class ModchuModel_TextureManagerBase {
 			Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getNextPackege ltb.textureName="+ltb.textureName+" ltb.hasColor(pColor)="+ltb.hasColor(pColor));
 		}
 */
+		//Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getNextPackege pNowBox.textureName="+pNowBox.textureName);
 		for (Entry<String, ModchuModel_TextureBoxBase> en : textures.entrySet()) {
 			ModchuModel_TextureBoxBase ltb = en.getValue();
-			if (ltb.hasColor(pColor)
+			if (ltb != null
+					&& ltb != pNowBox
+					&& ltb.hasColor(pColor)
 					&& ltb.textureName != null
 					&& !ltb.textureName.isEmpty()) {
-				if (b) {
+				if (b1) {
+					//Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getNextPackege b1 ltb.textureName="+ltb.textureName);
 					return ltb;
 				}
 				if (lreturn == null) {
+					//Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getNextPackege lreturn = ltb.");
 					lreturn = ltb;
 				}
 			}
 			if (ltb == pNowBox) {
-				b = true;
+				//Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getNextPackege b1 = true.");
+				b1 = true;
 			}
 		}
-		//if (lreturn != null) return lreturn;
-		return textures != null
-				&& !textures.isEmpty() ? getTextureManagerTextures(0) : null;
+		lreturn = getTextureManagerTextures(0, b);
+		//Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getNextPackege end. lreturn.textureName="+lreturn.textureName);
+		return lreturn;
 	}
 
-	public ModchuModel_TextureBoxBase getPrevPackege(ModchuModel_TextureBoxBase pNowBox, int pColor) {
-		//Modchu_Debug.mDebug("getPrevPackege");
+	public ModchuModel_TextureBoxBase getPrevPackege(ModchuModel_TextureBoxBase pNowBox, int pColor, boolean b) {
+		Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getPrevPackege");
 		// 前のテクスチャパッケージの名前を返す
 		ModchuModel_TextureBoxBase lreturn = null;
 		for (Entry<String, ModchuModel_TextureBoxBase> en : textures.entrySet()) {
 			ModchuModel_TextureBoxBase ltb = en.getValue();
-			if (ltb == pNowBox) {
+			if (ltb == pNowBox
+					&& ltb != lreturn) {
 				if (lreturn != null) {
-					//Modchu_Debug.mDebug("getPrevPackege return lreturn="+lreturn);
+					Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getPrevPackege return lreturn="+lreturn);
 					return lreturn;
 				}
 			}
 			if (ltb.hasColor(pColor)
 					&& ltb.textureName != null
 					&& !ltb.textureName.isEmpty()) {
-				//Modchu_Debug.mDebug("getPrevPackege hasColor lreturn="+ltb);
 				lreturn = ltb;
+				Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getPrevPackege hasColor lreturn="+lreturn);
 			}
 		}
-		//if (lreturn != null) return lreturn;
-		return textures != null
-				&& textures.size() > 0 ? getTextureManagerTextures(textures.size() - 1) : null;
+		lreturn = textures != null
+				&& textures.size() > -1 ? getTextureManagerTextures(textures.size() - 1, b) : null;
+		Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getPrevPackege end. textures.size() - 1="+(textures.size() - 1));
+		return lreturn;
 	}
 
 	/**
@@ -840,6 +860,12 @@ public class ModchuModel_TextureManagerBase {
 				f = true;
 			}
 		}
+		if (lreturn != null); else {
+			for (Entry<String, ModchuModel_TextureBoxBase> en : textures.entrySet()) {
+				ModchuModel_TextureBoxBase ltb = en.getValue();
+				if (ltb.hasArmor()) return ltb;
+			}
+		}
 		return lreturn;
 	}
 
@@ -857,11 +883,19 @@ public class ModchuModel_TextureManagerBase {
 				lreturn = ltb;
 			}
 		}
+		if (lreturn != null); else {
+			ModchuModel_TextureBoxBase ltb1 = null;
+			for (Entry<String, ModchuModel_TextureBoxBase> en : textures.entrySet()) {
+				ModchuModel_TextureBoxBase ltb = en.getValue();
+				if (ltb.hasArmor()) ltb1 = ltb;
+			}
+			return ltb1;
+		}
 		return lreturn;
 	}
 
-	public String getRandomTextureString(Random pRand) {
-		return getTextureBox(pRand.nextInt(textures.size())).textureName;
+	public String getRandomTextureString(Random pRand, boolean b) {
+		return getTextureBox(pRand.nextInt(textures.size()), b).textureName;
 	}
 
 	public ModchuModel_TextureBoxBase getRandomTexture(Random pRand) {
@@ -1349,7 +1383,7 @@ public class ModchuModel_TextureManagerBase {
 	public Object[] modelNewInstance(String s, boolean useCustom, Object[] option) {
 		if (s != null
 				&& !s.isEmpty()); else return null;
-		boolean debug = true;
+		boolean debug = false;
 		Object[] models = new Object[3];
 /*
 		String s1 = s != null ? Modchu_Main.lastIndexProcessing(s, "_") : s;
@@ -1660,16 +1694,16 @@ public class ModchuModel_TextureManagerBase {
 		return o1 != null ? Modchu_CastHelper.FloatArray(o1) : new float[]{ 0.1F, 0.5F };
 	}
 
-	public String getPackege(int i, int j) {
-		return getTextureBoxTextureName(getTextureManagerTextures(j));
+	public String getPackege(int i, int j, boolean b) {
+		return getTextureBoxTextureName(getTextureManagerTextures(j, b));
 	}
 
-	public String getModelSpecificationArmorPackege(String s) {
+	public String getModelSpecificationArmorPackege(String s, boolean b) {
 		s = Modchu_Main.lastIndexProcessing(s, "_");
 		String s1 = null;
 		ModchuModel_TextureBoxBase ltb;
 		for (int i = 0 ; i < textures.size() ; ++i) {
-			ltb = getTextureManagerTextures(i);
+			ltb = getTextureManagerTextures(i, b);
 			if (getTextureBoxHasArmor(ltb)) {
 				String s2 = Modchu_Main.lastIndexProcessing(getTextureBoxTextureName(ltb), "_");
 				if (s2 != null
@@ -1691,21 +1725,21 @@ public class ModchuModel_TextureManagerBase {
 		return modelNewInstance(entity, s, b, true, option);
 	}
 
-	public ModchuModel_TextureBoxBase getTextureBox(int i) {
-		return getTextureManagerTextures(i);
+	public ModchuModel_TextureBoxBase getTextureBox(int i, boolean b) {
+		return getTextureManagerTextures(i, b);
 	}
 
-	public Object[] getTextureModels(Object entity, int i, Object[] option) {
-		return getTextureModels(entity, i, false, option);
+	public Object[] getTextureModels(Object entity, int i, boolean b1, Object[] option) {
+		return getTextureModels(entity, i, false, b1, option);
 	}
 
-	public Object[] getTextureModels(Object entity, int i, boolean b, Object[] option) {
-		ModchuModel_TextureBoxBase ltb = getTextureManagerTextures(i);
+	public Object[] getTextureModels(Object entity, int i, boolean b, boolean b1, Object[] option) {
+		ModchuModel_TextureBoxBase ltb = getTextureManagerTextures(i, b1);
 		return ltb != null ? modelNewInstance(entity, getTextureBoxTextureName(ltb), b, true, option) : null;
 	}
 
 	public Object checkTexturePackege(String s, int i) {
-		ModchuModel_TextureBoxBase ltb = getTextureBox(s);
+		ModchuModel_TextureBoxBase ltb = getTextureBox(s, true);
 		if (ltb != null) {
 			Object resourceLocation = textureManagerGetTexture(s, i);
 			if (resourceLocation != null) {
@@ -1721,9 +1755,9 @@ public class ModchuModel_TextureManagerBase {
 	}
 
 	public Object checkTextureArmorPackege(String s) {
-		boolean debug = true;
+		boolean debug = false;
 		if (debug) Modchu_Debug.mDebug("checkTextureArmorPackege s="+s);
-		ModchuModel_TextureBoxBase ltb = getTextureBox(s);
+		ModchuModel_TextureBoxBase ltb = getTextureBox(s, true);
 		if (debug) Modchu_Debug.mDebug("checkTextureArmorPackege ltb="+ltb);
 		if (ltb != null
 				&& getTextureBoxHasArmor(ltb)) {
@@ -1739,7 +1773,7 @@ public class ModchuModel_TextureManagerBase {
 	}
 
 	public Object textureManagerGetTexture(String s, int i) {
-		ModchuModel_TextureBoxBase ltb = getTextureBox(s);
+		ModchuModel_TextureBoxBase ltb = getTextureBox(s, true);
 		//Modchu_Debug.mDebug("textureManagerGetTextureName s="+s+" i="+i+" ltb="+ltb);
 		if (ltb != null) {
 			Object o = getTextureBoxTextureName(ltb, i);
@@ -1747,14 +1781,14 @@ public class ModchuModel_TextureManagerBase {
 			return o;
 		}
 		Modchu_Debug.Debug1("textureManagerGetTextureName null !! default change. s="+textureNameCheck(s)+" i="+i);
-		ltb = getTextureBox(textureNameCheck(null));
+		ltb = getTextureBox(textureNameCheck(null), true);
 		if (ltb != null) return getTextureBoxTextureName(ltb, i);
 		return null;
 	}
 
 	public boolean textureColorChack(String s, int i) {
 		s = textureNameCheck(s);
-		ModchuModel_TextureBoxBase ltb = getTextureBox(s);
+		ModchuModel_TextureBoxBase ltb = getTextureBox(s, true);
 		if (ltb != null) return getTextureBoxHasColor(ltb, i);
 		//Modchu_Debug.mDebug("textureColorChack return null !! s="+s+" i="+i);
 		return false;
@@ -1797,7 +1831,7 @@ public class ModchuModel_TextureManagerBase {
 	public Object textureManagerGetArmorTexture(String s, int i, Object itemstack, boolean debug) {
 		if (debug) Modchu_Debug.Debug("textureManagerGetArmorTextureName s="+s+" i="+i+" itemstack != null ? "+(itemstack != null));
 		s = textureNameCheck(s);
-		ModchuModel_TextureBoxBase ltb = getTextureBox(s);
+		ModchuModel_TextureBoxBase ltb = getTextureBox(s, true);
 		if (debug) Modchu_Debug.Debug("textureManagerGetArmorTextureName s="+s+" ltb="+ltb);
 		if (ltb != null) {
 			if (debug) Modchu_Debug.Debug("textureManagerGetArmorTextureName return="+(((ModchuModel_TextureBoxBase) ltb).getArmorTextureName(i, itemstack)));
@@ -1807,35 +1841,40 @@ public class ModchuModel_TextureManagerBase {
 		return null;
 	}
 
-	public String textureManagerGetNextPackege(String s, int i) {
-		return textureManagerGetPackege(s, i, 0);
+	public String textureManagerGetNextPackege(String s, int i, boolean b) {
+		return textureManagerGetPackege(s, i, 0, b);
 	}
 
-	public String textureManagerGetPrevPackege(String s, int i) {
-		return textureManagerGetPackege(s, i, 1);
+	public String textureManagerGetPrevPackege(String s, int i, boolean b) {
+		return textureManagerGetPackege(s, i, 1, b);
 	}
 
-	public String textureManagerGetPackege(String s, int i, int i1) {
-		ModchuModel_TextureBoxBase ltb = getTextureBox(s);
-		if (ltb != null); else ltb = getTextureBox(0);
+	public String textureManagerGetPackege(String s, int i, int i1, boolean b) {
+		boolean debug = false;
+		if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase textureManagerGetPackege s="+s+" i="+i);
+		ModchuModel_TextureBoxBase ltb = getTextureBox(s, true);
+		if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase textureManagerGetPackege 1 ltb="+ltb);
+		if (ltb != null); else ltb = getTextureBox(0, b);
+		if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase textureManagerGetPackege 2 ltb="+ltb);
 		if (ltb != null) {
-			ltb = i1 == 0 ? instance.getNextPackege(ltb, i) :
-				instance.getPrevPackege(ltb, i);
+			ltb = i1 == 1 ? instance.getNextPackege(ltb, i, b) :
+				instance.getPrevPackege(ltb, i, b);
+			if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase textureManagerGetPackege 3 ltb="+ltb);
 			return getTextureBoxTextureName(ltb);
 		}
-		Modchu_Debug.mDebug("textureManagerGetPackege return null !! s="+s+" i="+i);
+		if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase textureManagerGetPackege return null !! s="+s+" i="+i);
 		return null;
 	}
 
-	public String textureManagerGetNextArmorPackege(String s) {
-		return textureManagerGetArmorPackege(s, 0);
+	public String textureManagerGetNextArmorPackege(String s, boolean b) {
+		return textureManagerGetArmorPackege(s, 0, b);
 	}
 
-	public String textureManagerGetPrevArmorPackege(String s) {
-		return textureManagerGetArmorPackege(s, 1);
+	public String textureManagerGetPrevArmorPackege(String s, boolean b) {
+		return textureManagerGetArmorPackege(s, 1, b);
 	}
 
-	public String textureManagerGetArmorPackege(String s, int i) {
+	public String textureManagerGetArmorPackege(String s, int i, boolean b) {
 		//Modchu_Debug.mDebug("textureManagerGetArmorPackege s="+s+" i="+i);
 		int index = -1;
 		String s2 = textureNameCheck(s);
@@ -1844,9 +1883,9 @@ public class ModchuModel_TextureManagerBase {
 			s2 = s.substring(0, i2 - 1);
 		}
 		//Modchu_Debug.mDebug("textureManagerGetArmorPackege s2="+s2);
-		index = textureManagerGetArmorPackegeIndex(s2);
+		index = textureManagerGetArmorPackegeIndex(s2, b);
 		if (index == -1) {
-			index = textureManagerGetArmorPackegeIndex("default");
+			index = textureManagerGetArmorPackegeIndex("default", b);
 			if (index == -1) {
 				Modchu_Debug.mDebug("textureManagerGetArmorPackege return index == -1 !!");
 				return null;
@@ -1858,7 +1897,7 @@ public class ModchuModel_TextureManagerBase {
 			index = i == 0 ? index + 1 : index - 1;
 			if (index >= textures.size()) index = 0;
 			if (index < 0) index = textures.size() - 1;
-			ltb = getTextureManagerTextures(index);
+			ltb = getTextureManagerTextures(index, b);
 			//ltb = i == 0 ? Modchu_Reflect.invokeMethod(ModchuModel_TextureManagerBase, "getNextArmorPackege", new Class[]{MMM_TextureBox}, textureManagerInstance, new Object[]{ltb}) :
 			//Modchu_Reflect.invokeMethod(ModchuModel_TextureManagerBase, "getPrevArmorPackege", new Class[]{MMM_TextureBox}, textureManagerInstance, new Object[]{ltb});
 			//Modchu_Debug.mDebug("textureManagerGetArmorPackege index for index="+index+" s="+(String) Modchu_Reflect.getFieldObject(ltb.getClass(), "fileName", ltb));
@@ -1880,7 +1919,7 @@ public class ModchuModel_TextureManagerBase {
 		return s;
 	}
 
-	private int textureManagerGetArmorPackegeIndex(String s) {
+	private int textureManagerGetArmorPackegeIndex(String s, boolean b) {
 		if (s != null); else {
 			s = "default";
 		}
@@ -1891,7 +1930,7 @@ public class ModchuModel_TextureManagerBase {
 		int index = -1;
 		ModchuModel_TextureBoxBase ltb;
 		for (int i = 0; i < textures.size(); i++) {
-			ltb = getTextureManagerTextures(i);
+			ltb = getTextureManagerTextures(i, b);
 			//Modchu_Debug.mDebug("textureManagerGetArmorPackegeIndex get "+((String) Modchu_Reflect.getFieldObject(ltb.getClass(), "textureName", ltb)));
 			if (ltb != null
 					&& ltb.hasArmor()
@@ -1903,15 +1942,15 @@ public class ModchuModel_TextureManagerBase {
 		return index;
 	}
 
-	public String[] setTexturePackege(String textureName, String textureArmorName, int color, int prevNextNormal, boolean armorOnly, boolean autoArmorSelect) {
+	public String[] setTexturePackege(String textureName, String textureArmorName, int color, int prevNextNormal, boolean armorOnly, boolean autoArmorSelect, boolean b) {
 		if (!armorOnly) {
 			String s = textureName;
 			switch(prevNextNormal) {
 			case 0:
-				s = instance.textureManagerGetPrevPackege(textureName, color);
+				s = instance.textureManagerGetPrevPackege(textureName, color, b);
 				break;
 			case 1:
-				s = instance.textureManagerGetNextPackege(textureName, color);
+				s = instance.textureManagerGetNextPackege(textureName, color, b);
 				break;
 			case 2:
 				break;
@@ -1920,39 +1959,43 @@ public class ModchuModel_TextureManagerBase {
 			if (s != null
 					&& !s.isEmpty()); else return null;
 			textureName = s;
+			//Modchu_Debug.mDebug("ModchuModel_TextureManagerBase setTexturePackege autoArmorSelect="+autoArmorSelect);
 			if (autoArmorSelect) {
 				textureArmorName = textureName;
-				String s1 = getArmorName(textureArmorName, prevNextNormal);
+				String s1 = getArmorName(textureArmorName, prevNextNormal, b);
+				//Modchu_Debug.mDebug("ModchuModel_TextureManagerBase setTexturePackege s1="+s1);
 				if (s1 != null
 						&& !s1.isEmpty()) textureArmorName = s1;
 			}
 			//Modchu_Debug.mDebug("ModchuModel_TextureManagerBase setTexturePackege 2 s="+s);
 		} else {
-			textureArmorName = prevNextNormal == 0 ? instance.textureManagerGetPrevArmorPackege(textureArmorName) : instance.textureManagerGetNextArmorPackege(textureArmorName);
+			textureArmorName = prevNextNormal == 0 ? instance.textureManagerGetPrevArmorPackege(textureArmorName, b) : instance.textureManagerGetNextArmorPackege(textureArmorName, b);
 		}
 		return new String[]{ textureName, textureArmorName };
 	}
 
-	public static String getArmorName(String s) {
-		return getArmorName(s, 0);
+	public static String getArmorName(String s, boolean b) {
+		return getArmorName(s, 0, b);
 	}
 
-	public static String getArmorName(String s, int i) {
-		if (s == null) return "";
+	public static String getArmorName(String s, int i, boolean b) {
+		boolean debug = false;
+		if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getArmorName s="+s);
+		if (s != null); else return "";
 		String s1 = s;
-		ModchuModel_TextureBoxBase ltb = instance.getTextureBox(s);
+		ModchuModel_TextureBoxBase ltb = instance.getTextureBox(s, true);
 		if (ltb != null
 				&& instance.getTextureBoxHasArmor(ltb)) {
-			Modchu_Debug.mDebug("getArmorName getTextureBoxHasArmor true s1="+s1);
+			if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getArmorName getTextureBoxHasArmor true s1="+s1);
 		} else {
-			Modchu_Debug.mDebug("getArmorName getTextureBoxHasArmor ltb == null. s1="+s1);
-			s1 = instance.getModelSpecificationArmorPackege(s);
-			Modchu_Debug.mDebug("getArmorName getTextureBoxHasArmor 1 s1="+s1);
+			if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getArmorName getTextureBoxHasArmor ltb == null. s1="+s1);
+			s1 = instance.getModelSpecificationArmorPackege(s, b);
+			if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getArmorName getTextureBoxHasArmor 1 s1="+s1);
 			if (s1 != null) return s1;
 			boolean flag = specificationArmorCheckBoolean(s);
-			Modchu_Debug.mDebug("getArmorName getTextureBoxHasArmor 2 flag="+flag);
+			if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getArmorName getTextureBoxHasArmor 2 flag="+flag);
 			s1 = specificationArmorCheck(s);
-			Modchu_Debug.mDebug("getArmorName getTextureBoxHasArmor 3 s1="+s1);
+			if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getArmorName getTextureBoxHasArmor 3 s1="+s1);
 			if (!flag) {
 				if (i == 1) {
 					s1 = s1 != null ? s1.indexOf("_Biped") > -1 ? "_Biped" : "erasearmor" : "erasearmor";
@@ -1966,7 +2009,7 @@ public class ModchuModel_TextureManagerBase {
 			if (s.lastIndexOf(ModchuModel_ModelAddManager.addLmmModelString) > -1
 					&& s1.lastIndexOf(ModchuModel_ModelAddManager.addLmmModelString) < 0) s1 = s1 + ModchuModel_ModelAddManager.addLmmModelString;
 		}
-		Modchu_Debug.mDebug("getArmorName return s1="+s1+" i="+i);
+		if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getArmorName return s1="+s1+" i="+i);
 		return s1;
 	}
 
@@ -2042,8 +2085,11 @@ public class ModchuModel_TextureManagerBase {
 				&& ltb instanceof ModchuModel_TextureBoxBase ? ((ModchuModel_TextureBoxBase) ltb).packegeName : null;
 	}
 
-	public ModchuModel_TextureBoxBase getTextureManagerTextures(int i) {
-		return (ModchuModel_TextureBoxBase) Modchu_Main.getMapValue(textures, i);
+	public ModchuModel_TextureBoxBase getTextureManagerTextures(int i, boolean b) {
+		ModchuModel_TextureBoxBase modchuModel_TextureBoxBase = (ModchuModel_TextureBoxBase) Modchu_Main.getMapValue(textures, i);
+		if (modchuModel_TextureBoxBase != null
+				| !b) return modchuModel_TextureBoxBase;
+		return (ModchuModel_TextureBoxBase) Modchu_Main.getMapValue(partsTextures, i);
 	}
 
 	public void worldEventLoad(Object event) {
@@ -2079,6 +2125,29 @@ public class ModchuModel_TextureManagerBase {
 
 	public String getDefaultTextureName() {
 		return defaultUsingTexture+"_"+ModchuModel_TextureManagerBase.instance.defaultModelName;
+	}
+
+	public boolean checkPartsName(String s) {
+		if (s != null
+				&& !s.isEmpty()); else return false;
+		for (String s1 : partsNameList) {
+			if (s.indexOf(s1) > -1) return true;
+		}
+		return false;
+	}
+
+	public List<String> textureNameList() {
+		List list = new LinkedList();
+		for (Entry<String, ModchuModel_TextureBoxBase> en : textures.entrySet()) {
+			String s = en.getKey();
+			ModchuModel_TextureBoxBase modchuModel_TextureBoxBase = en.getValue();
+			String textureName = modchuModel_TextureBoxBase.textureName;
+			list.add(textureName);
+			if (s != textureName) {
+				Modchu_Debug.mDebug("ModchuModel_TextureManagerBase textureNameList() s != textureName s="+s+" textureName="+textureName);
+			}
+		}
+		return list;
 	}
 
 }

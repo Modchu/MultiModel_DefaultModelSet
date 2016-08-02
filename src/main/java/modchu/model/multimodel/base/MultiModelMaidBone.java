@@ -307,10 +307,10 @@ public class MultiModelMaidBone extends MultiModelSkirtFloats {
 				&& !Modchu_EntityCapsHelper.getCapsValueBoolean(this, entityCaps, caps_oldwalking)) {
 			if (heldItem[1] == 3) {
 				// 剣などのガードポーズ
-				bipedLeftArm.rotateAngleX = -0.8F;
-				bipedLeftArm.rotateAngleY = -0.4F;
+				bipedLeftArm.rotateAngleX = flag ? bipedLeftArm.rotateAngleX * 0.5F - 0.9424779F : -0.8F;
+				bipedLeftArm.rotateAngleY = flag ? 0.5235988F : -0.4F;
 				if (flag) {
-					if (!Modchu_EntityCapsHelper.getCapsValueBoolean(this, entityCaps, caps_aimedBow)) Arms[1].setRotateAngle(-4.6F, 2.45F, 0.12F);
+					if (!Modchu_EntityCapsHelper.getCapsValueBoolean(this, entityCaps, caps_aimedBow)) Arms[1].setRotateAngle(-0.24F, -0.48F, 0.36F);
 					//Arms[1].setRotateAngle(Modchu_Debug.debaf1, Modchu_Debug.debaf2, Modchu_Debug.debaf3);
 					//Modchu_Debug.mdDebug(""+Modchu_Debug.debaf1+" "+Modchu_Debug.debaf2+" "+Modchu_Debug.debaf3+" ");
 				}
@@ -322,13 +322,14 @@ public class MultiModelMaidBone extends MultiModelSkirtFloats {
 				&& !Modchu_EntityCapsHelper.getCapsValueBoolean(this, entityCaps, caps_oldwalking)) {
 			if (heldItem[0] == 3) {
 				// 剣などのガードポーズ
-				bipedRightArm.rotateAngleX = flag ? -1.2F : -0.8F;
-				bipedRightArm.rotateAngleY = flag ? -0.7F : -0.4F;
-				bipedRightArm.rotateAngleZ = flag ? -0.28F : bipedRightArm.rotateAngleZ;
-				//bipedRightArm.rotateAngleX = Modchu_Debug.debaf1;
-				//bipedRightArm.rotateAngleY = Modchu_Debug.debaf2;
-				//bipedRightArm.rotateAngleZ = Modchu_Debug.debaf3;
-				//Modchu_Debug.mdDebug(""+Modchu_Debug.debaf1+" "+Modchu_Debug.debaf2+" "+Modchu_Debug.debaf3+" ");
+				bipedRightArm.rotateAngleX = flag ? bipedRightArm.rotateAngleX * 0.5F - 0.9424779F : -0.8F;
+				bipedRightArm.rotateAngleY = flag ? -0.5235988F : -0.4F;
+				bipedRightArm.rotateAngleZ = flag ? 0.0F : bipedRightArm.rotateAngleZ;
+				if (flag) {
+					if (!Modchu_EntityCapsHelper.getCapsValueBoolean(this, entityCaps, caps_aimedBow)) Arms[0].setRotateAngle(-0.12F, -0.22F, -0.56F);
+					//Arms[0].setRotateAngle(Modchu_Debug.debaf1, Modchu_Debug.debaf2, Modchu_Debug.debaf3);
+					//Modchu_Debug.mdDebug(""+Modchu_Debug.debaf1+" "+Modchu_Debug.debaf2+" "+Modchu_Debug.debaf3+" ");
+				}
 			} else {
 				bipedRightArm.rotateAngleX = bipedRightArm.rotateAngleX * 0.5F - 0.3141593F * heldItem[0];
 			}
@@ -346,8 +347,6 @@ public class MultiModelMaidBone extends MultiModelSkirtFloats {
 			// しゃがみ
 			upperBody.rotateAngleX = 0.5F;
 			bipedHead.rotateAngleX -= upperBody.rotateAngleX;
-			bipedRightLeg.rotateAngleX += 1.0F;
-			bipedLeftLeg.rotateAngleX += 1.0F;
 			bipedHead.rotationPointY = -3.0F;
 			bipedBody.rotationPointZ = 2.0F;
 			bipedRightLeg.rotationPointY = bipedLeftLeg.rotationPointY = 3.5F - 1.0F;

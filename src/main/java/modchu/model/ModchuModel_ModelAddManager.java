@@ -94,15 +94,19 @@ public class ModchuModel_ModelAddManager {
 			if (i1 > -1) name = name.substring(0, i1);
 			Modchu_Debug.mDebug("ModchuModel_ModelAddManager addPflmAndLmmCustomModel() name="+name);
 			String s1 = "default_Custom"+name;
-			ModchuModel_TextureBoxBase mtb = ModchuModel_TextureManagerBase.instance.textures.get(s1);
-			if (mtb != null); else {
-				mtb = ModchuModel_TextureManagerBase.instance.textures.get("default_Custom");
+			ModchuModel_TextureBoxBase mtb = ModchuModel_TextureManagerBase.instance.partsTextures.get(s1);
+			if (mtb != null) {
+				mtb.fileName = s1;
+				mtb.textureName = s1;
+			} else {
+				mtb = ModchuModel_TextureManagerBase.instance.partsTextures.get("default_Custom");
 				if (mtb != null); else return;
 				ModchuModel_TextureBoxBase mtb2 = mtb.duplicate();
 				mtb2.fileName = s1;
 				mtb2.textureName = s1;
-				ModchuModel_TextureManagerBase.instance.textures.put(s1, mtb2);
+				mtb = mtb2;
 			}
+			ModchuModel_TextureManagerBase.instance.textures.put(s1, mtb);
 			ModchuModel_TextureManagerBase.instance.modelClassNameMap.put("Custom"+name, MultiModelCustom.class.getName());
 			ModchuModel_CustomModel.cfgFilePathMap.put(name, path);
 			Modchu_Debug.mlDebug("addPflmTextureManagerModel modelMap.put modelName=Custom"+name);

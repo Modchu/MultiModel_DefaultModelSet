@@ -122,5 +122,5 @@ package modchu.model.multimodel.base;import modchu.lib.Modchu_EntityCapsHelper
 			if (SideTailR != null) bipedHead.addChild(SideTailR);
 			if (SideTailL != null) bipedHead.addChild(SideTailL);
 		}
-	}	@Override	public void setRotationAnglesLM(float f, float f1, float f2, float f3, float f4, float f5, ModchuModel_IEntityCaps entityCaps) {		super.setRotationAnglesLM(f, f1, f2, f3, f4, f5, entityCaps);		if (Modchu_EntityCapsHelper.getCapsValueBoolean(this, entityCaps, caps_getIsSneak)) {			bipedRightLeg.rotateAngleX -= 1.0F;			bipedLeftLeg.rotateAngleX -= 1.0F;		}	}	@Override	public float getRenderCorrectionYOffset(ModchuModel_ModelDataBase entityCaps) {		return 1.8F - getHeight(entityCaps) + 0.1F;	}
+	}	@Override	public float getRenderCorrectionYOffset(ModchuModel_ModelDataBase entityCaps) {		return 1.8F - getHeight(entityCaps) + 0.1F;	}
 }
