@@ -24,6 +24,7 @@ import modchu.model.multimodel.base.MultiModelBaseBiped;
 public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 
 	public boolean angleFirst;
+	private boolean isVanillaItem;
 	private static Random rnd = new Random();
 	public List<Object> boneChildModels = new ArrayList();
 	public List<Object> boneSpecialChildModels = new ArrayList();
@@ -103,7 +104,6 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		if (baseModel != null) setTextureSize(Modchu_AS.getInt(Modchu_AS.modelBaseTextureWidth, baseModel), Modchu_AS.getInt(Modchu_AS.modelBaseTextureHeight, baseModel));
 
 		rotatePriority = RotXYZ;
-		itemStack = null;
 		adjust = true;
 		matrix = BufferUtils.createFloatBuffer(16);
 		isInvertX = false;
@@ -210,7 +210,7 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		//Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems() pIndex="+pIndex);
 		//Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems() itemstacks="+itemstacks);
 		//Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems() itemstacks["+pIndex+"]="+(itemstacks.length > pIndex ? itemstacks[pIndex] : null));
-		itemStack = itemstacks != null
+		Object itemStack = itemstacks != null
 				&& itemstacks.length > pIndex ? itemstacks[pIndex] : null;
 		renderItems(s, entity, pRealBlock, enumActions != null
 				&& enumActions.length > pIndex ? enumActions[pIndex] : null, itemStack, scale, pIndex);
@@ -219,12 +219,11 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 
 	public void renderItems(String s, Object entityLiving, boolean pRealBlock, Object enumAction, Object itemStack1, float scale, int pIndex, int addSupport, Enum type) {
 		if (entityLiving != null); else return;
-		itemStack = itemStack1;
 		switch (addSupport) {
 		case 0:
 		case 1:
 		case 2:
-			renderDecoBlock(entityLiving, pRealBlock, enumAction, scale, addSupport);
+			renderDecoBlock(entityLiving, pRealBlock, enumAction, itemStack1, scale, addSupport);
 			return;
 		}
 		renderItems(s, entityLiving, pRealBlock, enumAction, itemStack1, scale, pIndex, type);
@@ -234,19 +233,19 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		renderItems(s, entityLiving, pRealBlock, enumAction, itemstack, scale, pIndex, Modchu_Main.getMinecraftVersion() > 179 ? Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeTHIRD_PERSON) : null);
 	}
 
-	public void renderItems(String s, Object entityLiving, boolean pRealBlock, Object enumAction, Object itemstack, float scale, int pIndex, Enum type) {
+	public void renderItems(String s, Object entityLiving, boolean pRealBlock, Object enumAction, Object itemStack1, float scale, int pIndex, Enum type) {
 		String eventName = "modchuModel_ModelRendererRenderItems".concat(s);
 		boolean isCanceled = false;
 		if (ModchuModel_Main.modchuLibEvent(eventName)) {
 			boolean flag = true;
-			Object[] o = ModchuModel_Main.modchuLibEvent(eventName, new Object[]{ this, entityLiving, pRealBlock, itemstack, scale, type });
+			Object[] o = ModchuModel_Main.modchuLibEvent(eventName, new Object[]{ this, entityLiving, pRealBlock, itemStack1, scale, type });
 			isCanceled = o != null
 					&& o.length > 0 ? Modchu_CastHelper.Boolean(o[0]) : false;
 			if (o != null
 					&& o.length > 1) {
 				if (o.length > 2) entityLiving = o[2];
 				if (o.length > 3) pRealBlock = Modchu_CastHelper.Boolean(o[3]);
-				if (o.length > 4) itemstack = o[4];
+				if (o.length > 4) itemStack1 = o[4];
 				if (o.length > 5) scale = Modchu_CastHelper.Float(o[5]);
 				if (o.length > 6) type = (Enum) o[6];
 			}
@@ -254,16 +253,24 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		//scale = 4.0F;
 		//Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems scale="+scale);
 		if (isCanceled) return;
-		if (itemstack != null
+		if (itemStack1 != null
 				&& entityLiving != null); else {
 			//if (itemstack != null); else Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems itemstack == null.");
 			//if (entityLiving != null); else Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems entityLiving == null.");
 			return;
 		}
-		//Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems itemstack="+itemstack);
+		//Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems itemStack="+itemStack1);
+		if ((itemStack != null
+				&& !itemStack.equals(itemStack1))
+				| itemStack == null) {
+			itemStack = itemStack1;
+			Object item = Modchu_AS.get(Modchu_AS.itemStackGetItem, itemStack1);
+			isVanillaItem = item.getClass().getName().startsWith("net.minecraft.item");
+			//Modchu_Debug.lDebug("ModchuModel_ModelRenderer renderItems getName="+item.getClass().getName());
+		}
 		int version = Modchu_Main.getMinecraftVersion();
 		if (version < 180) {
-			oldRenderItems_mc179(entityLiving, pRealBlock, enumAction, itemstack, scale);
+			oldRenderItems_mc179(entityLiving, pRealBlock, enumAction, itemStack1, scale);
 			return;
 		}
 		Enum enum1 = Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeHEAD);
@@ -271,7 +278,7 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		//Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems enum1="+enum1);
 		if (version < 190
 				| enum1 == type) {
-			oldRenderItems_mc189(entityLiving, pRealBlock, enumAction, itemstack, scale, type);
+			oldRenderItems_mc189(entityLiving, pRealBlock, enumAction, itemStack1, scale, type);
 			return;
 		}
 		//Modchu_GlStateManager.pushAttrib();
@@ -305,7 +312,7 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		type = flag ? Modchu_AS.getEnum("net.minecraft.client.renderer.block.model.ItemCameraTransforms$TransformType", "THIRD_PERSON_LEFT_HAND") : Modchu_AS.getEnum(Modchu_AS.itemCameraTransformsTransformTypeTHIRD_PERSON);
 		//Modchu_Debug.mDebug("type="+type);
 		Object itemRenderer = Modchu_AS.get("Minecraft", "getItemRenderer", Modchu_AS.get(Modchu_AS.minecraftGetMinecraft));
-		Modchu_AS.set("ItemRenderer", "renderItemSide", new Class[]{ Modchu_Reflect.loadClass("EntityLivingBase"), Modchu_Reflect.loadClass("ItemStack"), Modchu_Reflect.loadClass("net.minecraft.client.renderer.block.model.ItemCameraTransforms$TransformType"), boolean.class }, itemRenderer, new Object[]{ entityLiving, itemstack, type, flag });
+		Modchu_AS.set("ItemRenderer", "renderItemSide", new Class[]{ Modchu_Reflect.loadClass("EntityLivingBase"), Modchu_Reflect.loadClass("ItemStack"), Modchu_Reflect.loadClass("net.minecraft.client.renderer.block.model.ItemCameraTransforms$TransformType"), boolean.class }, itemRenderer, new Object[]{ entityLiving, itemStack1, type, flag });
 
 /*
 		ItemRenderer itemRenderer = (ItemRenderer) Modchu_AS.get("Minecraft", "getItemRenderer", Modchu_AS.get(Modchu_AS.minecraftGetMinecraft));
@@ -682,17 +689,33 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 					Modchu_GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
 				} else if (Modchu_AS.getBoolean(Modchu_AS.itemIsFull3D, item)) {
 					var6 = 0.625F;
+					//Modchu_Debug.Debug("ModchuModel_ModelRenderer oldRenderItems_mc179 itemIsFull3D");
 
 					if (Modchu_AS.getBoolean(Modchu_AS.itemShouldRotateAroundWhenRendering, item)) {
+						//Modchu_Debug.Debug("ModchuModel_ModelRenderer oldRenderItems_mc179 itemIsFull3D itemShouldRotateAroundWhenRendering");
 						Modchu_GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
 						Modchu_GlStateManager.translate(0.0F, -0.125F, 0.0F);
 					}
 
 					if (enumAction == Modchu_AS.getEnum(Modchu_AS.enumActionBlock)) {
+						//Modchu_Debug.dDebug("Enum=enumActionBlock");
 						Modchu_GlStateManager.translate(0.05F, 0.0F, -0.1F);
 						Modchu_GlStateManager.rotate(-50.0F, 0.0F, 1.0F, 0.0F);
 						Modchu_GlStateManager.rotate(-10.0F, 1.0F, 0.0F, 0.0F);
 						Modchu_GlStateManager.rotate(-60.0F, 0.0F, 0.0F, 1.0F);
+					} else {
+						if (!isVanillaItem) {
+							//Modchu_Debug.dDebug("x="+Modchu_Debug.debaf1+" y="+Modchu_Debug.debaf2+" z="+Modchu_Debug.debaf3);
+							//Modchu_GlStateManager.rotate(Modchu_Debug.debaf1, 1.0F, 0.0F, 0.0F);
+							//Modchu_GlStateManager.rotate(Modchu_Debug.debaf2, 0.0F, 1.0F, 0.0F);
+							//Modchu_GlStateManager.rotate(Modchu_Debug.debaf3, 0.0F, 0.0F, 1.0F);
+							Modchu_GlStateManager.rotate(100.2F, 1.0F, 0.0F, 0.0F);
+							Modchu_GlStateManager.rotate(189.4F, 0.0F, 1.0F, 0.0F);
+							Modchu_GlStateManager.rotate(66.4F, 0.0F, 0.0F, 1.0F);
+						}// else {
+							//Modchu_Debug.debugStringClear();
+							//Modchu_Debug.dDebug("isVanillaItem");
+						//}
 					}
 
 					Modchu_GlStateManager.translate(0.0F, 0.1875F, 0.1F);
@@ -1052,7 +1075,7 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		return true;
 	}
 */
-	public boolean renderDecoBlock(Object entityLiving, boolean pRealBlock, Object enumAction, float scale, int addSupport) {
+	public boolean renderDecoBlock(Object entityLiving, boolean pRealBlock, Object enumAction, Object itemStack, float scale, int addSupport) {
 		//DecoBlock, FavBlock用描画
 		Object render = Modchu_Main.getRender(getBaseModel());
 		if (render != null); else return false;

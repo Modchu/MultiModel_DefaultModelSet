@@ -519,11 +519,15 @@ public class ModchuModel_ModelAddManager {
 					if (debug) Modchu_Debug.lDebug("lmmTextureManagerInit() LMM to PFLM fileName="+fileName);
 					Object[] o1 = Modchu_LMMManager.getTextureBoxModels(ltb);
 					Class ModchuLmmModel = Modchu_LMMManager.getModchuLmmModelClass();
+					if (debug) {
+						Modchu_Debug.lDebug("lmmTextureManagerInit() LMM to PFLM ModchuLmmModel="+ModchuLmmModel);
+						Modchu_Debug.lDebug("lmmTextureManagerInit() LMM to PFLM o1="+o1);
+					}
 					if (o1 != null
-							&& o1.length > 0
+							&& (o1.length > 0
 							&& o1[0] != null
 							&& (o1[0] instanceof MultiModelBaseBiped
-							| ModchuLmmModel.isInstance(o1[0]))) {
+							| ModchuLmmModel.isInstance(o1[0])))) {
 						// 逆輸入チェック
 						if (debug) Modchu_Debug.lDebug("lmmTextureManagerInit() LMM to PFLM o1[0] instanceof MultiModelBaseBiped continue fileName="+fileName);
 						if (debug) Modchu_Debug.lDebug("lmmTextureManagerInit() LMM to PFLM textures e-------------------------");
@@ -593,11 +597,15 @@ public class ModchuModel_ModelAddManager {
 				if (debug) Modchu_Debug.lDebug("lmmTextureManagerInit() LMM to PFLM fileName="+textureName);
 				Object[] o1 = Modchu_LMMManager.getTextureBoxModels(ltb);
 				Class ModchuLmmModel = Modchu_LMMManager.getModchuLmmModelClass();
+				if (debug) {
+					Modchu_Debug.lDebug("lmmTextureManagerInit() LMM to PFLM ModchuLmmModel="+ModchuLmmModel);
+					Modchu_Debug.lDebug("lmmTextureManagerInit() LMM to PFLM o1="+o1);
+				}
 				if (o1 != null
-						&& o1.length > 0
+						&& (o1.length > 0
 						&& o1[0] != null
 						&& (o1[0] instanceof MultiModelBaseBiped
-						| ModchuLmmModel.isInstance(o1[0]))) {
+						| ModchuLmmModel.isInstance(o1[0])))) {
 					// 逆輸入チェック
 					if (debug) Modchu_Debug.lDebug("lmmTextureManagerInit() LMM to PFLM o1[0] instanceof ModchuModel continue fileName="+textureName);
 					if (debug) Modchu_Debug.lDebug("lmmTextureManagerInit() LMM to PFLM textures e-------------------------");
