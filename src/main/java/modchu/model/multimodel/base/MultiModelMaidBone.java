@@ -416,6 +416,10 @@ public class MultiModelMaidBone extends MultiModelSkirtFloats {
 	@Override
 	public void skirtFloats(float f, float f1, float f2, float f3, float f4, float f5, ModchuModel_IEntityCaps entityCaps) {
 		if (Modchu_EntityCapsHelper.getCapsValueInt(this, null, caps_skirtFloats) < 2) return;
+		if (SkirtFront != null
+				&& SkirtBack != null
+						&& SkirtRight != null
+								&& SkirtLeft != null); else return;
 		float motionY = (float) Modchu_EntityCapsHelper.getCapsValueDouble(this, entityCaps, caps_skirtFloatsMotionY);
 		//Modchu_Debug.mdDebug("MultiModelMaidBone skirtFloats motionY="+motionY);
 		SkirtFront.rotationPointX = SkirtBack.rotationPointX = SkirtRight.rotationPointZ = SkirtLeft.rotationPointZ = motionY * 4.0F;

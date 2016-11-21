@@ -591,7 +591,7 @@ public class ModchuModel_TextureManagerBase {
 		return b;
 	}
 
-	public boolean addTextureName(String fname, String[] pSearch) {
+	public boolean addTextureName(String fname, String[] pSearch, File file) {
 		// パッケージにテクスチャを登録
 		boolean debug = false;
 		String s = fname
@@ -680,7 +680,7 @@ public class ModchuModel_TextureManagerBase {
 						//Modchu_Debug.tDebug("addTextureZip zipentry. addModelClass");
 						if (addModelClass(zipentry.getName(), pSearch)) b = true;
 					} else {
-						if (addTextureName(zipentry.getName(), pSearch)) b = true;
+						if (addTextureName(zipentry.getName(), pSearch, file)) b = true;
 					}
 				}
 			} while(true);
@@ -743,7 +743,7 @@ public class ModchuModel_TextureManagerBase {
 						if (i > -1) {
 							// 対象はテクスチャディレクトリ
 							//addTextureName(s.substring(i), lst);
-							addTextureName(s, lst);
+							addTextureName(s, lst, t);
 						}
 					}
 				}

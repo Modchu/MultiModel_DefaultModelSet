@@ -260,15 +260,21 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 			return;
 		}
 		//Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems itemStack="+itemStack1);
+		int version = Modchu_Main.getMinecraftVersion();
 		if ((itemStack != null
 				&& !itemStack.equals(itemStack1))
 				| itemStack == null) {
 			itemStack = itemStack1;
 			Object item = Modchu_AS.get(Modchu_AS.itemStackGetItem, itemStack1);
-			isVanillaItem = item.getClass().getName().startsWith("net.minecraft.item");
-			//Modchu_Debug.lDebug("ModchuModel_ModelRenderer renderItems getName="+item.getClass().getName());
+			String s1 = item.getClass().getName();
+			//Modchu_Debug.mDebug("ModchuModel_ModelRenderer renderItems s1="+s1);
+			int itemID = version < 170 ? Modchu_AS.getInt(Modchu_AS.itemItemID, item) : -1;
+			//Modchu_Debug.mdDebug("itemID="+itemID);
+			isVanillaItem = (Modchu_Main.isForge
+					&& s1.startsWith("net.minecraft.item"))
+					| (!Modchu_Main.isForge
+							&& (itemID < 449 | (itemID > 2255 && itemID < 2268)));
 		}
-		int version = Modchu_Main.getMinecraftVersion();
 		if (version < 180) {
 			oldRenderItems_mc179(entityLiving, pRealBlock, enumAction, itemStack1, scale);
 			return;
@@ -358,10 +364,12 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		GlStateManager.popMatrix();
 */
 		Modchu_GlStateManager.popMatrix();
-		Object textureManager = Modchu_AS.get(Modchu_AS.minecraftGetTextureManager);
-		Object LOCATION_MISSING_TEXTURE = Modchu_AS.get("TextureMap", "LOCATION_MISSING_TEXTURE");
-		Modchu_AS.set(Modchu_AS.textureManagerBindTexture, textureManager, LOCATION_MISSING_TEXTURE);
-		Modchu_AS.set("ITextureObject", "restoreLastBlurMipmap", Modchu_AS.get(Modchu_AS.textureManagerGetTexture, LOCATION_MISSING_TEXTURE));
+		if (version < 210) {
+			Object textureManager = Modchu_AS.get(Modchu_AS.minecraftGetTextureManager);
+			Object LOCATION_MISSING_TEXTURE = Modchu_AS.get("TextureMap", "LOCATION_MISSING_TEXTURE");
+			Modchu_AS.set(Modchu_AS.textureManagerBindTexture, textureManager, LOCATION_MISSING_TEXTURE);
+			Modchu_AS.set("ITextureObject", "restoreLastBlurMipmap", Modchu_AS.get(Modchu_AS.textureManagerGetTexture, LOCATION_MISSING_TEXTURE));
+		}
 		//Modchu_GlStateManager.popAttrib();
 		//Modchu_GlStateManager.depthMask(false);
 		//Modchu_GlStateManager.depthMask(true);

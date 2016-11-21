@@ -26,7 +26,17 @@ public class ModchuModel_EntityPlayerDummyMaster implements Modchu_IEntityPlayer
 		armorItemStack[1] = Modchu_Reflect.newInstance("ItemStack", new Class[]{ Modchu_Reflect.loadClass("Item") }, new Object[]{ Modchu_AS.get(Modchu_AS.getItem, "diamond_chestplate") });
 		armorItemStack[2] = Modchu_Reflect.newInstance("ItemStack", new Class[]{ Modchu_Reflect.loadClass("Item") }, new Object[]{ Modchu_AS.get(Modchu_AS.getItem, "diamond_leggings") });
 		armorItemStack[3] = Modchu_Reflect.newInstance("ItemStack", new Class[]{ Modchu_Reflect.loadClass("Item") }, new Object[]{ Modchu_AS.get(Modchu_AS.getItem, "diamond_boots") });
-		if (version > 189) {
+		if (version > 202) {
+			for (int i = 0; i < armorItemStack.length; i++) {
+				Object itemStack = armorItemStack[i];
+				Object nonNullList = Modchu_AS.get("EntityLiving", "getArmorInventoryList", base);
+				//Modchu_Debug.mDebug("ModchuModel_EntityPlayerDummyMaster nonNullList="+nonNullList);
+				Modchu_AS.set("NonNullList", "set", new Class[]{ int.class, Object.class }, nonNullList, new Object[]{ i, itemStack });
+			}
+			//Object nonNullList1 = Modchu_AS.get("EntityLiving", "getArmorInventoryList", base);
+			//Modchu_Debug.mDebug("ModchuModel_EntityPlayerDummyMaster nonNullList1="+nonNullList1);
+		}
+		else if (version > 189) {
 			Modchu_AS.set("EntityLiving", "inventoryArmor", base, new Object[]{ armorItemStack });
 		}
 	}

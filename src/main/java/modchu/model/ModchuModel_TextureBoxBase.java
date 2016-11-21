@@ -255,16 +255,18 @@ public class ModchuModel_TextureBoxBase {
 	}
 
 	public boolean addTexture(int pIndex, String pLocation) {
-		String ls;
-		ls = "/assets/minecraft/";
-		if (pLocation.startsWith(ls)) {
-			pLocation = pLocation.substring(ls.length());
-		} else {
-			ls = "assets/minecraft/";
-			if (pLocation.startsWith(ls)) {
-				pLocation = pLocation.substring(ls.length());
+		int version = Modchu_Main.getMinecraftVersion();
+		if (version > 159) {
+			String s1 = "assets/";
+			int i1 = pLocation.indexOf(s1);
+			if (i1 > -1) {
+				pLocation = pLocation.substring(i1 + s1.length());
+				i1 = pLocation.indexOf("/");
+				if (i1 > -1) {
+					pLocation = new StringBuilder().append(pLocation.substring(0, i1)).append(":").append(pLocation.substring(i1 + 1)).toString();
+				}
 			} else {
-//				pLocation = "../.." + pLocation;
+				//pLocation = "../.." + pLocation;
 			}
 		}
 		boolean lflag = false;
@@ -279,7 +281,7 @@ public class ModchuModel_TextureBoxBase {
 		case ModchuModel_TextureManagerBase.tx_oldarmor1:
 		case ModchuModel_TextureManagerBase.tx_oldarmor2:
 			Modchu_Debug.tDebug("ModchuModel_TextureBoxBase addTexture armor pLocation="+pLocation);
-			ls = pLocation.substring(pLocation.lastIndexOf("/") + 1, pLocation.lastIndexOf("_"));
+			String ls = pLocation.substring(pLocation.lastIndexOf("/") + 1, pLocation.lastIndexOf("_"));
 			Modchu_Debug.tDebug("ModchuModel_TextureBoxBase addTexture armor ls="+ls);
 			Map<Integer, Object> lmap;
 			if (armors.containsKey(ls)) {
