@@ -364,12 +364,10 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		GlStateManager.popMatrix();
 */
 		Modchu_GlStateManager.popMatrix();
-		if (version < 210) {
-			Object textureManager = Modchu_AS.get(Modchu_AS.minecraftGetTextureManager);
-			Object LOCATION_MISSING_TEXTURE = Modchu_AS.get("TextureMap", "LOCATION_MISSING_TEXTURE");
-			Modchu_AS.set(Modchu_AS.textureManagerBindTexture, textureManager, LOCATION_MISSING_TEXTURE);
-			Modchu_AS.set("ITextureObject", "restoreLastBlurMipmap", Modchu_AS.get(Modchu_AS.textureManagerGetTexture, LOCATION_MISSING_TEXTURE));
-		}
+		Object textureManager = Modchu_AS.get(Modchu_AS.minecraftGetTextureManager);
+		Object LOCATION_MISSING_TEXTURE = Modchu_AS.get("TextureMap", "LOCATION_MISSING_TEXTURE");
+		Modchu_AS.set(Modchu_AS.textureManagerBindTexture, textureManager, LOCATION_MISSING_TEXTURE);
+		if (LOCATION_MISSING_TEXTURE != null) Modchu_AS.set("ITextureObject", "restoreLastBlurMipmap", Modchu_AS.get(Modchu_AS.textureManagerGetTexture, LOCATION_MISSING_TEXTURE));
 		//Modchu_GlStateManager.popAttrib();
 		//Modchu_GlStateManager.depthMask(false);
 		//Modchu_GlStateManager.depthMask(true);
