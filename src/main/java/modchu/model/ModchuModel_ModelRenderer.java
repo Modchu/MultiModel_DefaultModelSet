@@ -434,7 +434,7 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 				//Modchu_Debug.mDebug("renderItems metadata="+metadata);
 				//Modchu_Debug.mDebug("renderItems block.getClass()="+block.getClass());
 
-				Object theWorld = Modchu_AS.get(Modchu_AS.minecraftTheWorld);
+				Object theWorld = Modchu_AS.get(Modchu_AS.minecraftWorld);
 				double posX = Modchu_AS.getDouble(Modchu_AS.entityPosX);
 				double posY = Modchu_AS.getDouble(Modchu_AS.entityPosY);
 				double posZ = Modchu_AS.getDouble(Modchu_AS.entityPosZ);
@@ -914,7 +914,7 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 			Modchu_AS.set(Modchu_AS.tessellatorStartDrawingQuads, tessellator);
 		}
 		Modchu_AS.set(Modchu_AS.tessellatorSetNormal, tessellator, 0.0F, -1.0F, 0.0F);
-		Object theWorld = Modchu_AS.get(Modchu_AS.minecraftTheWorld);
+		Object theWorld = Modchu_AS.get(Modchu_AS.minecraftWorld);
 		int brightness = Modchu_AS.getInt(Modchu_AS.blockDoublePlantGetMixedBrightnessForBlock, blockDoublePlant, theWorld, x, y + 2, z);
 		//Modchu_Debug.dDebug("brightness="+brightness);
 		Modchu_AS.set(Modchu_AS.tessellatorSetBrightness, tessellator, brightness);

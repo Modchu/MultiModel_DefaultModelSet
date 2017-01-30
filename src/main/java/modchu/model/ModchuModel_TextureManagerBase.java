@@ -591,7 +591,7 @@ public class ModchuModel_TextureManagerBase {
 		return b;
 	}
 
-	public boolean addTextureName(String fname, String[] pSearch, File file) {
+	public boolean addTextureName(String fname, String[] pSearch, File file, boolean isZip) {
 		// パッケージにテクスチャを登録
 		boolean debug = false;
 		String s = fname
@@ -606,13 +606,17 @@ public class ModchuModel_TextureManagerBase {
 		if (debug) Modchu_Debug.tDebug("ModchuModel_TextureManagerBase addTextureName 1 fname="+fname);
 		boolean b = false;
 		getSearchSettledList().add(s);
+		int version = Modchu_Main.getMinecraftVersion();
 		if (Modchu_Main.isDev) {
 			if (fname.startsWith("/")
 					| fname.startsWith("\\")) fname = fname.substring(1);
 			if (pSearch[1].startsWith("/")
 					| pSearch[1].startsWith("\\")) pSearch[1] = pSearch[1].substring(1);
 		} else {
-			if (!fname.startsWith("/")) fname = (new StringBuilder()).append("/").append(fname).toString();
+			if (!fname.startsWith("/")
+					//&& (version > 159
+							//| isZip)
+					) fname = (new StringBuilder()).append("/").append(fname).toString();
 		}
 
 		int i1 = fname.indexOf(pSearch[1]);
@@ -680,7 +684,7 @@ public class ModchuModel_TextureManagerBase {
 						//Modchu_Debug.tDebug("addTextureZip zipentry. addModelClass");
 						if (addModelClass(zipentry.getName(), pSearch)) b = true;
 					} else {
-						if (addTextureName(zipentry.getName(), pSearch, file)) b = true;
+						if (addTextureName(zipentry.getName(), pSearch, file, true)) b = true;
 					}
 				}
 			} while(true);
@@ -743,7 +747,7 @@ public class ModchuModel_TextureManagerBase {
 						if (i > -1) {
 							// 対象はテクスチャディレクトリ
 							//addTextureName(s.substring(i), lst);
-							addTextureName(s, lst, t);
+							addTextureName(s, lst, t, false);
 						}
 					}
 				}

@@ -312,7 +312,7 @@ public class ModchuModel_Config extends Modchu_Config {
 			Object o = Modchu_Main.getModchuCharacteristicObjectMaster(model);
 			MultiModelBaseBiped multiModelBaseBiped = o instanceof MultiModelBaseBiped ? (MultiModelBaseBiped) o : null;
 			if (multiModelBaseBiped != null) {
-				ModchuModel_ModelDataBase data = ModchuModel_ModelDataMaster.instance.getPlayerData(Modchu_AS.get(Modchu_AS.minecraftThePlayer));
+				ModchuModel_ModelDataBase data = ModchuModel_ModelDataMaster.instance.getPlayerData(Modchu_AS.get(Modchu_AS.minecraftPlayer));
 				multiModelBaseBiped.defaultPartsSettingBefore(data);
 				renemeMap = (ConcurrentHashMap<String, String>) data.getCapsValue(multiModelBaseBiped.caps_showPartsRenemeMap);
 				if (renemeMap != null) {
@@ -371,7 +371,7 @@ public class ModchuModel_Config extends Modchu_Config {
 			MultiModelBaseBiped multiModelBaseBiped = o instanceof MultiModelBaseBiped ? (MultiModelBaseBiped) o : null;
 			if (multiModelBaseBiped != null) {
 				Modchu_Debug.mDebug("getConfigShowPartsHideMap multiModelBaseBiped ok.");
-				ModchuModel_ModelDataBase data = ModchuModel_ModelDataMaster.instance.getPlayerData(Modchu_AS.get(Modchu_AS.minecraftThePlayer));
+				ModchuModel_ModelDataBase data = ModchuModel_ModelDataMaster.instance.getPlayerData(Modchu_AS.get(Modchu_AS.minecraftPlayer));
 				multiModelBaseBiped.defaultPartsSettingBefore(data);
 				List<String> hideList = null;
 				if (data != null) hideList = (List<String>) data.getCapsValue(multiModelBaseBiped.caps_showPartsHideList);

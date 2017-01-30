@@ -333,7 +333,7 @@ public class MultiModelOtherModel extends MultiModelBaseBiped {
 		if (debug) Modchu_Debug.lDebug1("MultiModelOtherModel initRenderDummyEntity renderDummyEntityClassName="+renderDummyEntityClassName);
 		if (renderDummyEntityClassName != null
 				&& !renderDummyEntityClassName.isEmpty()) {
-			renderDummyEntity = Modchu_Reflect.newInstance(renderDummyEntityClassName, new Class[]{ Modchu_Reflect.loadClass("World") }, new Object[]{ Modchu_AS.get(Modchu_AS.minecraftTheWorld) });
+			renderDummyEntity = Modchu_Reflect.newInstance(renderDummyEntityClassName, new Class[]{ Modchu_Reflect.loadClass("World") }, new Object[]{ Modchu_AS.get(Modchu_AS.minecraftWorld) });
 			if (debug) Modchu_Debug.lDebug1("MultiModelOtherModel initRenderDummyEntity renderDummyEntity="+renderDummyEntity);
 		}
 		if (renderDummyEntityInvokeMethod != null
