@@ -238,16 +238,15 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 		boolean isCanceled = false;
 		if (ModchuModel_Main.modchuLibEvent(eventName)) {
 			boolean flag = true;
-			Object[] o = ModchuModel_Main.modchuLibEvent(eventName, new Object[]{ this, entityLiving, pRealBlock, itemStack1, scale, type });
-			isCanceled = o != null
-					&& o.length > 0 ? Modchu_CastHelper.Boolean(o[0]) : false;
-			if (o != null
-					&& o.length > 1) {
-				if (o.length > 2) entityLiving = o[2];
-				if (o.length > 3) pRealBlock = Modchu_CastHelper.Boolean(o[3]);
-				if (o.length > 4) itemStack1 = o[4];
-				if (o.length > 5) scale = Modchu_CastHelper.Float(o[5]);
-				if (o.length > 6) type = (Enum) o[6];
+			Object[] o = ModchuModel_Main.modchuLibEvent(eventName, new Object[]{ this, entityLiving, pRealBlock, itemStack1, scale, pIndex, type });
+			if (o != null) {
+				if (o.length > 0) isCanceled = Modchu_CastHelper.Boolean(o[0]);
+				else if (o.length > 2) entityLiving = o[2];
+				else if (o.length > 3) pRealBlock = Modchu_CastHelper.Boolean(o[3]);
+				else if (o.length > 4) itemStack1 = o[4];
+				else if (o.length > 5) scale = Modchu_CastHelper.Float(o[5]);
+				else if (o.length > 6) pIndex = Modchu_CastHelper.Int(o[6]);
+				else if (o.length > 7) type = (Enum) o[7];
 			}
 		}
 		//scale = 4.0F;
