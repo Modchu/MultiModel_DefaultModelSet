@@ -6,6 +6,7 @@ public class ModchuModel_ConfigData {
 	public static boolean AlphaBlend = true;
 	public static boolean skirtFloats = true;
 	public static boolean breastFloats = false;
+	public static boolean isFakeBreast = true;
 	public static double skirtFloatsVolume = 1.0D;
 	public static double breastFloatsVolume = 1.0D;
 	public static float transparency = 1.0F;

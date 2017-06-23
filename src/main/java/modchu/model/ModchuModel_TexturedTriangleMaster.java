@@ -2,13 +2,14 @@ package modchu.model;
 
 import java.util.HashMap;
 
+import org.lwjgl.opengl.GL11;
+
 import modchu.lib.Modchu_AS;
+import modchu.lib.Modchu_Debug;
 import modchu.lib.Modchu_ITexturedQuad;
 import modchu.lib.Modchu_ITexturedQuadMaster;
 import modchu.lib.Modchu_Main;
 import modchu.lib.Modchu_Reflect;
-
-import org.lwjgl.opengl.GL11;
 
 public class ModchuModel_TexturedTriangleMaster implements Modchu_ITexturedQuadMaster {
 	public Modchu_ITexturedQuad base;
@@ -124,7 +125,7 @@ public class ModchuModel_TexturedTriangleMaster implements Modchu_ITexturedQuadM
 		if (version > 180) {
 			Modchu_AS.set(Modchu_AS.tessellatorStartDrawingQuads, tessellator, i2, Modchu_AS.get("DefaultVertexFormats", version > 188 ? "OLDMODEL_POSITION_TEX_NORMAL" : "field_181703_c"));
 		} else {
-			Modchu_AS.set(Modchu_AS.tessellatorStartDrawingQuads, tessellator);
+			Modchu_AS.set(Modchu_AS.tessellatorStartDrawing, tessellator, i2);
 		}
 
 		for (int i1 = 0; i1 < nVertices; ++i1) {
@@ -142,9 +143,9 @@ public class ModchuModel_TexturedTriangleMaster implements Modchu_ITexturedQuadM
 			Object vertexPosition = vertexPositions[i1];
 			Object vertexPositionVec3 = Modchu_AS.get(Modchu_AS.positionTextureVertexVector3D, vertexPosition);
 			Modchu_AS.set(Modchu_AS.tessellatorAddVertexWithUV, tessellator,
-					(double) (((float) Modchu_AS.getDouble(Modchu_AS.vec3XCoord, vertexPositionVec3)) * f),
-					(double) (((float) Modchu_AS.getDouble(Modchu_AS.vec3YCoord, vertexPositionVec3)) * f),
-					(double) (((float) Modchu_AS.getDouble(Modchu_AS.vec3ZCoord, vertexPositionVec3)) * f),
+					(double) (Modchu_AS.getDouble(Modchu_AS.vec3XCoord, vertexPositionVec3) * f),
+					(double) (Modchu_AS.getDouble(Modchu_AS.vec3YCoord, vertexPositionVec3) * f),
+					(double) (Modchu_AS.getDouble(Modchu_AS.vec3ZCoord, vertexPositionVec3) * f),
 					(double) Modchu_AS.getFloat(Modchu_AS.positionTextureVertexTexturePositionX, vertexPosition),
 					(double) Modchu_AS.getFloat(Modchu_AS.positionTextureVertexTexturePositionY, vertexPosition),
 					fx, fy, fz);

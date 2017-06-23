@@ -58,12 +58,12 @@ public class ModchuModel_EntityPlayerDummyMaster implements Modchu_IEntityPlayer
 	}
 
 	@Override
-	public void moveEntityWithHeading(float f, float f1) {
-		base.superMoveEntityWithHeading(f, f1);
+	public void moveEntityWithHeading(float f, float f1, float f2) {
+		base.superMoveEntityWithHeading(f, f1, f2);
 	}
 
 	@Override
-	public String getHurtSound() {
+	public String getHurtSound(Object DamageSource) {
 		return null;
 	}
 
