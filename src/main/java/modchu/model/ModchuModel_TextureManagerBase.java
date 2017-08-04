@@ -283,30 +283,36 @@ public class ModchuModel_TextureManagerBase {
 		}
 
 		// ファイルを解析してテクスチャを追加
-		List<File> jarList = Modchu_FileManager.getMinecraftJarList();
+		List<File> jarList = ModchuModel_ConfigData.loadMinecraftJar ? Modchu_FileManager.getMinecraftJarList() : null;
 		File assetsDir = new File(".", "assets");
-		for (Object[] lss : searchPrefix) {
-			String[] s1 = (String[]) lss[0];
-			String[] s2 = (String[]) lss[1];
-			String[] s3 = (String[]) lss[2];
-
-			// jar
-			if (jarList.isEmpty()) {
-				Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures jarList.isEmpty() error !!");
-			} else {
-				Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures jarList="+jarList);
-				loadTextures(lss[0], lss[1], lss[2], jarList);
-			}
-
-			// mods
-			for (String fileName : s1) {
-				Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures mods load Modchu_FileManager.getFileList("+fileName+")="+Modchu_FileManager.getFileList(fileName));
-				loadTextures(lss[0], lss[1], lss[2], Modchu_FileManager.getFileList(fileName));
-			}
-
-			// assets
-			loadTextures(lss[0], lss[1], lss[2], assetsDir);
+		// jar
+		if (jarList != null
+				&& !jarList.isEmpty()) {
+			Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures jarList="+jarList);
+			loadTextures(searchPrefix, jarList);
+		} else {
+			Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures jarList.isEmpty(). ModchuModel_ConfigData.loadMinecraftJar="+ModchuModel_ConfigData.loadMinecraftJar);
 		}
+
+		// mods
+		List<String> searchFileNameList = new LinkedList();
+		for (Object[] o : searchPrefix) {
+			String[] s0 = (String[]) o[0];
+			String s = (String) s0[0];
+			if (!searchFileNameList.contains(s)) {
+				searchFileNameList.add(s);
+				Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures searchFileNameList.add s="+s);
+			}
+		}
+		if (searchFileNameList != null
+				&& !searchFileNameList.isEmpty())
+		for (Object fileName : searchFileNameList) {
+			Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures mods load Modchu_FileManager.getFileList("+fileName+")="+Modchu_FileManager.getFileList((String) fileName));
+			loadTextures(searchPrefix, Modchu_FileManager.getFileList((String) fileName));
+		}
+
+		// assets
+		loadTextures(searchPrefix, assetsDir);
 		buildCrafterTexture();
 		setModels();
 
@@ -321,45 +327,51 @@ public class ModchuModel_TextureManagerBase {
 		return false;
 	}
 
-	private void loadTextures(Object o, Object o1, Object o2, List<File> list) {
-		for (File file : list) {
-			loadTextures(o, o1, o2, file);
+	private void loadTextures(List<Object[]> list, List<File> list1) {
+		if (list != null
+				&& !list.isEmpty()
+				&& list1 != null
+						&& !list1.isEmpty()); else return;
+		for (File file : list1) {
+			loadTextures(list, file);
 		}
 	}
 
-	private void loadTextures(Object o, Object o1, Object o2, File file) {
-		String[] s1 = (String[]) o;
-		String[] s2 = (String[]) o1;
-		String[] s3 = (String[]) o2;
-		boolean lflag = false;
-		for (String s4 : s1) {
-			for (String s5 : s2) {
-				for (String s6 : s3) {
-					String[] lst = new String[]{ s4, s5, s6 };
-					Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures [%s] [%s] [%s]", s4, s5, s6);
-					Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures file="+file);
-					if (file.isDirectory()) {
-						// ディレクトリ
-						if (addTexturesDir(file, lst)) {
-							Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures file.isDirectory() addTexturesDir true.");
-						} else {
-							Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures file.isDirectory() addTexturesDir false.");
-						}
-					} else if (file.isFile()) {
-						Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures file.isFile() file.toString()="+file.toString());
-						if (file.toString().lastIndexOf(".jar") > -1) {
-							// jar
-							if (addTexturesJar(file, lst)) {
-								Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures file.isFile() addTexturesJar true.");
+	private void loadTextures(List<Object[]> list, File file) {
+		for (Object[] o0 : list) {
+			String[] s1 = (String[]) o0[0];
+			String[] s2 = (String[]) o0[1];
+			String[] s3 = (String[]) o0[2];
+			boolean lflag = false;
+			for (String s4 : s1) {
+				for (String s5 : s2) {
+					for (String s6 : s3) {
+						String[] lst = new String[]{ s4, s5, s6 };
+						Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures [%s] [%s] [%s]", s4, s5, s6);
+						Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures file="+file);
+						if (file.isDirectory()) {
+							// ディレクトリ
+							if (addTexturesDir(file, lst)) {
+								Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures file.isDirectory() addTexturesDir true.");
 							} else {
-								Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures file.isFile() addTexturesJar false.");
+								Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures file.isDirectory() addTexturesDir false.");
 							}
-						}
-						// zip
-						else if (addTexturesZip(file, lst)) {
-							Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures file.isFile() addTexturesZip true.");
-						} else {
-							Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures file.isFile() addTexturesZip false.");
+						} else if (file.isFile()) {
+							Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures file.isFile() file.toString()="+file.toString());
+							if (file.toString().lastIndexOf(".jar") > -1) {
+								// jar
+								if (addTexturesJar(file, lst)) {
+									Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures file.isFile() addTexturesJar true.");
+								} else {
+									Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures file.isFile() addTexturesJar false.");
+								}
+							}
+							// zip
+							else if (addTexturesZip(file, lst)) {
+								Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures file.isFile() addTexturesZip true.");
+							} else {
+								Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures file.isFile() addTexturesZip false.");
+							}
 						}
 					}
 				}

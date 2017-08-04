@@ -710,13 +710,23 @@ public class ModchuModel_ModelRenderer extends ModchuModel_ModelRendererBase {
 						Modchu_GlStateManager.rotate(-60.0F, 0.0F, 0.0F, 1.0F);
 					} else {
 						if (!isVanillaItem) {
-							//Modchu_Debug.dDebug("x="+Modchu_Debug.debaf1+" y="+Modchu_Debug.debaf2+" z="+Modchu_Debug.debaf3);
-							//Modchu_GlStateManager.rotate(Modchu_Debug.debaf1, 1.0F, 0.0F, 0.0F);
-							//Modchu_GlStateManager.rotate(Modchu_Debug.debaf2, 0.0F, 1.0F, 0.0F);
-							//Modchu_GlStateManager.rotate(Modchu_Debug.debaf3, 0.0F, 0.0F, 1.0F);
-							Modchu_GlStateManager.rotate(100.2F, 1.0F, 0.0F, 0.0F);
-							Modchu_GlStateManager.rotate(189.4F, 0.0F, 1.0F, 0.0F);
-							Modchu_GlStateManager.rotate(66.4F, 0.0F, 0.0F, 1.0F);
+							ModchuModel_ModelDataBase entityCaps = ModchuModel_ModelDataMaster.instance.getPlayerData(entityLiving);
+							if (entityCaps != null
+									&& entityCaps instanceof ModchuModel_IEntityCaps
+									&& Modchu_EntityCapsHelper.getCapsValueByte(null, entityCaps, entityCaps.caps_EntityType) == entityCaps.entityType_LMM) {
+							} else {
+								var6 = var6 * 0.75F;
+								//Modchu_Debug.dDebug("x="+Modchu_Debug.debaf1+" y="+Modchu_Debug.debaf2+" z="+Modchu_Debug.debaf3);
+								//Modchu_GlStateManager.rotate(Modchu_Debug.debaf1, 1.0F, 0.0F, 0.0F);
+								//Modchu_GlStateManager.rotate(Modchu_Debug.debaf2, 0.0F, 1.0F, 0.0F);
+								//Modchu_GlStateManager.rotate(Modchu_Debug.debaf3, 0.0F, 0.0F, 1.0F);
+								//Modchu_Debug.debaf1 = 91.4F;
+								//Modchu_Debug.debaf2 = 194F;
+								//Modchu_Debug.debaf3 = 70F;
+								Modchu_GlStateManager.rotate(91.4F, 1.0F, 0.0F, 0.0F);
+								Modchu_GlStateManager.rotate(194F, 0.0F, 1.0F, 0.0F);
+								Modchu_GlStateManager.rotate(70F, 0.0F, 0.0F, 1.0F);
+							}
 						}// else {
 							//Modchu_Debug.debugStringClear();
 							//Modchu_Debug.dDebug("isVanillaItem");

@@ -58,8 +58,8 @@ public class ModchuModel_EntityPlayerDummyMaster implements Modchu_IEntityPlayer
 	}
 
 	@Override
-	public void moveEntityWithHeading(float f, float f1, float f2) {
-		base.superMoveEntityWithHeading(f, f1, f2);
+	public void travel(float f, float f1, float f2) {
+		base.superTravel(f, f1, f2);
 	}
 
 	@Override
