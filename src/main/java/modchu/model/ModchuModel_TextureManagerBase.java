@@ -100,6 +100,7 @@ public class ModchuModel_TextureManagerBase {
 	public static HashMap<String, Object[]> dummyModelMapData = new HashMap();
 
 	public void init() {
+		int progress = 0;
 		if (ModchuModel_Main.isDev) {
 			try {
 /*
@@ -136,7 +137,11 @@ public class ModchuModel_TextureManagerBase {
 		partsNameList.add("_Custom");
 		modelClassNameMap.put(defaultModelName, "modchu.model.multimodel.base.MultiModel");
 		modelClassNameMap.put(defaultModelMaidBoneName, "modchu.model.multimodel.base.MultiModelMaidBone");
+		progress = 1;
+		ModchuModel_Main.setSubProgress2(progress);
 		loadTextures();
+		progress = 90;
+		ModchuModel_Main.setSubProgress2(progress);
 		// 必須モデルのロード
 		Modchu_Debug.lDebug("ModchuModel_TextureManagerBase init() MultiModel load.");
 		MultiModelBaseBiped[] models = null;
@@ -157,6 +162,8 @@ public class ModchuModel_TextureManagerBase {
 			Modchu_Debug.systemLogDebug("", e);
 			e.printStackTrace();
 		}
+		progress = 100;
+		ModchuModel_Main.setSubProgress2(progress);
 		Modchu_Debug.lDebug("ModchuModel_TextureManagerBase init() MultiModel load end.");
 	}
 
@@ -293,6 +300,8 @@ public class ModchuModel_TextureManagerBase {
 		} else {
 			Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures jarList.isEmpty(). ModchuModel_ConfigData.loadMinecraftJar="+ModchuModel_ConfigData.loadMinecraftJar);
 		}
+		int progress = 15;
+		ModchuModel_Main.setSubProgress2(progress);
 
 		// mods
 		List<String> searchFileNameList = new LinkedList();
@@ -305,11 +314,19 @@ public class ModchuModel_TextureManagerBase {
 			}
 		}
 		if (searchFileNameList != null
-				&& !searchFileNameList.isEmpty())
-		for (Object fileName : searchFileNameList) {
-			Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures mods load Modchu_FileManager.getFileList("+fileName+")="+Modchu_FileManager.getFileList((String) fileName));
-			loadTextures(searchPrefix, Modchu_FileManager.getFileList((String) fileName));
+				&& !searchFileNameList.isEmpty()) {
+			int size = searchFileNameList.size();
+			int tempProgress = progress;
+			for (int i = 0; i < size; i++) {
+				Object fileName = searchFileNameList.get(i);
+				Modchu_Debug.tDebug("ModchuModel_TextureManagerBase loadTextures mods load Modchu_FileManager.getFileList("+fileName+")="+Modchu_FileManager.getFileList((String) fileName));
+				loadTextures(searchPrefix, Modchu_FileManager.getFileList((String) fileName));
+				progress = (int) (60.0F - ((float) (size - i) / (float) size) * 60F) + tempProgress;
+				ModchuModel_Main.setSubProgress2(progress);
+			}
 		}
+		progress = 75;
+		ModchuModel_Main.setSubProgress2(progress);
 
 		// assets
 		loadTextures(searchPrefix, assetsDir);
@@ -826,7 +843,8 @@ public class ModchuModel_TextureManagerBase {
 	}
 
 	public ModchuModel_TextureBoxBase getPrevPackege(ModchuModel_TextureBoxBase pNowBox, int pColor, boolean b) {
-		Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getPrevPackege");
+		boolean debug = false;
+		if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getPrevPackege");
 		// 前のテクスチャパッケージの名前を返す
 		ModchuModel_TextureBoxBase lreturn = null;
 		for (Entry<String, ModchuModel_TextureBoxBase> en : textures.entrySet()) {
@@ -834,7 +852,7 @@ public class ModchuModel_TextureManagerBase {
 			if (ltb == pNowBox
 					&& ltb != lreturn) {
 				if (lreturn != null) {
-					Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getPrevPackege return lreturn="+lreturn);
+					if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getPrevPackege return lreturn="+lreturn);
 					return lreturn;
 				}
 			}
@@ -842,12 +860,12 @@ public class ModchuModel_TextureManagerBase {
 					&& ltb.textureName != null
 					&& !ltb.textureName.isEmpty()) {
 				lreturn = ltb;
-				Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getPrevPackege hasColor lreturn="+lreturn);
+				if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getPrevPackege hasColor lreturn="+lreturn);
 			}
 		}
 		lreturn = textures != null
 				&& textures.size() > -1 ? getTextureManagerTextures(textures.size() - 1, b) : null;
-		Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getPrevPackege end. textures.size() - 1="+(textures.size() - 1));
+		if (debug) Modchu_Debug.mDebug("ModchuModel_TextureManagerBase getPrevPackege end. textures.size() - 1="+(textures.size() - 1));
 		return lreturn;
 	}
 
