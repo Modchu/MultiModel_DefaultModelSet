@@ -31,7 +31,8 @@ public class ModchuModel_ModelAddManager {
 	public static final String addLmmModelString = ";lmmModel";
 
 	static void addCustomModel() {
-		Modchu_Debug.mDebug("ModchuModel_ModelAddManager addCustomModel()");
+		boolean debug = false;
+		if (debug) Modchu_Debug.mDebug("ModchuModel_ModelAddManager addCustomModel()");
 		File cfgCustomModelDir = new File(Modchu_AS.getFile(Modchu_AS.minecraftMcDataDir), "/config/CustomModel/");
 		ModchuModel_CustomModel.sampleCfgCopy();
 		String s1 = "CustomModel_";
@@ -44,20 +45,20 @@ public class ModchuModel_ModelAddManager {
 			}
 			if (list != null
 					&& !list.isEmpty()) {
-				Modchu_Debug.mDebug("ModchuModel_ModelAddManager addCustomModel() list != null");
+				if (debug) Modchu_Debug.mDebug("ModchuModel_ModelAddManager addCustomModel() list != null");
 				for (File f : list) {
 					addPflmAndLmmCustomModel(f.getAbsolutePath());
 				}
 			}
 		} else {
-			Modchu_Debug.systemLogDebug("ModchuModel_ModelAddManager addCustomModel() cfgCustomModelDir not found !! cfgCustomModelDir="+cfgCustomModelDir);
+			if (debug) Modchu_Debug.systemLogDebug("ModchuModel_ModelAddManager addCustomModel() cfgCustomModelDir not found !! cfgCustomModelDir="+cfgCustomModelDir);
 		}
 		List<ZipFile> zipList = Modchu_FileManager.getModsZipFileList();
 		if (zipList != null
 				&& !zipList.isEmpty()) {
 			for (ZipFile zipFile : zipList) {
 				String zipName = zipFile.getName();
-				Modchu_Debug.lDebug("ModchuModel_ModelAddManager addCustomModel() zipName="+zipName);
+				if (debug) Modchu_Debug.lDebug("ModchuModel_ModelAddManager addCustomModel() zipName="+zipName);
 				String s2 = zipName;
 				if (s2.indexOf("\\") > -1) s2 = Modchu_Main.lastIndexProcessing(s2, "\\");
 				if (s2.indexOf("/") > -1) s2 = Modchu_Main.lastIndexProcessing(s2, "/");
@@ -65,34 +66,35 @@ public class ModchuModel_ModelAddManager {
 				Enumeration enumeration = zipFile.entries();
 				do {
 					if (!enumeration.hasMoreElements()) {
-						//Modchu_Debug.lDebug("ModchuModel_ModelAddManager addCustomModel() break");
+						//if (debug) Modchu_Debug.lDebug("ModchuModel_ModelAddManager addCustomModel() break");
 						break;
 					}
 					ZipEntry zipentry = zipFile.getEntry(enumeration.nextElement().toString());
 					String name = zipentry.getName();
-					Modchu_Debug.lDebug("ModchuModel_ModelAddManager addCustomModel() 1 name="+name);
+					if (debug) Modchu_Debug.lDebug("ModchuModel_ModelAddManager addCustomModel() 1 name="+name);
 					if (name.indexOf(s1) > -1
 							&& name.lastIndexOf(".cfg") > -1) {
-						Modchu_Debug.lDebug("ModchuModel_ModelAddManager addCustomModel() 2 name="+name);
+						if (debug) Modchu_Debug.lDebug("ModchuModel_ModelAddManager addCustomModel() 2 name="+name);
 						addPflmAndLmmCustomModel(zipName+";"+name);
 					}
 				} while (true);
 			}
 		} else {
-			Modchu_Debug.lDebug("ModchuModel_ModelAddManager addCustomModel() zipList == null zipList="+zipList);
+			if (debug) Modchu_Debug.lDebug("ModchuModel_ModelAddManager addCustomModel() zipList == null zipList="+zipList);
 		}
 		addOtherCustomModel();
-		Modchu_Debug.mDebug("ModchuModel_ModelAddManager addCustomModel() end.");
+		if (debug) Modchu_Debug.mDebug("ModchuModel_ModelAddManager addCustomModel() end.");
 	}
 
 	private static void addPflmAndLmmCustomModel(String path) {
+		boolean debug = false;
 		if (path != null
 				&& !path.isEmpty()); else return;
 		try {
 			String name = Modchu_Main.lastIndexProcessing(path, "_");
 			int i1 = name.indexOf(".");
 			if (i1 > -1) name = name.substring(0, i1);
-			Modchu_Debug.mDebug("ModchuModel_ModelAddManager addPflmAndLmmCustomModel() name="+name);
+			if (debug) Modchu_Debug.mDebug("ModchuModel_ModelAddManager addPflmAndLmmCustomModel() name="+name);
 			String s1 = "default_Custom"+name;
 			ModchuModel_TextureBoxBase mtb = ModchuModel_TextureManagerBase.instance.partsTextures.get(s1);
 			if (mtb != null) {
@@ -109,7 +111,7 @@ public class ModchuModel_ModelAddManager {
 			ModchuModel_TextureManagerBase.instance.textures.put(s1, mtb);
 			ModchuModel_TextureManagerBase.instance.modelClassNameMap.put("Custom"+name, MultiModelCustom.class.getName());
 			ModchuModel_CustomModel.cfgFilePathMap.put(name, path);
-			Modchu_Debug.mlDebug("addPflmTextureManagerModel modelMap.put modelName=Custom"+name);
+			if (debug) Modchu_Debug.mlDebug("addPflmTextureManagerModel modelMap.put modelName=Custom"+name);
 			if (!addLMMModelFlag()) return;
 			MultiModelBaseBiped[] mlm2 = new MultiModelBaseBiped[3];
 			Object[] o0 = new Object[]{ name };
@@ -117,7 +119,7 @@ public class ModchuModel_ModelAddManager {
 			float[] lsize2 = mlm2[0].getArmorModelsSize();
 			mlm2[1] = new MultiModelCustom(lsize2[0], 0.0F, 64, 32, o0);
 			mlm2[2] = new MultiModelCustom(lsize2[1], 0.0F, 64, 32, o0);
-			Modchu_Debug.mDebug("ModchuModel_ModelAddManager addPflmAndLmmCustomModel() mlm2[0]="+mlm2[0]);
+			if (debug) Modchu_Debug.mDebug("ModchuModel_ModelAddManager addPflmAndLmmCustomModel() mlm2[0]="+mlm2[0]);
 			String s0 = "Custom"+name;
 			addLmmTextureManagerModel(s0, MultiModelCustom.class, mlm2);
 		} catch(Exception e) {
@@ -126,6 +128,7 @@ public class ModchuModel_ModelAddManager {
 	}
 
 	private static void addOtherCustomModel() {
+		boolean debug = false;
 		ArrayList<File> list = Modchu_FileManager.listFiles(Modchu_Main.modsDir.getAbsolutePath(), "*.zip", null, "MultiModelOtherCustomModel", false);
 		list.addAll(Modchu_FileManager.listFiles(new File(Modchu_Main.modsDir, Modchu_Version.getMinecraftVersionString()).getAbsolutePath(), "*.zip", null, "MultiModelOtherCustomModel", true));
 		if (list != null
@@ -142,17 +145,17 @@ public class ModchuModel_ModelAddManager {
 					try {
 						zipFile = new ZipFile(s);
 					} catch (Exception e) {
-						Modchu_Debug.lDebug("ModchuModel_ModelAddManager addCustomModel() Exception !! s="+s, 2, e);
+						if (debug) Modchu_Debug.lDebug("ModchuModel_ModelAddManager addCustomModel() Exception !! s="+s, 2, e);
 						e.printStackTrace();
 						continue;
 					}
-					//Modchu_Debug.mlDebug("ModchuModel_ModelAddManager addCustomModel() zipFile="+zipFile);
+					//if (debug) Modchu_Debug.mlDebug("ModchuModel_ModelAddManager addCustomModel() zipFile="+zipFile);
 					for (Enumeration<? extends ZipEntry> e = zipFile.entries(); e.hasMoreElements();) {
 						ZipEntry entry = e.nextElement();
 						String name = entry.getName();
 						if (entry.isDirectory()
 								| name.lastIndexOf(".cfg") < 0) continue;
-						Modchu_Debug.mlDebug(name);
+						if (debug) Modchu_Debug.mlDebug(name);
 						inputStream = zipFile.getInputStream(entry);
 						inputStreamReader = new InputStreamReader(zipFile.getInputStream(entry));
 						breader = new BufferedReader(inputStreamReader);
@@ -371,19 +374,19 @@ public class ModchuModel_ModelAddManager {
 		}
 		mtb.armors = new TreeMap();
 		if (tempOtherCustomModelArmorTextureName != null) {
-			Modchu_Debug.lDebug("pflmAddTempOtherCustomModel tempOtherCustomModelArmorTextureName != null");
+			if (debug) Modchu_Debug.lDebug("pflmAddTempOtherCustomModel tempOtherCustomModelArmorTextureName != null");
 			Map<Integer, Object> map = new HashMap();
 			if (tempOtherCustomModelArmorTextureName.length > 0
 					&& tempOtherCustomModelArmorTextureName[0] != null
 					&& !tempOtherCustomModelArmorTextureName[0].isEmpty()) {
 				map.put(ModchuModel_TextureManagerBase.tx_armor1, Modchu_Main.newResourceLocation(tempOtherCustomModelArmorTextureName[0]));
-				Modchu_Debug.lDebug("pflmAddTempOtherCustomModel map.put tx_armor1 tempOtherCustomModelArmorTextureName[0]="+tempOtherCustomModelArmorTextureName[0]);
+				if (debug) Modchu_Debug.lDebug("pflmAddTempOtherCustomModel map.put tx_armor1 tempOtherCustomModelArmorTextureName[0]="+tempOtherCustomModelArmorTextureName[0]);
 			}
 			if (tempOtherCustomModelArmorTextureName.length > 1
 					&& tempOtherCustomModelArmorTextureName[1] != null
 					&& !tempOtherCustomModelArmorTextureName[1].isEmpty()) {
 				map.put(ModchuModel_TextureManagerBase.tx_armor2, Modchu_Main.newResourceLocation(tempOtherCustomModelArmorTextureName[1]));
-				Modchu_Debug.lDebug("pflmAddTempOtherCustomModel map.put tx_armor2 tempOtherCustomModelArmorTextureName[1]="+tempOtherCustomModelArmorTextureName[1]);
+				if (debug) Modchu_Debug.lDebug("pflmAddTempOtherCustomModel map.put tx_armor2 tempOtherCustomModelArmorTextureName[1]="+tempOtherCustomModelArmorTextureName[1]);
 			}
 			mtb.armors.put("default", map);
 		}
@@ -391,7 +394,7 @@ public class ModchuModel_ModelAddManager {
 		//ltb1.textureDir = null;
 		Object[] o1 = ModchuModel_TextureManagerBase.instance.newOtherModel(tempOtherCustomModelClassName, tempOtherCustomModelArmorClassName0, tempOtherCustomModelArmorClassName1, tempOtherCustomOtherConstructor, tempOtherCustomOtherConstructorObject, tempOtherCustomModelSize, tempOtherCustomModelIsChild);
 		if (o1 != null); else {
-			Modchu_Debug.systemLogDebug("pflmAddTempOtherCustomModel() new model failure !! tempOtherCustomModelClassName="+tempOtherCustomModelClassName);
+			if (debug) Modchu_Debug.systemLogDebug("pflmAddTempOtherCustomModel() new model failure !! tempOtherCustomModelClassName="+tempOtherCustomModelClassName);
 			return null;
 		}
 		if (debug) {

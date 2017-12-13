@@ -17,5 +17,6 @@ public class ModchuModel_ConfigData {
 	public static boolean versionCheck = true;
 	public static boolean modelForLittleMaidMob = true;
 	public static boolean loadMinecraftJar = false;
+	public static boolean isModelSize = false;
 
 }

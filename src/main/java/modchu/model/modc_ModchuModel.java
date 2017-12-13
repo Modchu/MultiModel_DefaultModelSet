@@ -70,6 +70,10 @@ public class modc_ModchuModel {
 		return !Modchu_Main.isServer;
 	}
 
+	public void load1() {
+		ModchuModel_Main.load1();
+	}
+
 	public void modsLoaded() {
 		ModchuModel_Main.modsLoaded();
 	}

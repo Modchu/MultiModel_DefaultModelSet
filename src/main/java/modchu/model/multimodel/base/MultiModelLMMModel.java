@@ -11,10 +11,10 @@ import modchu.lib.Modchu_EntityCapsHelper;
 import modchu.lib.Modchu_GlStateManager;
 import modchu.lib.Modchu_LMMManager;
 import modchu.lib.Modchu_Main;
+import modchu.lib.Modchu_ModelRendererBase;
 import modchu.lib.Modchu_Reflect;
 import modchu.model.ModchuModel_IEntityCaps;
 import modchu.model.ModchuModel_ModelRenderer;
-import modchu.model.ModchuModel_ModelRendererBase;
 
 public class MultiModelLMMModel extends MultiModelBaseBiped {
 	public Object model;
@@ -240,18 +240,18 @@ public class MultiModelLMMModel extends MultiModelBaseBiped {
 				Modchu_Reflect.invokeMethod(arms[0].getClass(), "loadMatrix", arms[0]);
 				Modchu_GlStateManager.translate(0F, 0.05F, -0.05F);
 				Modchu_GlStateManager.translate(Arms[0].rotationPointX, Arms[0].rotationPointY, Arms[0].rotationPointZ);
-				Modchu_GlStateManager.rotate(Arms[0].rotateAngleX * ModchuModel_ModelRendererBase.radFactor, 1.0F, 0.0F, 0.0F);
-				Modchu_GlStateManager.rotate(Arms[0].rotateAngleY * ModchuModel_ModelRendererBase.radFactor, 0.0F, 1.0F, 0.0F);
-				Modchu_GlStateManager.rotate(Arms[0].rotateAngleZ * ModchuModel_ModelRendererBase.radFactor, 0.0F, 0.0F, 1.0F);
+				Modchu_GlStateManager.rotate(Arms[0].rotateAngleX * Modchu_ModelRendererBase.radFactor, 1.0F, 0.0F, 0.0F);
+				Modchu_GlStateManager.rotate(Arms[0].rotateAngleY * Modchu_ModelRendererBase.radFactor, 0.0F, 1.0F, 0.0F);
+				Modchu_GlStateManager.rotate(Arms[0].rotateAngleZ * Modchu_ModelRendererBase.radFactor, 0.0F, 0.0F, 1.0F);
 				Arms[0].renderItems("Hand", this, entityCaps, false, 0);
 				// L
 				Modchu_Reflect.invokeMethod(arms[1].getClass(), "loadMatrix", arms[1]);
 				Modchu_GlStateManager.translate(0F, 0.05F, -0.05F);
 				Modchu_GlStateManager.translate(Arms[1].rotationPointX, Arms[1].rotationPointY, Arms[1].rotationPointZ);
 				Modchu_GlStateManager.rotate(180F, 0.0F, 0.0F, 1.0F);
-				Modchu_GlStateManager.rotate(Arms[1].rotateAngleX * ModchuModel_ModelRendererBase.radFactor, 1.0F, 0.0F, 0.0F);
-				Modchu_GlStateManager.rotate(Arms[1].rotateAngleY * ModchuModel_ModelRendererBase.radFactor, 0.0F, 1.0F, 0.0F);
-				Modchu_GlStateManager.rotate(Arms[1].rotateAngleZ * ModchuModel_ModelRendererBase.radFactor, 0.0F, 0.0F, 1.0F);
+				Modchu_GlStateManager.rotate(Arms[1].rotateAngleX * Modchu_ModelRendererBase.radFactor, 1.0F, 0.0F, 0.0F);
+				Modchu_GlStateManager.rotate(Arms[1].rotateAngleY * Modchu_ModelRendererBase.radFactor, 0.0F, 1.0F, 0.0F);
+				Modchu_GlStateManager.rotate(Arms[1].rotateAngleZ * Modchu_ModelRendererBase.radFactor, 0.0F, 0.0F, 1.0F);
 				Arms[1].renderItems("Hand", this, entityCaps, false, 1);
 			}
 		} else {
