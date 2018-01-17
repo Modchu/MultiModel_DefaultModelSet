@@ -2310,7 +2310,8 @@ public class ModchuModel_TextureManagerBase {
 	}
 
 	public String getDefaultTextureName() {
-		return defaultUsingTexture+"_"+defaultModelName;
+		String s = defaultUsingTexture != null ? defaultUsingTexture : "default";
+		return s+"_"+defaultModelName;
 	}
 
 	public boolean checkPartsName(String s) {
